@@ -500,6 +500,7 @@
           <label class="checkbox-label"><input type="checkbox" id="sec" value="sec" onchange="optionRules(); updatePriceOptions();" disabled>あんしんセキュリティ(S)</label>
           <label class="checkbox-label"><input type="checkbox" id="dval" value="dval" onchange="optionRules(); updatePriceOptions();" disabled>dバリューパス</label>
           <label class="checkbox-label"><input type="checkbox" id="bst" value="bst" onchange="optionRules(); updatePriceOptions();" disabled>詐欺バスター</label>
+          <label class="checkbox-label"><input type="checkbox" id="ks" value="Ks" onchange="optionRules(); updatePriceOptions();" disabled>あんしんモバイル保険</label>
           <label class="checkbox-label"><input type="checkbox" id="ah-tel" value="ahTel" onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（ahamo）</label>
           <label class="checkbox-label"><input type="checkbox" id="ah-mega" value="ahMega" onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り</label>
           <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt" onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活</label>
@@ -738,7 +739,7 @@
       };
 
       const optionPrices = {
-        '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 330, 'dval': 550, 'bst': 550, 'ah-tel': 1100, 'ah-mega': 1980, 'ah-pt': 2750
+        '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 330, 'dval': 550, 'bst': 550, 'ks': 700, 'ah-tel': 1100, 'ah-mega': 1980, 'ah-pt': 2750
       };
 
       const osToSeries = {
@@ -921,11 +922,12 @@
         const opSec = document.getElementById('sec');
         const opDval = document.getElementById('dval');
         const opBst = document.getElementById('bst');
+        const opKs = document.getElementById('ks');
         const opAhTel = document.getElementById('ah-tel');
         const opAhMega = document.getElementById('ah-mega');
         const opAhPt = document.getElementById('ah-pt');
 
-        const allOps = [op5mTel, opEdTel, opMail, opSmart, opSec, opDval, opBst, opAhTel, opAhMega, opAhPt];
+        const allOps = [op5mTel, opEdTel, opMail, opSmart, opSec, opKs, opDval, opBst, opAhTel, opAhMega, opAhPt];
 
         if (!planSelect.value) {
           allOps.forEach(op => { op.checked = false; op.disabled = true; });
