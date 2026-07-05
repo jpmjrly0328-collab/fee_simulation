@@ -1,0 +1,690 @@
+    
+    :root {
+      --primary-color: #e31837;
+      --primary-light: #fff5f6;
+      --accent-once: #ff9800;
+      --accent-once-light: #fff9c4;
+      --accent-divide: #1e88e5;
+      --accent-kaedoki: #2e7d32;
+      --accent-kaedoki-light: #e8f5e9;
+      --text-main: #333333;
+      --text-sub: #495057;
+      --bg-body: #f4f6f9;
+      --bg-card: #ffffff;
+      --border-color: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
+    .app-header-fixed, 
+    header, 
+    header *, 
+    .header-content, 
+    .header-brand {
+      background: transparent !important; /* 中の余計な背景をすべて透明化 */
+    }
+
+    /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
+    .app-header-fixed, header {
+      background-color: #9e7d7e !important; 
+      background: #1a4d2f !important;
+    }
+
+    /* 💡 ブランド名（VEIL）のデザイン */
+    .header-brand {
+      display: block !important;
+      font-size: 0.75rem !important;
+      font-weight: 900 !important;
+      letter-spacing: 0.2em !important;
+      color: #94a3b8 !important; /* スタイリッシュなライトグレー */
+      margin-bottom: 2px !important;
+    }
+
+    /* 👑 タイトル文字：インラインと合わせて徹底的にダークネイビー化 */
+    .page-title-navy {
+      color: #1e293b !important;
+      font-size: 1.15rem !important;
+      font-weight: 800 !important;   
+      margin: 0 !important;          
+      letter-spacing: 0.03em !important;
+      display: inline-block !important;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      color: #111;
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--primary-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .alert-banner {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 2px solid #ef5350;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      display: none;
+    }
+
+    .buy-option-block {
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .buy-option-block h3 {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .buy-option-block.active-divide {
+      border-left: 5px solid var(--accent-divide);
+      background-color: #f1f8ff;
+    }
+
+    .buy-option-block.active-divide h3 {
+      color: var(--accent-divide);
+      font-weight: bold;
+    }
+
+    .buy-option-block.active-kaedoki {
+      border-left: 5px solid var(--accent-kaedoki);
+      background-color: var(--accent-kaedoki-light);
+    }
+
+    .buy-option-block.active-kaedoki h3 {
+      color: var(--accent-kaedoki);
+      font-weight: bold;
+    }
+
+    .section {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    select,
+    input[type="number"],
+    input[type="date"] {
+      width: 100%;
+      max-width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      background-color: #fff;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none; /* ★これをすぐ下に書き足す */
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: none; /* ★これをすぐ下に書き足す */
+    }
+
+    .section select,
+    .section input {
+      flex: 1;
+      min-width: 130px;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--primary-color);
+    }
+
+    select:disabled,
+    input:disabled {
+      background-color: #e9ecef;
+      color: #adb5bd;
+    }
+
+    .input-error-highlight {
+      border: 2px solid #ef5350 !important;
+      background-color: #ffebee !important;
+    }
+
+    .amount-input {
+      text-align: right;
+    }
+
+    .text-display-badge {
+      display: block;
+      width: 100%;
+      padding: 10px 0;
+      color: #0d47a1;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-label {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #off .checkbox-label {
+      justify-content: space-between;
+    }
+
+    #off .checkbox-label .label-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .discount-price {
+      white-space: nowrap;
+      font-size: 1.1rem;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: var(--primary-color);
+    }
+
+    .clear-all-label {
+      font-size: 0.85rem;
+      color: #212529;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sub-container {
+      margin-top: 10px;
+      padding: 12px;
+      border-left: 4px solid #007bff;
+      background-color: #f8f9fa;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .disabled-box {
+      display: none;
+      opacity: 0.35;
+      background-color: #eaeaea !important;
+      border-left-color: #999 !important;
+      pointer-events: none;
+    }
+
+    .result-locked {
+      opacity: 0.5 !important;
+      border: 2px dashed #ef5350 !important;
+    }
+
+    .subtotal-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .subtotal-box {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #333;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .subtotal-box.bg-plan {
+      background-color: #e3f2fd;
+      border-right: 4px solid #1e88e5;
+    }
+
+    .subtotal-box.bg-option {
+      background-color: #f3e5f5;
+      border-right: 4px solid #8e24aa;
+    }
+
+    .subtotal-box.bg-discount {
+      background-color: #e8f5e9;
+      border-right: 4px solid #2e7d32;
+    }
+
+    .subtotal-box span {
+      font-size: 1.1rem;
+      margin-left: 5px;
+    }
+
+    .subtotal-box.bg-plan span {
+      color: #1e88e5;
+    }
+
+    .subtotal-box.bg-option span {
+      color: #8e24aa;
+    }
+
+    .subtotal-box.bg-discount span {
+      color: #2e7d32;
+    }
+
+    input[type="checkbox"]:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    :has(> input[type="checkbox"]:disabled), 
+    label:has(input:disabled) {
+      color: #aaaaaa;
+      cursor: not-allowed;
+    }
+
+    .day-subtotal-box {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #495057;
+      padding: 2px 12px 6px 12px;
+    }
+
+    .day-subtotal-box span {
+      font-size: 1.1rem;
+      margin-left: 5px;
+      color: #666;
+    }
+
+    .day-price-container {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px dashed #ced4da;
+      background-color: #fffde7;
+      border-radius: 8px;
+    }
+
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .price-box {
+      width: 100%;
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--border-color);
+    }
+
+    .price-box strong {
+      display: block;
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .price-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-top: 10px;
+      padding-top: 6px;
+      border-top: 2px dashed rgba(0, 0, 0, 0.1);
+      text-align: right;
+    }
+
+    .price-breakdown {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .breakdown-line {
+      display: block;
+      margin-bottom: 5px;
+      padding-left: 14px;
+      text-indent: -14px;
+    }
+
+    .breakdown-line::before {
+      content: "・";
+      font-weight: bold;
+    }
+
+    .program-notice-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #856404;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .box-once {
+      background-color: var(--accent-once-light);
+      border-top: 4px solid var(--accent-once);
+    }
+
+    .box-once .price-breakdown {
+      color: #5c4308;
+    }
+
+    .box-once .price-amount {
+      color: #b78103;
+    }
+
+    .box-month1 {
+      background-color: var(--primary-light);
+      border-top: 4px solid var(--primary-color);
+    }
+
+    .box-month1 .price-breakdown {
+      color: #212529;
+    }
+
+    .box-month1 .price-amount {
+      color: var(--primary-color);
+    }
+
+    .box-month2 {
+      background-color: #e3f2fd;
+      border-top: 4px solid #1e88e5;
+    }
+
+    .box-month2 .price-breakdown {
+      color: #212529;
+    }
+
+    .box-month2 .price-amount {
+      color: #0d47a1;
+    }
+
+    .box-continue {
+      background-color: #f1f8ff;
+      border-top: 4px solid #0288d1;
+    }
+
+    .box-continue .price-breakdown {
+      color: #212529;
+    }
+
+    .box-continue .price-amount {
+      color: #0288d1;
+    }
+
+    .box-kaedoki {
+      background-color: var(--accent-kaedoki-light);
+      border-top: 4px solid var(--accent-kaedoki);
+    }
+
+    .box-kaedoki .price-breakdown {
+      color: #1b5e20;
+    }
+
+    .box-kaedoki .price-amount {
+      color: var(--accent-kaedoki);
+    }
+
+    .badge-info {
+      display: inline-block;
+      background-color: #2e7d32;
+      color: white;
+      padding: 3px 8px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .kaedoki-inner-box {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .breakdown-line {
+  color: #333333 !important; /* お好みに応じて #000000（真っ黒）でもOKです */
+}
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: #f5f5f7;
+      color: #555555;
+      border: 1px solid #d2d2d7;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-reset:hover {
+      background-color: #e8e8ed;
+      color: #1d1d1f;
+      border-color: #86868b;
+    }
+
+    .btn-reset:active {
+      transform: scale(0.97);
+      background-color: #d2d2d7;
+    }
+
+    .btn-reset:hover .btn-reset-icon {
+      transform: rotate(-180deg);
+      transition: transform 0.4s ease;
+    }
+
+    .error-msg-red {
+      display: inline-block;
+      font-size: 0.9rem !important; 
+      color: #c92a2a !important;   
+      line-height: 1.2 !important;
+      text-align: center !important;
+      background-color: #fff5f5 !important;
+      border: 1px solid #ffc9c9 !important;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+
+    .price-box.box-month1, 
+#once-fee-box-1.price-box {
+  background-color: #dbeafe !important; /* #e6f2ff から変更 */
+  border: 1.8px solid #1d4ed8 !important;
+}
+
+/* 🟩 グリーン：ほんの少しだけ緑を強く */
+#continue-fee-box-2.price-box,
+#kaedoki-month2-box.price-box {
+  background-color: #dcfce7 !important; /* #ebfbee から変更 */
+  border: 1.8px solid #2b8a3e !important;
+}
+
+/* 🟨 オレンジ：そのままでもOKですが、よりオレンジ寄りに */
+#continue-fee-box-3.price-box,
+#kaedoki-month3-23-box.price-box,
+#once-fee-box-2.price-box {
+  background-color: #ffedd5 !important; /* #fff9db から変更 */
+  border: 1.8px solid #d9480f !important;
+}
+
+    #once-fee-box.price-box,
+    #kaedoki-extend-box.price-box,
+    .price-box.box-kaedoki {
+      background-color: #f3f0ff !important;
+      border: 1.8px solid #7c3aed !important;
+    }
+
+    /* 📱 メインページの余白（固定フッター被り防止） */
+    .app-page {
+      padding-bottom: 100px !important;
+      box-sizing: border-box;
+    }
+
+    /* 📱 スマホ風の固定フッター（重複を整理した綺麗な一本化版） */
+    .app-footer {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 60px !important;
+      background-color: #7a99cf !important;
+      border-top: 1px solid #e0e0e0 !important;
+      display: flex !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      z-index: 1000 !important;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
+      padding-bottom: env(safe-area-inset-bottom) !important;
+    }
+
+    .footer-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1e293b;
+      cursor: pointer;
+      font-size: 0.75rem;
+      height: 100%;
+    }
+
+    .footer-tab.active {
+      color: #ffffff !important; /* エラーの濃い赤と合わせて洗練度アップ */
+      font-weight: bold;
+    }
+
+    .tab-icon {
+      font-size: 1.4rem;
+      margin-bottom: 2px;
+    }
+    *, *::before, *::after {
+      --text-main: #1e293b !important; /* もし変数が悪さをしていれば元から断つ */
+    }
+    
+    h1, .page-title-navy, .main-title, header h1 {
+      color: #1e293b !important;
+    }
+    .veil-app-header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  background-color: #7a99cf !important; 
+  border: none !important;
+  box-shadow: none !important;
+  
+  /* 📐 【変更】上下のパディングを14px → 6pxに狭め、文字との間隔をタイトに */
+  padding: 6px 0 !important; 
+  
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+  box-sizing: border-box !important;
+}
+
+/* 🎨 ブランド名（Veil）のスタイル */
+.veil-brand-text {
+  background: transparent !important;
+  color: #ffffff !important; 
+  font-family: 'Alex Brush', cursive !important;
+  
+  /* 📐 【変更】フォントサイズを2.5rem → 3.5remに大幅アップ！ */
+  font-size: 3.5rem !important;     
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  
+  letter-spacing: 0em !important;   
+  text-transform: none !important; 
+  
+  /* 📐 【変更】下の余白をゼロにして、ヘッダーの底面に近づけました */
+  margin: 0 !important;
+  display: inline-block !important;
+}
+
+/* 🎯 【新設】枠外に移動したタイトルのスタイル */
+.veil-outer-title {
+  background: transparent !important;
+  color: #1e293b !important; 
+  
+  /* 📐 【ここを変更！】1.25rem から 1.6rem（または 1.8rem など）に増やすとさらに大きくなります */
+  font-size: 1.6rem !important; 
+  
+  font-weight: 800 !important;   
+  letter-spacing: 0.05em !important;
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 20px 0 15px 0 !important; 
+}

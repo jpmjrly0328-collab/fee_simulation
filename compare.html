@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>携帯会社　料金比較</title>
+    <!-- index.htmlで使っているCSSファイルをここでも読み込む -->
+  <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color:transparent;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        /* 画面全体の白い大きなベース枠 */
+        .sim-base-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .sim-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+
+        /* 💡 1. プラン選択フォーム（上段）の横並び設定 */
+        .sim-main-box {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* スマホ対応 */
+        }
+        .sim-plan-column {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        /* 各カラムのタイトル（枠の最上部に固定） */
+        .sim-column-title {
+            margin-top: 0;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 8px;
+            color: #007bff;
+            font-size: 20px;
+        }
+
+        /* 💡 2. 合計金額（下段）の専用横並び設定 */
+        .sim-total-box {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap; /* スマホ対応 */
+        }
+        .sim-total-column {
+            flex: 1;
+            min-width: 300px;
+            background: #f0f7ff; /* 合計金額っぽく少し青みのある色に */
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .sim-total-column p {
+            white-space: nowrap; /* 中のpタグ（文字）だけを1行に固定！ */
+            margin: 5px 0;       /* 上下のすき間をちょっと綺麗に整える */
+        }
+        .sim-result-title {
+            font-size: 16px;
+            color: #495057;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+        }
+        .sim-result-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 0;
+        }
+
+        /* 各フォームパーツの装飾 */
+        .sim-field {
+            margin-bottom: 20px;
+        }
+        .sim-field label {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+        .sim-field select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            background-color: #fff;
+        }
+        .sim-field select:disabled {
+            background-color: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* チェックボックス・コメント・リセットボタン等の装飾 */
+        .sim-checkbox-container {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 38px;
+        }
+        .sim-checkbox-label {
+            display: block;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .sim-checkbox-label input {
+            margin-right: 8px;
+        }
+        .sim-placeholder {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .sim-comment-box {
+            margin-top: 15px;
+            background: #fffde7;
+            border: 1px solid #fff59d;
+            border-radius: 4px;
+            padding: 12px;
+        }
+        .sim-comment-title {
+            font-weight: bold;
+            color: #f57f17;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+        .sim-comment-content {
+            font-size: 0.85em;
+            color: #555;
+            line-height: 1.4;
+        }
+        .sim-reset-box {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .sim-reset-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #333;
+            transition: background 0.2s;
+        }
+        .sim-reset-btn:hover {
+            background: #d5d5d5;
+        }
+        .sim-error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+        h2 {
+  margin-top: 0 !important; /* <h2>の上の隙間を限界まで狭くする */
+}
+    </style>
+</head>
+<body>
+
+<h1 class="veil-outer-title">料金比較</h1>
+
+<div class="sim-base-card">
+    <h2 class="sim-title">料金比較（主要プラン及び通話、主要割引のみ）</h2>
+    
+    <!-- 1. 上段：プラン選択エリア（左右に並ぶ） -->
+    <div class="sim-main-box">
+        
+        <!-- 左側プランフォーム -->
+        <div class="sim-plan-column">
+            <h3 class="sim-column-title">比較プラン A</h3>
+            
+            <div class="sim-field">
+                <label>① 携帯会社</label>
+                <select id="sim-left-company" onchange="sim_updatePlans('left')">
+                    <option value="">選択してください</option>
+                    <option value="docomo">ドコモ</option>
+                    <option value="au">au</option>
+                    <option value="UQ">UQ mobile</option>
+                    <option value="softbank">softbank</option>
+                    <option value="Ymobile">Y! mobile</option>
+                    <option value="Rakuten">Rakuten</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>② プラン</label>
+                <select id="sim-left-plan" onchange="sim_updateStrages('left')" disabled>
+                    <option value="">先に選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>② 容量</label>
+                <select id="sim-left-strage" onchange="sim_updateOptionsAndDiscounts('left')" disabled>
+                    <option value="">先にプランを選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>③ 通話オプション</label>
+                <select id="sim-left-option" onchange="sim_calculateTotal('left')" disabled>
+                    <option value="">いずれか選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>④ 割引（対象なら選択、複数選択可）</label>
+                <div id="sim-left-discount-container" class="sim-checkbox-container">
+                    <span class="sim-placeholder">対象なら選択してください</span>
+                </div>
+            </div>
+
+            <div class="sim-field" id="sim-left-use-field" style="display: none;">
+                <label>利用年数</label>
+                <select id="sim-left-use" onchange="sim_calculateTotal('left')">
+                    <option value="">利用年数を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-left-family-field" style="display: none;">
+                <label>家族グループ人数</label>
+                <select id="sim-left-family" onchange="sim_calculateTotal('left')">
+                    <option value="">家族割対象人数を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-left-card-field" style="display: none;">
+                <label>カード券種</label>
+                <select id="sim-left-card" onchange="sim_calculateTotal('left')">
+                    <option value="">カードを選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-left-select-field" style="display: none;">
+                <label>割引種類</label>
+                <select id="sim-left-select" onchange="sim_calculateTotal('left')">
+                    <option value="">いずれかの割引を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-comment-box">
+                <div class="sim-comment-title">💡 プランのポイント</div>
+                <div id="sim-left-comment" class="sim-comment-content">プランを選択すると、ここに特徴や注意点が表示されます。</div>
+            </div>
+
+            <div class="sim-reset-box">
+                <button type="button" class="sim-reset-btn" onclick="sim_resetAll('left')">すべてリセット</button>
+            </div>
+        </div>
+
+        <!-- 右側プランフォーム -->
+        <div class="sim-plan-column">
+            <h3 class="sim-column-title">比較プラン B</h3>
+            
+            <div class="sim-field">
+                <label>① 携帯会社</label>
+                <select id="sim-right-company" onchange="sim_updatePlans('right')">
+                    <option value="">選択してください</option>
+                    <option value="docomo">ドコモ</option>
+                    <option value="au">au</option>
+                    <option value="UQ">UQ mobile</option>
+                    <option value="softbank">softbank</option>
+                    <option value="Ymobile">Y! mobile</option>
+                    <option value="Rakuten">Rakuten</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>② プラン</label>
+                <select id="sim-right-plan" onchange="sim_updateStrages('right')" disabled>
+                    <option value="">先に携帯会社を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>② 容量</label>
+                <select id="sim-right-strage" onchange="sim_updateOptionsAndDiscounts('right')" disabled>
+                    <option value="">先にプランを選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>③ 通話オプション</label>
+                <select id="sim-right-option" onchange="sim_calculateTotal('right')" disabled>
+                    <option value="">いずれか選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field">
+                <label>④ 割引（対象なら選択、複数選択可）</label>
+                <div id="sim-right-discount-container" class="sim-checkbox-container">
+                    <span class="sim-placeholder">対象なら選択してください</span>
+                </div>
+            </div>
+
+            <div class="sim-field" id="sim-right-use-field" style="display: none;">
+                <label>利用年数</label>
+                <select id="sim-right-use" onchange="sim_calculateTotal('right')">
+                    <option value="">利用年数を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-right-family-field" style="display: none;">
+                <label>家族グループ人数</label>
+                <select id="sim-right-family" onchange="sim_calculateTotal('right')">
+                    <option value="">家族割対象人数を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-right-card-field" style="display: none;">
+                <label>カード券種</label>
+                <select id="sim-right-card" onchange="sim_calculateTotal('right')">
+                    <option value="">カードを選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-field" id="sim-right-select-field" style="display: none;">
+                <label>割引種類</label>
+                <select id="sim-right-select" onchange="sim_calculateTotal('right')">
+                    <option value="">いずれかの割引を選択してください</option>
+                </select>
+            </div>
+
+            <div class="sim-comment-box">
+                <div class="sim-comment-title style="white-space: pre-wrap;">💡 プランのポイント</div>
+                <div id="sim-right-comment" class="sim-comment-content">プランを選択すると、ここに特徴や注意点が表示されます。</div>
+            </div>
+
+            <div class="sim-reset-box">
+                <button type="button" class="sim-reset-btn" onclick="sim_resetAll('right')">すべてリセット</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 下段：【新設】合計金額だけの専用枠（左右で高さが100%揃います） -->
+    <div class="sim-total-box">
+    <!-- 左側の合計金額 -->
+        <div class="sim-total-column">
+            <!-- 💡 表示・非表示を切り替えるための「専用の箱」を新しく作ります -->
+            <div id="sim-left-total-container">
+                <p class="sim-result-title" style="display: inline-block; margin-right: 10px;">比較プラン A 合計料金</p>
+                <p class="sim-result-price" style="display: inline-block;"><span id="sim-left-total">¥0</span> / 月</p>
+            </div>
+            <!-- エラーメッセージは箱の外（一番下）に置いておく -->
+            <p id="sim-left-error-msg" class="sim-error-message" style="display: none;"></p>
+        </div>
+    
+        <!-- 右側の合計金額 -->
+        <div class="sim-total-column">
+            <!-- 💡 右側も同じように専用の箱を作ります -->
+            <div id="sim-right-total-container">
+                <p class="sim-result-title" style="display: inline-block; margin-right: 10px;">比較プラン B 合計料金</p>
+                <p class="sim-result-price" style="display: inline-block;"><span id="sim-right-total">¥0</span> / 月</p>
+            </div>
+            <p id="sim-right-error-msg" class="sim-error-message" style="display: none;"></p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* 既存のスタイル */
+.sim-checkbox-container {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 38px;
+}
+.sim-checkbox-label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+.sim-checkbox-label input {
+    margin-right: 8px;
+}
+.sim-placeholder {
+    color: #888;
+    font-size: 0.9em;
+}
+
+/* 【新規追加】コメント欄のスタイル */
+.sim-comment-box {
+    margin-top: 15px;
+    background: #fffde7;
+    border: 1px solid #fff59d;
+    border-radius: 4px;
+    padding: 12px;
+}
+.sim-comment-title {
+    font-weight: bold;
+    color: #f57f17;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+}
+.sim-comment-content {
+    font-size: 0.85em;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* 【新規追加】リセットボタンのスタイル */
+.sim-reset-box {
+    margin-top: 15px;
+    text-align: right;
+}
+.sim-reset-btn {
+    background: #e0e0e0;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    color: #333;
+    transition: background 0.2s;
+}
+.sim-reset-btn:hover {
+    background: #d5d5d5;
+}
+#comment-display-area {
+  white-space: pre-wrap; /* 💡これを指定すると、\n や改行がそのまま画面で改行されます */
+}
+</style>
+
+<script>
+// =======================================================================================================================
+// 📱 携帯料金マスターデータ
+// =======================================================================================================================
+const simData = {
+    plans: {
+        docomo: [
+            { 
+                id: "d_MAX", 
+                name: "ドコモMAX", 
+                allowOption: true,
+                denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
+                allowDiscount: true,
+                comment: "Lemino, dアニメストア, DAZN, NBA・docomoのうちいずれか2つまで見放題（毎月切り替え可能）。<br>使用量に応じて料金が変動。",
+                strages: [
+                    { giga: "~1GB", price: 5698 },
+                    { giga: "1~3GB", price: 6798 },
+                    { giga: "3GB~", price: 8448 }
+                ]
+            },
+            { 
+                id: "d_MAXPt", 
+                name: "ドコモポイ活MAX", 
+                allowOption: true,
+                denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
+                allowDiscount: true,
+                comment: "dポイント最大5,000ptで実質値引き。ドコモMAX同様4種類のうち2つの動画配信サイトが見放題。",
+                strages: [{ giga: "無制限", price: 11748 }]
+            },
+            { 
+                id: "d_Pt20", 
+                name: "ドコモポイ活20", 
+                allowOption: true,
+                denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
+                allowDiscount: true,
+                denyDiscounts: ["d_disc_old", "d_opt_5mAh", "d_opt_fullAh"], 
+                comment: "dポイント最大2,500ptで実質値引き。ポイ活を始めてみたい人<br>向け。<br>使用量20GBを境に料金が変動。",
+                strages: [
+                    { giga: "~20GB", price: 7898 },
+                    { giga: "20GB~", price: 9570 }
+                ]
+            },
+            { 
+                id: "d_mini", 
+                name: "ドコモmini",
+                allowOption: true,
+                denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
+                allowDiscount: true,
+                denyDiscounts: ["d_disc_family","d_disc_old", "d_opt_5mAh", "d_opt_fullAh"], 
+                comment: "2種類の小容量の定額プラン。<br>キャリアメールは別途契約が必要なことに注意。",
+                strages: [
+                    { giga: "4GB", price: 2750 },
+                    { giga: "10GB~", price: 3850 }
+                ]
+            },
+            { 
+                id: "d_ahamo", 
+                name: "ahamo", 
+                allowOption: true,
+                denyOptions: ["d_opt_5m", "d_opt_full"],
+                allowDiscount: false,
+                comment: "割引無しの高コスパ最強プラン。<br>5分間かけ放題付きかつ+80GBのオプションも選べてあらゆる人が使いやすいプラン。",
+                strages: [
+                    { giga: "30GB", price: 2970 },
+                    { giga: "110GB（大盛りオプション追加後）", price: 4950 }
+                ]
+            }
+        ],
+        au: [
+            { id: "a_vl", name: "auバリューリンクプラン",
+                comment: "無制限プランの基本サービスにPontaパスと地震サポートが<br>加わったプラン。<br>使用量に応じて料金が変動。",
+                strages: [
+                    { giga: "~1GB", price: 6358 },
+                    { giga: "1GB~", price: 8008 }
+                ] },
+            { id: "a_vlmn", name: "auバリューリンク マネ活2",
+                allowDiscount: true,
+                denyDiscounts: ["a_family", "a_card"],
+                comment: "auスマートバリュー、au PAYとauじぶん銀行利用で最大￥5,800分の実質値引き。<br>Pontaパスと地震サポートも付帯。",
+                strages: [{ giga: "無制限", price: 9328 }] },
+            { id: "a_full", name: "使い放題MAX+", 
+                comment: "シンプルな無制限プラン。<br>1GBを境に料金が変動。",
+                strages: [{ giga: "無制限", price: 7788 }] },
+            { id: "a_fullmn", name: "使い放題MAX+ マネ活2", 
+                allowDiscount: true,
+                denyDiscounts: ["a_family", "a_card"],
+                comment: "使い放題MAX+にマネ活が加わったプラン。<br>auスマートバリュー、au PAYとauじぶん銀行利用で最大￥5,800分の実質値引き。",
+                strages: [{ giga: "無制限", price: 9108 }] },
+            { id: "a_mini", name: "スマホミニプラン+", 
+                comment: "最大5GBの小容量プラン。<br>それぞれ1GBと3GBで料金が変動。",
+                strages: [
+                    { giga: "~1GB", price: 4928 },
+                    { giga: "1~3GB", price: 6578 },
+                    { giga: "3~5GB", price: 8228 }
+                ]
+            }
+        ],
+        UQ: [
+            { id: "u_komi", name: "コミコミプランバリュー",
+                allowOption: true,
+                denyOptions: ["u_opt_10mToku", "u_opt_fullToku", "u_opt_60mToku"],
+                allowDiscount: false,
+                comment: "35GBの定額プランで10分かけ放題付き。<br>Pontaパスとau Starlink Directが追加料金無しで利用可能。<br>データの繰り越しも可能。",
+                strages: [
+                    { giga: "35GB", price: 3828 }
+                ] },
+            { id: "a_toku", name: "トクトクプラン2",
+                allowOption: true,
+                denyOptions: ["u_opt_10mKomi", "u_opt_fullKomi"],
+                allowDiscount: true,
+                comment: "5GBを境に料金が変動。<br>金額は異なるが自宅セット割か家族セット割の割引を選択可能で、より広い範囲で割引適用が可能。",
+                strages: [
+                    { giga: "~5GB", price: 4048 },
+                    { giga: "5~30GB", price: 2948 }
+                ] }
+        ],
+        softbank: [
+            { id: "s_pay", name: "ペイトク2",
+                allowOption: true,
+                allowDiscount: true,
+                denyDiscounts: ["s_family_2mini", "s_family_3mini"],
+                comment: "PayPayカード ゴールド所持でさらにお得。<br>PayPayカード ゴールドなら月額の支払い充当で割引額UPと、還元率10%に増加で月上限￥4,000相当。",
+                strages: [
+                    { giga: "無制限", price: 10538 }
+                ] },
+            { id: "s_flat", name: "テイガク無制限",
+                allowOption: true,
+                allowDiscount: true,
+                denyDiscounts: ["s_family_2mini", "s_family_3mini"],
+                comment: "シンプルな無制限プラン。",
+                strages: [
+                    { giga: "無制限", price: 8008 }
+                ] },
+            { id: "s_mini", name: "ミニフィット2",
+                allowOption: true,
+                allowDiscount: true,
+                denyDiscounts: ["s_family_2", "s_family_3"],
+                comment: "2GBを境に月額料金が変動する5GBまでの小容量プラン。<br>他プランと異なり、新みんな家族割の割引額が小さいので注意。",
+                strages: [
+                    { giga: "~2GB", price: 5258 },
+                    { giga: "2~5GB", price: 6358 }
+                ] }
+        ],
+        Ymobile: [
+            { id: "y_3s", name: "シンプル3 S",
+                allowOption: true,
+                denyOptions: ["y_opt_10m3l", "y_opt_full3l"],
+                allowDiscount: true,
+                denyDiscounts: ["y_disc_ele"],
+                comment: "小容量プランで各種割引の重複が可能で、PayPayカードは<br>ゴールドならさらに割引。<br>ただし、でんきセット(E)は対象外で家族割引は2回線目以降から<br>適用。",
+                strages: [
+                    { giga: "5GB", price: 3278 }
+                ] },
+                { id: "y_3m", name: "シンプル3 M",
+                allowOption: true,
+                denyOptions: ["y_opt_10m3l", "y_opt_full3l"],
+                allowDiscount: true,
+                comment: "中容量プランで各種割引の重複が可能で、PayPayカードは<br>ゴールドならさらに割引。<br>家族割引は2回線目以降から適用なので注意。",
+                strages: [
+                    { giga: "30GB", price: 4378 }
+                ] },
+                { id: "y_3l", name: "シンプル3 L",
+                allowOption: true,
+                denyOptions: ["y_opt_10m", "y_opt_full"],
+                allowDiscount: true,
+                comment: "10分国内かけ放題がついた中容量プランで各種割引重複可能。<br>PayPayカードはゴールドでさらにお得で、家族割引は2回線目以降から適用なので注意。",
+                strages: [
+                    { giga: "35GB", price: 5478 }
+                ] }
+        ],
+        Rakuten: [
+             { id: "r_best", name: "Rakuten最強プラン",
+                allowOption: true,
+                allowDiscount: true,
+                comment: "1種類のみの分かりやすいプランで、~3GB、~20GB、無制限のいずれでもキャリア間で最安。<br>楽天市場のポイント還元率が+4倍上がる。",
+                strages: [
+                    { giga: "~3GB", price: 1078 },
+                    { giga: "3~20GB", price: 2178 },
+                    { giga: "20GB~", price: 3278 }
+                ] }
+        ]
+    },
+    options: {
+        docomo: [
+            { id: "d_opt_5m", name: "5分通話無料",price: 880 },
+            { id: "d_opt_full", name: "かけ放題", price: 1980 },
+            { id: "d_opt_5mAh", name: "5分通話無料",price: 0 },
+            { id: "d_opt_fullAh", name: "かけ放題", price: 1100 }
+        ],
+        au: [
+            { id: "a_opt_5m", name: "5分通話無料", price: 880 },
+            { id: "a_opt_full", name: "かけ放題", price: 1980 }
+        ],
+        UQ: [
+            {id: "u_opt_10mKomi", name: "10分通話無料", price: 0},
+            {id: "u_opt_fullKomi", name: "かけ放題", price: 1100},
+            {id: "u_opt_10mToku", name: "10分通話無料", price: 880},
+            {id: "u_opt_fullToku", name: "かけ放題", price: 1980},
+            {id: "u_opt_60mToku", name: "月60分相当減額", price: 660},
+        ],
+        softbank: [
+            { id: "s_opt_5m", name: "5分通話無料", price: 880 },
+            { id: "s_opt_full", name: "かけ放題", price: 1980 }
+        ],
+        Ymobile: [
+            { id: "y_opt_10m", name: "10分通話無料", price: 880 },
+            { id: "y_opt_full", name: "かけ放題", price: 1980 },
+            { id: "y_opt_10m3l", name: "10分通話無料", price: 0 },
+            { id: "y_opt_full3l", name: "かけ放題", price: 1100 }
+        ],
+        Rakuten: [
+            { id: "r_opt_15m", name: "15分通話無料", price: 1100 }
+        ]
+    },
+    discounts: {
+        docomo: [
+            { id: "d_disc_old", 
+                name: "長期利用割", 
+                value: 0, 
+                useYears: [
+                    { id: "d_use10_20", name: "20年未満", value: 110 },
+                    { id: "d_use_20", name: "20年以上", value: 220 }
+                ]
+            },
+            { id: "d_disc_family",
+                name: "みんなドコモ割",
+                value: 0,
+                family: [
+                    {id: "d_family_2", name: "2人", value: 550 },
+                    {id: "d_family_3", name: "3人以上", value: 1210 }
+                ]
+            },
+            { id: "d_disc_card", 
+                name: "dカードお支払い割", 
+                value: 0, 
+                cards: [
+                    { id: "d_card_regular", name: "dカード REGULAR", value: 220 },
+                    { id: "d_card_GGUP", name: "dカード GOLD U / GOLD / PLUTINUM", value: 550 }
+                ]
+            },
+            { id: "d_disc_net", name: "ドコモ光 / home 5G セット割", value: 1210 },
+            { id: "d_disc_ele", name: "ドコモでんきセット割", value: 110 }
+        ],
+        au: [
+            { id: "a_disc_family",
+                name: "家族割プラス",
+                value: 0,
+                family: [
+                    { id: "a_family_2", name: "2人", value: 660 },
+                    { id: "a_family_3", name: "3人以上", value: 1210 }
+                ]
+            },
+            { id: "a_disc_value", name: "auスマートバリュー", value: 1100 },
+            { id: "a_disc_card", name: "au PAY カードお支払い割", value: 110 }
+            
+        ],
+        UQ: [
+            {id: "u_disc_family", name: "au PAY カードお支払い割", value: 220},
+            {id: "u_disc_select",
+                name: "どちらか選択",
+                value: 0, 
+                selects: [
+                    { id: "u_select_home", name: "自宅セット割", value: 1100 },
+                    { id: "u_select_family", name: "家族セット割", value: 550 }
+                ]
+            }
+        ],
+        softbank: [
+            { id: "s_disc_family",
+                name: "新みんな家族割",
+                value: 0,
+                family: [
+                    {id: "s_family_2", name: "2人", value: 660 },
+                    {id: "s_family_3", name: "3人以上", value: 1210 },
+                    {id: "s_family_2mini", name: "2人", value: 220 },
+                    {id: "s_family_3mini", name: "3人以上", value: 550 },
+                ]
+            },
+            { id: "s_disc_net", name: "おうち割光セット", value: 1100 },
+            { id: "s_disc_card",
+                name: "PayPayカード割",
+                value: 0,
+                cards: [
+                    {id: "s_pay", name: "PayPayカード", value: 330 },
+                    {id: "s_pay_g", name: "PayPayカード ゴールド", value: 550 }
+                ]
+            }
+        ],
+        Ymobile: [
+            { id: "y_disc_card",
+                name: "PayPayカード割",
+                value:0,
+                cards: [
+                    {id: "y_pay", name: "PayPayカード", value: 330 },
+                    {id: "y_pay_g", name: "PayPayカード ゴールド", value: 770 }
+                ]
+            },
+            { id: "y_disc_select",
+                name: "いずれか選択",
+                value: 0,
+                selects: [
+                    { id: "y_disc_net", name: "おうち割 光セット(A)", value: 1650 },
+                    { id: "y_disc_family", name: "家族割引", value: 1100 },
+                    { id: "y_disc_ele", name: "おうち割 でんきセット(E)", value: 1100 },
+                ]
+            }
+        ],
+        Rakuten: [
+            { id: "r_disc_family", name: "最強家族割", value: 110 }
+        ]
+    }
+};
+
+// ========================================================================================================================
+// 🛠️ 連動ロジック
+// ========================================================================================================================
+
+function sim_updatePlans(side) {
+    const company = document.getElementById(`sim-${side}-company`).value;
+    const planSelect = document.getElementById(`sim-${side}-plan`);
+    
+    sim_resetSelect(side, ['plan', 'strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
+
+    if (company && simData.plans[company]) {
+        simData.plans[company].forEach(plan => {
+            const opt = document.createElement("option");
+            opt.value = plan.id;
+            opt.textContent = plan.name;
+            planSelect.appendChild(opt);
+        });
+        planSelect.disabled = false;
+    }
+    sim_updateComment(side); 
+    sim_calculateTotal(side);
+}
+
+function sim_updateStrages(side) {
+    const company = document.getElementById(`sim-${side}-company`).value;
+    const planId = document.getElementById(`sim-${side}-plan`).value;
+    const strageSelect = document.getElementById(`sim-${side}-strage`);
+    
+    sim_resetSelect(side, ['strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
+
+    if (company && planId) {
+        const selectedPlan = simData.plans[company].find(p => p.id === planId);
+        if (selectedPlan && selectedPlan.strages) {
+            selectedPlan.strages.forEach(vol => {
+                const opt = document.createElement("option");
+                opt.value = vol.price;
+                opt.textContent = `${vol.giga} 　¥${vol.price.toLocaleString()}`;
+                opt.dataset.allowDiscount = selectedPlan.allowDiscount;
+                strageSelect.appendChild(opt);
+            });
+            strageSelect.disabled = false;
+        }
+    }
+    sim_updateComment(side); 
+    sim_calculateTotal(side);
+}
+
+function sim_updateOptionsAndDiscounts(side) {
+    const company = document.getElementById(`sim-${side}-company`).value;
+    const planId = document.getElementById(`sim-${side}-plan`).value;
+    const strageSelect = document.getElementById(`sim-${side}-strage`);
+    const optionSelect = document.getElementById(`sim-${side}-option`);
+    const discountContainer = document.getElementById(`sim-${side}-discount-container`);
+
+    sim_resetSelect(side, ['option', 'discount', 'use', 'family', 'card', 'select']);
+
+    const currentPlan = (simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
+
+    if (company && strageSelect && strageSelect.value) {
+        if (optionSelect) {
+            optionSelect.innerHTML = '<option value="0">なし　¥0</option>';
+            if (simData.options[company]) { 
+                const denyOptionList = currentPlan && currentPlan.denyOptions ? currentPlan.denyOptions : [];
+                simData.options[company].forEach(opt => {
+                    if (denyOptionList.includes(opt.id)) return; 
+                    const o = document.createElement("option");
+                    o.value = opt.price;
+                    o.textContent = `${opt.name} 　¥${opt.price}`;
+                    optionSelect.appendChild(o);
+                });
+                optionSelect.disabled = false;
+            }
+        }
+    }
+
+    if (currentPlan && currentPlan.allowDiscount === true && discountContainer) {
+        discountContainer.innerHTML = '';
+
+        // 💡 先にプルダウン側の初期テキストをリセットしておく（初回クリックの不発を防ぐ）
+        const useSelect = document.getElementById(`sim-${side}-use`);
+        const familySelect = document.getElementById(`sim-${side}-family`);
+        const cardSelect = document.getElementById(`sim-${side}-card`);
+        const selectSelect = document.getElementById(`sim-${side}-select`);
+        if (useSelect) useSelect.innerHTML = '<option value="">利用年数を選択してください</option>';
+        if (familySelect) familySelect.innerHTML = '<option value="">家族割対象人数を選択してください</option>';
+        if (cardSelect) cardSelect.innerHTML = '<option value="">カードを選択してください</option>';
+        if (selectSelect) selectSelect.innerHTML = '<option value="">いずれか選択してください</option>';
+
+        if (simData.discounts[company]) {
+            const denyList = currentPlan.denyDiscounts ? currentPlan.denyDiscounts : [];
+            simData.discounts[company].forEach(disc => {
+                if (denyList.includes(disc.id)) return; 
+
+                const label = document.createElement("label");
+                label.className = "sim-checkbox-label";
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = `sim-${side}-discount-cb`;
+                checkbox.value = disc.id;
+                checkbox.onchange = () => { sim_handleDiscountChange(side); };
+
+                const displayText = (disc.useYears || disc.family || disc.cards || disc.selects) ? disc.name : `${disc.name}　▲¥${disc.value}`;
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(displayText));
+                
+                discountContainer.appendChild(label);
+            });
+        }
+    }
+    sim_calculateTotal(side);
+}
+
+function sim_handleDiscountChange(side) {
+    const company = document.getElementById(`sim-${side}-company`).value;
+    const planId = document.getElementById(`sim-${side}-plan`).value;
+    const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]:checked`);
+    
+    const useField = document.getElementById(`sim-${side}-use-field`);
+    const useSelect = document.getElementById(`sim-${side}-use`);
+    const familyField = document.getElementById(`sim-${side}-family-field`);
+    const familySelect = document.getElementById(`sim-${side}-family`);
+    const cardField = document.getElementById(`sim-${side}-card-field`);
+    const cardSelect = document.getElementById(`sim-${side}-card`);
+    const selectField = document.getElementById(`sim-${side}-select-field`);
+    const selectSelect = document.getElementById(`sim-${side}-select`);
+
+    const currentPlan = (simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
+    const denyList = currentPlan && currentPlan.denyDiscounts ? currentPlan.denyDiscounts : [];
+
+    let hasUseDiscount = false;
+    let useDiscountData = null;
+    let hasFamilyDiscount = false;
+    let familyDiscountData = null;
+    let hasCardDiscount = false;
+    let cardDiscountData = null;
+    let hasSelectDiscount = false;
+    let selectDiscountData = null;
+
+    checkboxes.forEach(cb => {
+        const disc = simData.discounts[company].find(d => d.id === cb.value);
+        if (disc) {
+            if (disc.useYears) { hasUseDiscount = true; useDiscountData = disc; }
+            if (disc.family) { hasFamilyDiscount = true; familyDiscountData = disc; }
+            if (disc.cards) { hasCardDiscount = true; cardDiscountData = disc; }
+            if (disc.selects) { hasSelectDiscount = true; selectDiscountData = disc; }
+        }
+    });
+
+    if (hasUseDiscount && useSelect) {
+        if (useSelect.innerHTML === '<option value="">利用年数を選択してください</option>') {
+            useDiscountData.useYears.forEach(item => {
+                if (denyList.includes(item.id)) return; // 💡除外リストにあればスキップ
+                const o = document.createElement("option");
+                o.value = item.value;
+                o.textContent = `${item.name}　▲¥${item.value}`;
+                useSelect.appendChild(o);
+            });
+        }
+        if (useField) useField.style.display = 'block';
+        useSelect.disabled = false;
+    } else if (useSelect) {
+        useSelect.innerHTML = '<option value="">利用年数を選択してください</option>';
+        if (useField) useField.style.display = 'none';
+        useSelect.disabled = true;
+    }
+
+    if (hasFamilyDiscount && familySelect) {
+        if (familySelect.innerHTML === '<option value="">家族割対象人数を選択してください</option>') {
+            familyDiscountData.family.forEach(item => {
+                if (denyList.includes(item.id)) return; // 💡除外リストにあればスキップ
+                const o = document.createElement("option");
+                o.value = item.value;
+                o.textContent = `${item.name}　▲¥${item.value}`;
+                familySelect.appendChild(o);
+            });
+        }
+        if (familyField) familyField.style.display = 'block';
+        familySelect.disabled = false;
+    } else if (familySelect) {
+        familySelect.innerHTML = '<option value="">家族割対象人数を選択してください</option>';
+        if (familyField) familyField.style.display = 'none';
+        familySelect.disabled = true;
+    }
+
+    if (hasCardDiscount && cardSelect) {
+        if (cardSelect.innerHTML === '<option value="">カードを選択してください</option>') {
+            cardDiscountData.cards.forEach(card => {
+                if (denyList.includes(card.id)) return; // 💡除外リストにあればスキップ
+                const o = document.createElement("option");
+                o.value = card.value;
+                o.textContent = `${card.name}　▲¥${card.value}`;
+                cardSelect.appendChild(o);
+            });
+        }
+        if (cardField) cardField.style.display = 'block';
+        cardSelect.disabled = false;
+    } else if (cardSelect) {
+        cardSelect.innerHTML = '<option value="">カードを選択してください</option>';
+        if (cardField) cardField.style.display = 'none';
+        cardSelect.disabled = true;
+    }
+
+    if (hasSelectDiscount && selectSelect) {
+        if (selectSelect.innerHTML === '<option value="">いずれか選択してください</option>') {
+            selectDiscountData.selects.forEach(select => {
+                if (denyList.includes(select.id)) return;
+                const o = document.createElement("option");
+                o.value = select.value;
+                o.textContent = `${select.name}　▲¥${select.value}`;
+                selectSelect.appendChild(o);
+            });
+        }
+        if (selectField) selectField.style.display = 'block';
+        selectSelect.disabled = false;
+    } else if (selectSelect) {
+        // 💡「カードを選んでください」のタイポも修正
+        selectSelect.innerHTML = '<option value="">いずれか選択してください</option>';
+        if (selectField) selectField.style.display = 'none';
+        selectSelect.disabled = true;
+    }
+
+    sim_calculateTotal(side);
+}
+
+function sim_updateComment(side) {
+    const companyEl = document.getElementById(`sim-${side}-company`);
+    const planEl = document.getElementById(`sim-${side}-plan`);
+    const commentDiv = document.getElementById(`sim-${side}-comment`);
+
+    if (!commentDiv) return;
+
+    if (companyEl && planEl && companyEl.value && planEl.value) {
+        const selectedPlan = simData.plans[companyEl.value].find(p => p.id === planEl.value);
+        if (selectedPlan && selectedPlan.comment) {
+            commentDiv.innerHTML = selectedPlan.comment;
+            return;
+        }
+    }
+    commentDiv.innerHTML = "プランを選択すると、ここに特徴や注意点が表示されます。";
+}
+
+// 💡 各種プルダウンメニューの初期化
+function sim_resetSelect(side, targets) {
+    const labels = {
+        plan: 'プランを選択してください',
+        strage: '容量を選択ください',
+        option: 'いずれか選択してください', // 💡「容量」から「オプション」に修正
+        use: '利用年数を選択してください',
+        family: '家族割対象人数を選択してください',
+        card: 'カードを選択ください',
+        select: 'いずれか選択ください'
+    };
+
+    // 💡 現在の会社の選択状況を取得
+    const companyEl = document.getElementById(`sim-${side}-company`);
+    const company = companyEl ? companyEl.value : "";
+
+    targets.forEach(target => {
+        if (target === 'discount') {
+            const container = document.getElementById(`sim-${side}-discount-container`);
+            if (container) {
+                // 💡 会社自体が未選択なら「プランを〜」、会社選択済なら「容量を〜」に動的変更
+                container.innerHTML = company 
+                    ? '<span class="sim-placeholder">容量を選択ください</span>'
+                    : '<span class="sim-placeholder">プランを選択してください</span>';
+            }
+            return; 
+        }
+        
+        const el = document.getElementById(`sim-${side}-${target}`);
+        if (el) {
+            el.innerHTML = `<option value="">${labels[target] || '選択してください'}</option>`;
+            el.disabled = true; 
+        }
+
+        // 追加フィールドの非表示化
+        const field = document.getElementById(`sim-${side}-${target}-field`);
+        if (field) field.style.display = 'none';
+    });
+}
+
+function sim_calculateTotal(side) {
+    const companyEl = document.getElementById(`sim-${side}-company`);
+    const company = companyEl ? companyEl.value : "";
+    const errorMsg = document.getElementById(`sim-${side}-error-msg`);
+    
+    // 【修正】totalDisplay と totalSpan が重複していたので統合
+    const totalSpan = document.getElementById(`sim-${side}-total`);
+    const currentColumn = document.querySelector(`.sim-total-box .sim-total-column:${side === 'left' ? 'first-child' : 'last-child'}`);
+    const priceElement = currentColumn ? currentColumn.querySelector('.sim-result-price') : null;
+
+    const strageSelect = document.getElementById(`sim-${side}-strage`);
+    const optionSelect = document.getElementById(`sim-${side}-option`);
+    const useSelect = document.getElementById(`sim-${side}-use`);
+    const familySelect = document.getElementById(`sim-${side}-family`);
+    const cardSelect = document.getElementById(`sim-${side}-card`);
+    const selectSelect = document.getElementById(`sim-${side}-select`);
+
+    // 2. チェックボックスがON、かつプルダウンが未選択（空）のものを探す
+    let errors = [];
+
+    // 利用年数のチェック
+    if (useSelect && useSelect.disabled === false && useSelect.value === "") {
+        errors.push("「利用年数」を選択してください。");
+    }
+    // 家族割のチェック
+    if (familySelect && familySelect.disabled === false && familySelect.value === "") {
+        errors.push("「家族割対象人数」を選択してください。");
+    }
+    // カード割のチェック
+    if (cardSelect && cardSelect.disabled === false && cardSelect.value === "") {
+        errors.push("「支払いカード」を選択してください。");
+    }
+    // いずれか選択のチェック
+    if (selectSelect && selectSelect.disabled === false && selectSelect.value === "") {
+        errors.push("「いずれかの項目」を選択してください。");
+    }
+
+    // 3. エラーがあった場合の処理（一時的に金額を隠して警告を出す）
+    if (errors.length > 0) {
+        if (errorMsg) {
+            errorMsg.innerHTML = errors.join("<br>");
+            errorMsg.style.display = "block";
+        }
+        // 金額の文字だけをピンポイントで非表示にする
+        if (priceElement) priceElement.style.display = "none";
+        return;
+    }
+
+    // --- エラーがなかった場合の処理 ---
+    if (errorMsg) errorMsg.style.display = "none";
+    
+    // 【修正】エラーがないなら金額エリア（.sim-result-price）を表示する
+    if (priceElement) priceElement.style.display = "inline-block";
+    
+    // 【修正】元のコードで「totalDisplay.style.display = "none"」になっていた部分を削除し、
+    // 代わりに金額を表示するコンテナが表示状態（block等）になるように担保します
+    if (totalSpan) {
+        totalSpan.style.display = "inline"; // 必要に応じて inline-block などに適宜変更してください
+    } else {
+        return; // そもそも合計表示エリアがなければ終了
+    }
+
+    // 安全に対象の値を取得（要素が存在しない、または未選択なら 0 ）
+    const basePrice = (strageSelect && strageSelect.value) ? parseInt(strageSelect.value) : 0;
+    const optionPrice = (optionSelect && optionSelect.value) ? parseInt(optionSelect.value) : 0;
+   
+    let totalDiscountPrice = 0;
+    const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]:checked`);
+   
+    if (company && simData.discounts[company]) {
+        checkboxes.forEach(cb => {
+            const disc = simData.discounts[company].find(d => d.id === cb.value);
+            if (disc) {
+                if (disc.useYears) {
+                    totalDiscountPrice += (useSelect && useSelect.value) ? parseInt(useSelect.value) : 0;
+                } else if (disc.family) {
+                    totalDiscountPrice += (familySelect && familySelect.value) ? parseInt(familySelect.value) : 0;
+                } else if (disc.cards) {
+                    totalDiscountPrice += (cardSelect && cardSelect.value) ? parseInt(cardSelect.value) : 0;
+                } else if (disc.selects) {
+                    totalDiscountPrice += (selectSelect && selectSelect.value) ? parseInt(selectSelect.value) : 0;
+                } else {
+                    totalDiscountPrice += disc.value;
+                }
+            }
+        });
+    }
+
+    // 計算と金額の描画
+    const total = basePrice + optionPrice - totalDiscountPrice;
+    totalSpan.textContent = `¥${total.toLocaleString()}`;
+}
+
+// 【新規追加】「やり直す」ボタンの全面クリア処理
+function sim_resetAll(side) {
+    const companySelect = document.getElementById(`sim-${side}-company`);
+    if (companySelect) companySelect.value = "";
+    
+    // 全てをリセット
+    sim_resetSelect(side, ['plan', 'strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
+    
+    sim_updateComment(side);
+    sim_calculateTotal(side);
+}
+// iframeの中から、親画面（ブラウザのタブ）のタイトルを強制的に書き換える
+  window.parent.document.title = "キャリア料金比較";
+</script>
+</body>
+</html>
