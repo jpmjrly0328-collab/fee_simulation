@@ -9,763 +9,805 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 </head>
-  <title>料金シミュレーション</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    
-    :root {
-      --primary-color: #e31837;
-      --primary-light: #fff5f6;
-      --accent-once: #ff9800;
-      --accent-once-light: #fff9c4;
-      --accent-divide: #1e88e5;
-      --accent-kaedoki: #2e7d32;
-      --accent-kaedoki-light: #e8f5e9;
-      --text-main: #333333;
-      --text-sub: #495057;
-      --bg-body: #f4f6f9;
-      --bg-card: #ffffff;
-      --border-color: #e0e0e0;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
-    .app-header-fixed, 
-    header, 
-    header *, 
-    .header-content, 
-    .header-brand {
-      background: transparent !important; /* 中の余計な背景をすべて透明化 */
-    }
-
-    /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
-    .app-header-fixed, header {
-      background-color: #9e7d7e !important; 
-      background: #1a4d2f !important;
-    }
-
-    /* 💡 ブランド名（VEIL）のデザイン */
-    .header-brand {
-      display: block !important;
-      font-size: 0.75rem !important;
-      font-weight: 900 !important;
-      letter-spacing: 0.2em !important;
-      color: #94a3b8 !important; /* スタイリッシュなライトグレー */
-      margin-bottom: 2px !important;
-    }
-
-    /* 👑 タイトル文字：インラインと合わせて徹底的にダークネイビー化 */
-    .page-title-navy {
-      color: #1e293b !important;
-      font-size: 1.15rem !important;
-      font-weight: 800 !important;   
-      margin: 0 !important;          
-      letter-spacing: 0.03em !important;
-      display: inline-block !important;
-    }
-
-    body {
-      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-      background-color: var(--bg-body);
-      color: var(--text-main);
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      padding: 16px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border-color);
-    }
-
-    h2 {
-      font-size: 1.15rem;
-      color: #111;
-      margin-top: 0;
-      margin-bottom: 15px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid var(--primary-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .alert-banner {
-      background-color: #ffebee;
-      color: #c62828;
-      border: 2px solid #ef5350;
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      display: none;
-    }
-
-    .buy-option-block {
-      padding: 12px;
-      border-radius: 8px;
-      background-color: #f8f9fa;
-      margin-top: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    .buy-option-block h3 {
-      font-size: 0.95rem;
-      color: #555;
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-
-    .buy-option-block.active-divide {
-      border-left: 5px solid var(--accent-divide);
-      background-color: #f1f8ff;
-    }
-
-    .buy-option-block.active-divide h3 {
-      color: var(--accent-divide);
-      font-weight: bold;
-    }
-
-    .buy-option-block.active-kaedoki {
-      border-left: 5px solid var(--accent-kaedoki);
-      background-color: var(--accent-kaedoki-light);
-    }
-
-    .buy-option-block.active-kaedoki h3 {
-      color: var(--accent-kaedoki);
-      font-weight: bold;
-    }
-
-    .section {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    label {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    select,
-    input[type="number"],
-    input[type="date"] {
-      width: 100%;
-      max-width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      background-color: #fff;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none; /* ★これをすぐ下に書き足す */
-    }
-
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type="number"] {
-      -moz-appearance: textfield;
-      appearance: none; /* ★これをすぐ下に書き足す */
-    }
-
-    .section select,
-    .section input {
-      flex: 1;
-      min-width: 130px;
-    }
-
-    select:focus,
-    input:focus {
-      border-color: var(--primary-color);
-    }
-
-    select:disabled,
-    input:disabled {
-      background-color: #e9ecef;
-      color: #adb5bd;
-    }
-
-    .input-error-highlight {
-      border: 2px solid #ef5350 !important;
-      background-color: #ffebee !important;
-    }
-
-    .amount-input {
-      text-align: right;
-    }
-
-    .text-display-badge {
-      display: block;
-      width: 100%;
-      padding: 10px 0;
-      color: #0d47a1;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: right;
-    }
-
-    .checkbox-group {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .checkbox-label {
-      width: 100%;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    #off .checkbox-label {
-      justify-content: space-between;
-    }
-
-    #off .checkbox-label .label-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .discount-price {
-      white-space: nowrap;
-      font-size: 1.1rem;
-    }
-
-    .checkbox-label input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      accent-color: var(--primary-color);
-    }
-
-    .clear-all-label {
-      font-size: 0.85rem;
-      color: #212529;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .sub-container {
-      margin-top: 10px;
-      padding: 12px;
-      border-left: 4px solid #007bff;
-      background-color: #f8f9fa;
-      border-radius: 0 8px 8px 0;
-    }
-
-    .disabled-box {
-      display: none;
-      opacity: 0.35;
-      background-color: #eaeaea !important;
-      border-left-color: #999 !important;
-      pointer-events: none;
-    }
-
-    .result-locked {
-      opacity: 0.5 !important;
-      border: 2px dashed #ef5350 !important;
-    }
-
-    .subtotal-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .subtotal-box {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #333;
-      padding: 6px 12px;
-      border-radius: 6px;
-      display: inline-block;
-    }
-
-    .subtotal-box.bg-plan {
-      background-color: #e3f2fd;
-      border-right: 4px solid #1e88e5;
-    }
-
-    .subtotal-box.bg-option {
-      background-color: #f3e5f5;
-      border-right: 4px solid #8e24aa;
-    }
-
-    .subtotal-box.bg-discount {
-      background-color: #e8f5e9;
-      border-right: 4px solid #2e7d32;
-    }
-
-    .subtotal-box span {
-      font-size: 1.1rem;
-      margin-left: 5px;
-    }
-
-    .subtotal-box.bg-plan span {
-      color: #1e88e5;
-    }
-
-    .subtotal-box.bg-option span {
-      color: #8e24aa;
-    }
-
-    .subtotal-box.bg-discount span {
-      color: #2e7d32;
-    }
-
-    input[type="checkbox"]:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    :has(> input[type="checkbox"]:disabled), 
-    label:has(input:disabled) {
-      color: #aaaaaa;
-      cursor: not-allowed;
-    }
-
-    .day-subtotal-box {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #495057;
-      padding: 2px 12px 6px 12px;
-    }
-
-    .day-subtotal-box span {
-      font-size: 1.1rem;
-      margin-left: 5px;
-      color: #666;
-    }
-
-    .day-price-container {
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px dashed #ced4da;
-      background-color: #fffde7;
-      border-radius: 8px;
-    }
-
-    .result-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 10px;
-    }
-
-    .price-box {
-      width: 100%;
-      border-radius: 10px;
-      padding: 18px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-      border: 1px solid var(--border-color);
-    }
-
-    .price-box strong {
-      display: block;
-      font-size: 1.15rem;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    .price-amount {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-top: 10px;
-      padding-top: 6px;
-      border-top: 2px dashed rgba(0, 0, 0, 0.1);
-      text-align: right;
-    }
-
-    .price-breakdown {
-      font-size: 1.05rem;
-      font-weight: 600;
-      line-height: 1.6;
-    }
-
-    .breakdown-line {
-      display: block;
-      margin-bottom: 5px;
-      padding-left: 14px;
-      text-indent: -14px;
-    }
-
-    .breakdown-line::before {
-      content: "・";
-      font-weight: bold;
-    }
-
-    .program-notice-box {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background-color: #fff3cd;
-      border: 1px solid #ffeeba;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      color: #856404;
-      font-weight: bold;
-      line-height: 1.5;
-    }
-
-    .box-once {
-      background-color: var(--accent-once-light);
-      border-top: 4px solid var(--accent-once);
-    }
-
-    .box-once .price-breakdown {
-      color: #5c4308;
-    }
-
-    .box-once .price-amount {
-      color: #b78103;
-    }
-
-    .box-month1 {
-      background-color: var(--primary-light);
-      border-top: 4px solid var(--primary-color);
-    }
-
-    .box-month1 .price-breakdown {
-      color: #212529;
-    }
-
-    .box-month1 .price-amount {
-      color: var(--primary-color);
-    }
-
-    .box-month2 {
-      background-color: #e3f2fd;
-      border-top: 4px solid #1e88e5;
-    }
-
-    .box-month2 .price-breakdown {
-      color: #212529;
-    }
-
-    .box-month2 .price-amount {
-      color: #0d47a1;
-    }
-
-    .box-continue {
-      background-color: #f1f8ff;
-      border-top: 4px solid #0288d1;
-    }
-
-    .box-continue .price-breakdown {
-      color: #212529;
-    }
-
-    .box-continue .price-amount {
-      color: #0288d1;
-    }
-
-    .box-kaedoki {
-      background-color: var(--accent-kaedoki-light);
-      border-top: 4px solid var(--accent-kaedoki);
-    }
-
-    .box-kaedoki .price-breakdown {
-      color: #1b5e20;
-    }
-
-    .box-kaedoki .price-amount {
-      color: var(--accent-kaedoki);
-    }
-
-    .badge-info {
-      display: inline-block;
-      background-color: #2e7d32;
-      color: white;
-      padding: 3px 8px;
-      font-size: 0.85rem;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-
-    .kaedoki-inner-box {
-      margin-top: 12px;
-      background: rgba(255, 255, 255, 0.6);
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    .breakdown-line {
-  color: #333333 !important; /* お好みに応じて #000000（真っ黒）でもOKです */
-}
-
-    .btn-reset {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background-color: #f5f5f7;
-      color: #555555;
-      border: 1px solid #d2d2d7;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-
-    .btn-reset:hover {
-      background-color: #e8e8ed;
-      color: #1d1d1f;
-      border-color: #86868b;
-    }
-
-    .btn-reset:active {
-      transform: scale(0.97);
-      background-color: #d2d2d7;
-    }
-
-    .btn-reset:hover .btn-reset-icon {
-      transform: rotate(-180deg);
-      transition: transform 0.4s ease;
-    }
-
-    .error-msg-red {
-      display: inline-block;
-      font-size: 0.9rem !important; 
-      color: #c92a2a !important;   
-      line-height: 1.2 !important;
-      text-align: center !important;
-      background-color: #fff5f5 !important;
-      border: 1px solid #ffc9c9 !important;
-      border-radius: 6px;
-      padding: 4px 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
-    }
-
-    .price-box.box-month1, 
-#once-fee-box-1.price-box {
-  background-color: #dbeafe !important; /* #e6f2ff から変更 */
-  border: 1.8px solid #1d4ed8 !important;
-}
-
-/* 🟩 グリーン：ほんの少しだけ緑を強く */
-#continue-fee-box-2.price-box,
-#kaedoki-month2-box.price-box {
-  background-color: #dcfce7 !important; /* #ebfbee から変更 */
-  border: 1.8px solid #2b8a3e !important;
-}
-
-/* 🟨 オレンジ：そのままでもOKですが、よりオレンジ寄りに */
-#continue-fee-box-3.price-box,
-#kaedoki-month3-23-box.price-box,
-#once-fee-box-2.price-box {
-  background-color: #ffedd5 !important; /* #fff9db から変更 */
-  border: 1.8px solid #d9480f !important;
-}
-
-    #once-fee-box.price-box,
-    #kaedoki-extend-box.price-box,
-    .price-box.box-kaedoki {
-      background-color: #f3f0ff !important;
-      border: 1.8px solid #7c3aed !important;
-    }
-
-    /* 📱 メインページの余白（固定フッター被り防止） */
-    .app-page {
-      padding-bottom: 100px !important;
-      box-sizing: border-box;
-    }
-
-    /* 📱 スマホ風の固定フッター（重複を整理した綺麗な一本化版） */
-    .app-footer {
-      position: fixed !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 60px !important;
-      background-color: #7a99cf !important;
-      border-top: 1px solid #e0e0e0 !important;
-      display: flex !important;
-      justify-content: space-around !important;
-      align-items: center !important;
-      z-index: 1000 !important;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
-      padding-bottom: env(safe-area-inset-bottom) !important;
-    }
-
-    .footer-tab {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #1e293b;
-      cursor: pointer;
-      font-size: 0.75rem;
-      height: 100%;
-    }
-
-    .footer-tab.active {
-      color: #ffffff !important; /* エラーの濃い赤と合わせて洗練度アップ */
-      font-weight: bold;
-    }
-
-    .tab-icon {
-      font-size: 1.4rem;
-      margin-bottom: 2px;
-    }
-    *, *::before, *::after {
-      --text-main: #1e293b !important; /* もし変数が悪さをしていれば元から断つ */
-    }
-    
-    h1, .page-title-navy, .main-title, header h1 {
-      color: #1e293b !important;
-    }
-    .veil-app-header {
-  position: sticky !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  background-color: #7a99cf !important; 
-  border: none !important;
-  box-shadow: none !important;
-  
-  /* 📐 【変更】上下のパディングを14px → 6pxに狭め、文字との間隔をタイトに */
-  padding: 6px 0 !important; 
-  
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 9999 !important;
-  box-sizing: border-box !important;
-}
-
-/* 🎨 ブランド名（Veil）のスタイル */
-.veil-brand-text {
-  background: transparent !important;
-  color: #ffffff !important; 
-  font-family: 'Alex Brush', cursive !important;
-  
-  /* 📐 【変更】フォントサイズを2.5rem → 3.5remに大幅アップ！ */
-  font-size: 3.5rem !important;     
-  font-weight: 500 !important;
-  line-height: 1 !important;
-  
-  letter-spacing: 0em !important;   
-  text-transform: none !important; 
-  
-  /* 📐 【変更】下の余白をゼロにして、ヘッダーの底面に近づけました */
-  margin: 0 !important;
-  display: inline-block !important;
-}
-
-/* 🎯 【新設】枠外に移動したタイトルのスタイル */
-.veil-outer-title {
-  background: transparent !important;
-  color: #1e293b !important; 
-  margin-bottom: 5px; /* 数字を小さくするほど隙間が狭くなります（お好みで調整してください） */
-  
-  /* 📐 【ここを変更！】1.25rem から 1.6rem（または 1.8rem など）に増やすとさらに大きくなります */
-  font-size: 1.6rem !important; 
-  
-  font-weight: 800 !important;   
-  letter-spacing: 0.05em !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 20px 0 15px 0 !important; 
-}
-#page-compare {
-  margin-top: 0;
-  display: block; /* ※切り替え用。一瞬デザイン調整で確認したい時は display: block; にしておくと便利です */
-}
-/* 画面全体を覆う真っ白な壁 */
-#loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffffff; /* 画像の背景色に合わせると綺麗です */
-  z-index: 99999;
-  transition: opacity 0.4s ease; /* 消える時のフェードアウトだけ残す */
-  
-  /* 画像自体を全画面にするので、flex関連の配置指定は不要になります */
-}
-
-/* 画像を画面いっぱいに表示する設定 */
-.loader-logo {
-  width: 100vw;   /* 画面の横幅いっぱいに */
-  height: 100vh;  /* 画面の縦幅いっぱいに */
-  
-  /* ↓ここが一番のポイント！ */
-  /* cover：画像を切り抜いてでも、画面全体に隙間なく引き伸ばす（スマホの壁紙みたいなイメージ） */
-  /* contain：画像全体が画面に収まるように、比率を保ったまま最大化する */
-  object-fit: contain; 
-  
-  /* アニメーション（animation: pulse...）の行は削除します */
-}
-
-.loader-text {
-  font-family: sans-serif;
-  color: #666;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-}
-
-@keyframes pulse {
-  0% { transform: scale(0.9); opacity: 0.4; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.4; }
-}
-
-  </style>
+<title>料金シミュレーション</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<style>
+  :root {
+    --primary-color: #e31837;
+    --primary-light: #fff5f6;
+    --accent-once: #ff9800;
+    --accent-once-light: #fff9c4;
+    --accent-divide: #1e88e5;
+    --accent-kaedoki: #2e7d32;
+    --accent-kaedoki-light: #e8f5e9;
+    --text-main: #333333;
+    --text-sub: #495057;
+    --bg-body: #f4f6f9;
+    --bg-card: #ffffff;
+    --border-color: #e0e0e0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
+  .app-header-fixed,
+  header,
+  header *,
+  .header-content,
+  .header-brand {
+    background: transparent !important;
+    /* 中の余計な背景をすべて透明化 */
+  }
+
+  /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
+  .app-header-fixed,
+  header {
+    background-color: #9e7d7e !important;
+    background: #1a4d2f !important;
+  }
+
+  /* 💡 ブランド名（VEIL）のデザイン */
+  .header-brand {
+    display: block !important;
+    font-size: 0.75rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.2em !important;
+    color: #94a3b8 !important;
+    /* スタイリッシュなライトグレー */
+    margin-bottom: 2px !important;
+  }
+
+  /* 👑 タイトル文字：インラインと合わせて徹底的にダークネイビー化 */
+  .page-title-navy {
+    color: #1e293b !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+    letter-spacing: 0.03em !important;
+    display: inline-block !important;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    color: #111;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .alert-banner {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 2px solid #ef5350;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: none;
+  }
+
+  .buy-option-block {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    margin-top: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .buy-option-block h3 {
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .buy-option-block.active-divide {
+    border-left: 5px solid var(--accent-divide);
+    background-color: #f1f8ff;
+  }
+
+  .buy-option-block.active-divide h3 {
+    color: var(--accent-divide);
+    font-weight: bold;
+  }
+
+  .buy-option-block.active-kaedoki {
+    border-left: 5px solid var(--accent-kaedoki);
+    background-color: var(--accent-kaedoki-light);
+  }
+
+  .buy-option-block.active-kaedoki h3 {
+    color: var(--accent-kaedoki);
+    font-weight: bold;
+  }
+
+  .section {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  select,
+  input[type="number"],
+  input[type="date"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    background-color: #fff;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    /* ★これをすぐ下に書き足す */
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: none;
+    /* ★これをすぐ下に書き足す */
+  }
+
+  .section select,
+  .section input {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  select:focus,
+  input:focus {
+    border-color: var(--primary-color);
+  }
+
+  select:disabled,
+  input:disabled {
+    background-color: #e9ecef;
+    color: #adb5bd;
+  }
+
+  .input-error-highlight {
+    border: 2px solid #ef5350 !important;
+    background-color: #ffebee !important;
+  }
+
+  .amount-input {
+    text-align: right;
+  }
+
+  .text-display-badge {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    color: #0d47a1;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .checkbox-label {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #off .checkbox-label {
+    justify-content: space-between;
+  }
+
+  #off .checkbox-label .label-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .discount-price {
+    white-space: nowrap;
+    font-size: 1.1rem;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--primary-color);
+  }
+
+  .clear-all-label {
+    font-size: 0.85rem;
+    color: #212529;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .sub-container {
+    margin-top: 10px;
+    padding: 12px;
+    border-left: 4px solid #007bff;
+    background-color: #f8f9fa;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .disabled-box {
+    display: none;
+    opacity: 0.35;
+    background-color: #eaeaea !important;
+    border-left-color: #999 !important;
+    pointer-events: none;
+  }
+
+  .result-locked {
+    opacity: 0.5 !important;
+    border: 2px dashed #ef5350 !important;
+  }
+
+  .subtotal-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .subtotal-box {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .subtotal-box.bg-plan {
+    background-color: #e3f2fd;
+    border-right: 4px solid #1e88e5;
+  }
+
+  .subtotal-box.bg-option {
+    background-color: #f3e5f5;
+    border-right: 4px solid #8e24aa;
+  }
+
+  .subtotal-box.bg-discount {
+    background-color: #e8f5e9;
+    border-right: 4px solid #2e7d32;
+  }
+
+  .subtotal-box span {
+    font-size: 1.1rem;
+    margin-left: 5px;
+  }
+
+  .subtotal-box.bg-plan span {
+    color: #1e88e5;
+  }
+
+  .subtotal-box.bg-option span {
+    color: #8e24aa;
+  }
+
+  .subtotal-box.bg-discount span {
+    color: #2e7d32;
+  }
+
+  input[type="checkbox"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  :has(> input[type="checkbox"]:disabled),
+  label:has(input:disabled) {
+    color: #aaaaaa;
+    cursor: not-allowed;
+  }
+
+  .day-subtotal-box {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #495057;
+    padding: 2px 12px 6px 12px;
+  }
+
+  .day-subtotal-box span {
+    font-size: 1.1rem;
+    margin-left: 5px;
+    color: #666;
+  }
+
+  .day-price-container {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px dashed #ced4da;
+    background-color: #fffde7;
+    border-radius: 8px;
+  }
+
+  .result-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .price-box {
+    width: 100%;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
+  }
+
+  .price-box strong {
+    display: block;
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .price-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 2px dashed rgba(0, 0, 0, 0.1);
+    text-align: right;
+  }
+
+  .price-breakdown {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .breakdown-line {
+    display: block;
+    margin-bottom: 5px;
+    padding-left: 14px;
+    text-indent: -14px;
+  }
+
+  .breakdown-line::before {
+    content: "・";
+    font-weight: bold;
+  }
+
+  .program-notice-box {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #856404;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  .box-once {
+    background-color: var(--accent-once-light);
+    border-top: 4px solid var(--accent-once);
+  }
+
+  .box-once .price-breakdown {
+    color: #5c4308;
+  }
+
+  .box-once .price-amount {
+    color: #b78103;
+  }
+
+  .box-month1 {
+    background-color: var(--primary-light);
+    border-top: 4px solid var(--primary-color);
+  }
+
+  .box-month1 .price-breakdown {
+    color: #212529;
+  }
+
+  .box-month1 .price-amount {
+    color: var(--primary-color);
+  }
+
+  .box-month2 {
+    background-color: #e3f2fd;
+    border-top: 4px solid #1e88e5;
+  }
+
+  .box-month2 .price-breakdown {
+    color: #212529;
+  }
+
+  .box-month2 .price-amount {
+    color: #0d47a1;
+  }
+
+  .box-continue {
+    background-color: #f1f8ff;
+    border-top: 4px solid #0288d1;
+  }
+
+  .box-continue .price-breakdown {
+    color: #212529;
+  }
+
+  .box-continue .price-amount {
+    color: #0288d1;
+  }
+
+  .box-kaedoki {
+    background-color: var(--accent-kaedoki-light);
+    border-top: 4px solid var(--accent-kaedoki);
+  }
+
+  .box-kaedoki .price-breakdown {
+    color: #1b5e20;
+  }
+
+  .box-kaedoki .price-amount {
+    color: var(--accent-kaedoki);
+  }
+
+  .badge-info {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: white;
+    padding: 3px 8px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .kaedoki-inner-box {
+    margin-top: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .breakdown-line {
+    color: #333333 !important;
+    /* お好みに応じて #000000（真っ黒）でもOKです */
+  }
+
+  .btn-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background-color: #f5f5f7;
+    color: #555555;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-reset:hover {
+    background-color: #e8e8ed;
+    color: #1d1d1f;
+    border-color: #86868b;
+  }
+
+  .btn-reset:active {
+    transform: scale(0.97);
+    background-color: #d2d2d7;
+  }
+
+  .btn-reset:hover .btn-reset-icon {
+    transform: rotate(-180deg);
+    transition: transform 0.4s ease;
+  }
+
+  .error-msg-red {
+    display: inline-block;
+    font-size: 0.9rem !important;
+    color: #c92a2a !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    background-color: #fff5f5 !important;
+    border: 1px solid #ffc9c9 !important;
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+
+  .price-box.box-month1,
+  #once-fee-box-1.price-box {
+    background-color: #dbeafe !important;
+    /* #e6f2ff から変更 */
+    border: 1.8px solid #1d4ed8 !important;
+  }
+
+  /* 🟩 グリーン：ほんの少しだけ緑を強く */
+  #continue-fee-box-2.price-box,
+  #kaedoki-month2-box.price-box {
+    background-color: #dcfce7 !important;
+    /* #ebfbee から変更 */
+    border: 1.8px solid #2b8a3e !important;
+  }
+
+  /* 🟨 オレンジ：そのままでもOKですが、よりオレンジ寄りに */
+  #continue-fee-box-3.price-box,
+  #kaedoki-month3-23-box.price-box,
+  #once-fee-box-2.price-box {
+    background-color: #ffedd5 !important;
+    /* #fff9db から変更 */
+    border: 1.8px solid #d9480f !important;
+  }
+
+  #once-fee-box.price-box,
+  #kaedoki-extend-box.price-box,
+  .price-box.box-kaedoki {
+    background-color: #f3f0ff !important;
+    border: 1.8px solid #7c3aed !important;
+  }
+
+  /* 📱 メインページの余白（固定フッター被り防止） */
+  .app-page {
+    padding-bottom: 100px !important;
+    box-sizing: border-box;
+  }
+
+  /* 📱 スマホ風の固定フッター（重複を整理した綺麗な一本化版） */
+  .app-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    background-color: #7a99cf !important;
+    border-top: 1px solid #e0e0e0 !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    z-index: 1000 !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  .footer-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+    cursor: pointer;
+    font-size: 0.75rem;
+    height: 100%;
+  }
+
+  .footer-tab.active {
+    color: #ffffff !important;
+    /* エラーの濃い赤と合わせて洗練度アップ */
+    font-weight: bold;
+  }
+
+  .tab-icon {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    --text-main: #1e293b !important;
+    /* もし変数が悪さをしていれば元から断つ */
+  }
+
+  h1,
+  .page-title-navy,
+  .main-title,
+  header h1 {
+    color: #1e293b !important;
+  }
+
+  .veil-app-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background-color: #7a99cf !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    /* 📐 【変更】上下のパディングを14px → 6pxに狭め、文字との間隔をタイトに */
+    padding: 6px 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 🎨 ブランド名（Veil）のスタイル */
+  .veil-brand-text {
+    background: transparent !important;
+    color: #ffffff !important;
+    font-family: 'Alex Brush', cursive !important;
+
+    /* 📐 【変更】フォントサイズを2.5rem → 3.5remに大幅アップ！ */
+    font-size: 3.5rem !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+
+    letter-spacing: 0em !important;
+    text-transform: none !important;
+
+    /* 📐 【変更】下の余白をゼロにして、ヘッダーの底面に近づけました */
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  /* 🎯 【新設】枠外に移動したタイトルのスタイル */
+  .veil-outer-title {
+    background: transparent !important;
+    color: #1e293b !important;
+    margin-bottom: 5px;
+    /* 数字を小さくするほど隙間が狭くなります（お好みで調整してください） */
+
+    /* 📐 【ここを変更！】1.25rem から 1.6rem（または 1.8rem など）に増やすとさらに大きくなります */
+    font-size: 1.6rem !important;
+
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 20px 0 15px 0 !important;
+  }
+
+  #page-compare {
+    margin-top: 0;
+    display: block;
+    /* ※切り替え用。一瞬デザイン調整で確認したい時は display: block; にしておくと便利です */
+  }
+
+  #page-search {
+    margin-top: 0;
+    display: block;
+    /* ※切り替え用。一瞬デザイン調整で確認したい時は display: block; にしておくと便利です */
+  }
+
+  /* 画面全体を覆う真っ白な壁 */
+  #loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    /* 画像の背景色に合わせると綺麗です */
+    z-index: 99999;
+    transition: opacity 0.4s ease;
+    /* 消える時のフェードアウトだけ残す */
+
+    /* 画像自体を全画面にするので、flex関連の配置指定は不要になります */
+  }
+
+  /* 画像を画面いっぱいに表示する設定 */
+  .loader-logo {
+    width: 100vw;
+    /* 画面の横幅いっぱいに */
+    height: 100vh;
+    /* 画面の縦幅いっぱいに */
+
+    /* ↓ここが一番のポイント！ */
+    /* cover：画像を切り抜いてでも、画面全体に隙間なく引き伸ばす（スマホの壁紙みたいなイメージ） */
+    /* contain：画像全体が画面に収まるように、比率を保ったまま最大化する */
+    object-fit: contain;
+
+    /* アニメーション（animation: pulse...）の行は削除します */
+  }
+
+  .loader-text {
+    font-family: sans-serif;
+    color: #666;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.4;
+    }
+
+    50% {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(0.9);
+      opacity: 0.4;
+    }
+  }
+</style>
 </head>
 
-  <body>
-    <!-- 📱 完全に整理された、あなた専用の固定ヘッダー（背景色はお好みで！） -->
-     <!-- 1. ローディング画面（演出用） -->
-<div id="loader">
-  <!-- ここにロゴ画像を入れると一気にLINE/Xっぽくなります -->
-  <img src="Veil.png" alt="アプリのロゴ" class="loader-logo">
-</div>
+<body>
+  <!-- 📱 完全に整理された、あなた専用の固定ヘッダー（背景色はお好みで！） -->
+  <!-- 1. ローディング画面（演出用） -->
+  <div id="loader">
+    <!-- ここにロゴ画像を入れると一気にLINE/Xっぽくなります -->
+    <img src="Veil.png" alt="アプリのロゴ" class="loader-logo">
+  </div>
 
-<!-- 2. メインコンテンツ（あなたの作ったページ） -->
-<div id="main-content">
-  <!-- ここに既存のコードが入る -->
-</div>
+  <!-- 2. メインコンテンツ（あなたの作ったページ） -->
+  <div id="main-content">
+    <!-- ここに既存のコードが入る -->
+  </div>
   <div class="veil-app-header">
-  <span class="veil-brand-text">Veil</span>
-</div>
+    <span class="veil-brand-text">Veil</span>
+  </div>
 
   <!-- 📱 メインコンテンツ（スマホサイズを確実にキープするコンテナ） -->
   <div id="page-simulator" class="app-page">
@@ -786,7 +828,8 @@
 
         <div class="section">
           <label for="phonePrice">本体代（値引き後）:￥</label>
-          <input type="number" id="phonePrice" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0" min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
+          <input type="number" id="phonePrice" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0"
+            min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
           <span style="font-size:0.9rem;"></span>
         </div>
 
@@ -808,12 +851,14 @@
           <div class="section" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; align-items: end;">
             <div>
               <label for="phoneCredit" style="font-size:0.8rem; display:block; margin-bottom:4px;">残価:￥</label>
-              <input type="number" id="phoneCredit" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0" min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
+              <input type="number" id="phoneCredit" class="amount-input" inputmode="numeric" pattern="[0-9]*"
+                placeholder="0" min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
             </div>
             <div>
               <label style="font-size:0.8rem; display:block; margin-bottom:4px;">23ヶ月総支払額:</label>
               <div id="salePriceText" class="text-display-badge">0 </div>
-              <div id="kaedoki-error-message" style="color: #ff3333; font-weight: bold; font-size: 0.9rem; margin-top: 5px;"></div>
+              <div id="kaedoki-error-message"
+                style="color: #ff3333; font-weight: bold; font-size: 0.9rem; margin-top: 5px;"></div>
             </div>
           </div>
         </div>
@@ -847,240 +892,271 @@
           </div>
           <div style="font-weight: bold; color: #d32f2f; font-size: 0.85rem;">
             ※当月以降指定の場合は当月日割り+指定月までの月額
+          </div>
+
+          <div class="subtotal-wrapper">
+            <div class="subtotal-box bg-plan">プラン月額: <span id="subtotal-plan">￥0</span></div>
+            <div class="day-subtotal-box">プラン月額（日割り）: <span id="day-subtotal-plan">￥0</span></div>
+          </div>
         </div>
 
-        <div class="subtotal-wrapper">
-          <div class="subtotal-box bg-plan">プラン月額: <span id="subtotal-plan">￥0</span></div>
-          <div class="day-subtotal-box">プラン月額（日割り）: <span id="day-subtotal-plan">￥0</span></div>
-        </div>
-      </div>
+        <div class="card">
+          <h2>
+            <span>オプション</span>
+            <label class="clear-all-label"><input type="checkbox" id="clear-options"
+                onchange="clearAllGroup('options')">すべての選択を解除</label>
+          </h2>
+          <div class="checkbox-group" id="option-wrapper">
+            <label class="checkbox-label"><input type="checkbox" id="5mtel" value="5mTel"
+                onchange="optionRules(); updatePriceOptions();" disabled>5分通話無料 ￥880</label>
+            <label class="checkbox-label"><input type="checkbox" id="ed-tel" value="edTel"
+                onchange="optionRules(); updatePriceOptions();" disabled>かけ放題 ￥1980</label>
+            <label class="checkbox-label"><input type="checkbox" id="mail" value="mail"
+                onchange="optionRules(); updatePriceOptions();" disabled>メール持ち運び ￥330（初回31日は無料）</label>
+            <label class="checkbox-label"><input type="checkbox" id="smart" value="smart"
+                onchange="toggleSmartAnshinOptions(); optionRules(); updatePriceOptions();"
+                disabled>smartあんしん補償（機種によって月額変動）</label>
 
-      <div class="card">
-        <h2>
-          <span>オプション</span>
-          <label class="clear-all-label"><input type="checkbox" id="clear-options" onchange="clearAllGroup('options')">すべての選択を解除</label>
-        </h2>
-        <div class="checkbox-group" id="option-wrapper">
-          <label class="checkbox-label"><input type="checkbox" id="5mtel" value="5mTel" onchange="optionRules(); updatePriceOptions();" disabled>5分通話無料 ￥880</label>
-          <label class="checkbox-label"><input type="checkbox" id="ed-tel" value="edTel" onchange="optionRules(); updatePriceOptions();" disabled>かけ放題 ￥1980</label>
-          <label class="checkbox-label"><input type="checkbox" id="mail" value="mail" onchange="optionRules(); updatePriceOptions();" disabled>メール持ち運び ￥330（初回31日は無料）</label>
-          <label class="checkbox-label"><input type="checkbox" id="smart" value="smart" onchange="toggleSmartAnshinOptions(); optionRules(); updatePriceOptions();" disabled>smartあんしん補償（機種によって月額変動）</label>
-          
-          <div id="smart-comp" class="sub-container disabled-box">
-            <h4 style="margin:0 0 10px 0; font-size:0.9rem;">smartあんしん補償 詳細</h4>
-            <div class="section" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-              <div>
-                <label for="OS-select" style="font-size:0.8rem;">OS:</label>
-                <select id="OS-select" onchange="updateOsSelect(); updateSeriesSelect(); updatePriceOptions();">
-                  <option value="">-- 選択してください --</option>
-                  <option value="iOS">iOS</option>
-                  <option value="Android">Android</option>
+            <div id="smart-comp" class="sub-container disabled-box">
+              <h4 style="margin:0 0 10px 0; font-size:0.9rem;">smartあんしん補償 詳細</h4>
+              <div class="section" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div>
+                  <label for="OS-select" style="font-size:0.8rem;">OS:</label>
+                  <select id="OS-select" onchange="updateOsSelect(); updateSeriesSelect(); updatePriceOptions();">
+                    <option value="">-- 選択してください --</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="device-series" style="font-size:0.8rem;">シリーズ:</label>
+                  <select id="device-series" onchange="updateSeriesSelect(); updatePriceOptions();" disabled>
+                    <option value="">-- OSを選択してください --</option>
+                  </select>
+                </div>
+              </div>
+              <div class="section" style="margin-top:8px;">
+                <label for="device-select" style="font-size:0.8rem;">機種名:</label>
+                <select id="device-select" onchange="updatePriceOptions()" disabled>
+                  <option value="">-- OSとシリーズを選択してください --</option>
                 </select>
               </div>
-              <div>
-                <label for="device-series" style="font-size:0.8rem;">シリーズ:</label>
-                <select id="device-series" onchange="updateSeriesSelect(); updatePriceOptions();" disabled>
-                  <option value="">-- OSを選択してください --</option>
-                </select>
+              <div id="smart-price-display"
+                style="font-weight: bold; color: #007bff; font-size:1.1rem; text-align:right;"></div>
+            </div> <label class="checkbox-label"><input type="checkbox" id="sec" value="sec"
+                onchange="optionRules(); updatePriceOptions();" disabled>あんしんセキュリティ（スタンダード）　￥550</label>
+            <label class="checkbox-label"><input type="checkbox" id="dval" value="dval"
+                onchange="optionRules(); updatePriceOptions();" disabled>dバリューパス　￥550</label>
+            <label class="checkbox-label"><input type="checkbox" id="bst" value="bst"
+                onchange="optionRules(); updatePriceOptions();" disabled>詐欺バスター（トレンドマイクロ）　￥550</label>
+            <label class="checkbox-label"><input type="checkbox" id="ks" value="Ks"
+                onchange="optionRules(); updatePriceOptions();" disabled>あんしんモバイル保険（ケーズデンキ）￥700</label>
+            <label class="checkbox-label"><input type="checkbox" id="ah-tel" value="ahTel"
+                onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（ahamo）　￥1,100</label>
+            <label class="checkbox-label"><input type="checkbox" id="ah-mega" value="ahMega"
+                onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
+            <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
+                onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活オプション　￥2,200</label>
+          </div>
+
+          <div class="subtotal-wrapper">
+            <div class="subtotal-box bg-option">オプション合計: <span id="subtotal-option">￥0</span></div>
+            <div class="day-subtotal-box">オプション合計（日割り）: <span id="day-subtotal-option">￥0</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            <span>割引</span>
+            <label class="clear-all-label"><input type="checkbox" id="clear-discounts"
+                onchange="clearAllGroup('discounts')">すべての選択を解除</label>
+          </h2>
+          <div class="checkbox-group" id="off">
+            <label class="checkbox-label">
+              <div class="label-left">
+                <input type="checkbox" id="d-family" value="dFamily" onchange="offOptions(); updatePriceOptions();"
+                  disabled>みんなドコモ割
               </div>
-            </div>
-            <div class="section" style="margin-top:8px;">
-              <label for="device-select" style="font-size:0.8rem;">機種名:</label>
-              <select id="device-select" onchange="updatePriceOptions()" disabled>
-                <option value="">-- OSとシリーズを選択してください --</option>
+              <span id="family-price" class="discount-price"
+                style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            </label>
+
+            <div id="family-box" class="sub-container disabled-box">
+              <h4 style="margin:0 0 8px 0; font-size:0.85rem;">家族グループ対象人数</h4>
+              <select id="people-select" onchange="updatePriceOptions();" disabled>
+                <option value="">-- 対象人数を選択 --</option>
+                <option value="under2">2人　▲￥550</option>
+                <option value="over3">3人以上　▲￥1,210</option>
               </select>
             </div>
-            <div id="smart-price-display" style="font-weight: bold; color: #007bff; font-size:1.1rem; text-align:right;"></div>
-          </div> <label class="checkbox-label"><input type="checkbox" id="sec" value="sec" onchange="optionRules(); updatePriceOptions();" disabled>あんしんセキュリティ（スタンダード）　￥550</label>
-          <label class="checkbox-label"><input type="checkbox" id="dval" value="dval" onchange="optionRules(); updatePriceOptions();" disabled>dバリューパス　￥550</label>
-          <label class="checkbox-label"><input type="checkbox" id="bst" value="bst" onchange="optionRules(); updatePriceOptions();" disabled>詐欺バスター（トレンドマイクロ）　￥550</label>
-          <label class="checkbox-label"><input type="checkbox" id="ks" value="Ks" onchange="optionRules(); updatePriceOptions();" disabled>あんしんモバイル保険（ケーズデンキ）￥700</label>
-          <label class="checkbox-label"><input type="checkbox" id="ah-tel" value="ahTel" onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（ahamo）　￥1,100</label>
-          <label class="checkbox-label"><input type="checkbox" id="ah-mega" value="ahMega" onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
-          <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt" onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活オプション　￥2,200</label>
-        </div>
 
-        <div class="subtotal-wrapper">
-          <div class="subtotal-box bg-option">オプション合計: <span id="subtotal-option">￥0</span></div>
-          <div class="day-subtotal-box">オプション合計（日割り）: <span id="day-subtotal-option">￥0</span></div>
-        </div>
-      </div>
+            <label class="checkbox-label">
+              <div class="label-left">
+                <input type="checkbox" id="d-user-check" value="dUser" onchange="offOptions(); updatePriceOptions();"
+                  disabled>長期利用割（※継続利用が10年以上）
+              </div>
+              <span id="user-price" class="discount-price"
+                style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            </label>
 
-      <div class="card">
-        <h2>
-          <span>割引</span>
-          <label class="clear-all-label"><input type="checkbox" id="clear-discounts" onchange="clearAllGroup('discounts')">すべての選択を解除</label>
-        </h2>
-        <div class="checkbox-group" id="off">
-          <label class="checkbox-label">
-            <div class="label-left">
-              <input type="checkbox" id="d-family" value="dFamily" onchange="offOptions(); updatePriceOptions();" disabled>みんなドコモ割
+            <div id="user-box" class="sub-container disabled-box">
+              <h4 style="margin:0 0 8px 0; font-size:0.85rem;">利用年数</h4>
+              <select id="user-select" onchange="updatePriceOptions();" disabled>
+                <option value="">-- 利用年数を選択 --</option>
+                <option value="under10">10年以上20年未満　▲￥110</option>
+                <option value="over20">20年以上　▲￥220</option>
+              </select>
             </div>
-            <span id="family-price" class="discount-price" style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
-          </label>
 
-          <div id="family-box" class="sub-container disabled-box">
-            <h4 style="margin:0 0 8px 0; font-size:0.85rem;">家族グループ対象人数</h4>
-            <select id="people-select" onchange="updatePriceOptions();" disabled>
-              <option value="">-- 対象人数を選択 --</option>
-              <option value="under2">2人　▲￥550</option>
-              <option value="over3">3人以上　▲￥1,210</option>
-            </select>
+            <label class="checkbox-label">
+              <div class="label-left">
+                <input type="checkbox" id="d-card-check" value="dCard" onchange="offOptions(); updatePriceOptions();"
+                  disabled>dカードお支払割
+              </div>
+              <span id="card-price" class="discount-price"
+                style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            </label>
+
+            <div id="card-box" class="sub-container disabled-box">
+              <h4 style="margin:0 0 8px 0; font-size:0.85rem;">dカードの種類</h4>
+              <select id="card-select" onchange="updatePriceOptions();" disabled>
+                <option value="">-- 種類を選択 --</option>
+                <option value="regular">dカード　▲￥220</option>
+                <option value="GOLD-U">dカード GOLD U　▲￥550</option>
+                <option value="GOLD">dカード GOLD　▲￥550</option>
+                <option value="PLUTINUM">dカード PLUTINUM　▲￥550</option>
+              </select>
+            </div>
+
+            <label class="checkbox-label">
+              <div class="label-left">
+                <input type="checkbox" id="net" value="Net" onchange="offOptions(); updatePriceOptions();" disabled>ドコモ光
+                / Home 5Gセット割　▲￥1,210
+              </div>
+              <span id="net-price" class="discount-price"
+                style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            </label>
+
+            <label class="checkbox-label">
+              <div class="label-left">
+                <input type="checkbox" id="ene" value="Ene" onchange="offOptions(); updatePriceOptions();"
+                  disabled>ドコモでんきセット割　▲￥110
+              </div>
+              <span id="ene-price" class="discount-price"
+                style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            </label>
           </div>
 
-          <label class="checkbox-label">
-            <div class="label-left">
-              <input type="checkbox" id="d-user-check" value="dUser" onchange="offOptions(); updatePriceOptions();" disabled>長期利用割（※継続利用が10年以上）
-            </div>
-            <span id="user-price" class="discount-price" style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
-          </label>
-
-          <div id="user-box" class="sub-container disabled-box">
-            <h4 style="margin:0 0 8px 0; font-size:0.85rem;">利用年数</h4>
-            <select id="user-select" onchange="updatePriceOptions();" disabled>
-              <option value="">-- 利用年数を選択 --</option>
-              <option value="under10">10年以上20年未満　▲￥110</option>
-              <option value="over20">20年以上　▲￥220</option>
-            </select>
+          <div class="subtotal-wrapper">
+            <div class="subtotal-box bg-discount">割引合計: <span id="subtotal-discount">￥0</span></div>
+            <div class="day-subtotal-box">割引（日割り）: <span id="day-subtotal-discount">￥0</span></div>
           </div>
+        </div>
 
-          <label class="checkbox-label">
-            <div class="label-left">
-              <input type="checkbox" id="d-card-check" value="dCard" onchange="offOptions(); updatePriceOptions();" disabled>dカードお支払割
-            </div>
-            <span id="card-price" class="discount-price" style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
-          </label>
 
-          <div id="card-box" class="sub-container disabled-box">
-            <h4 style="margin:0 0 8px 0; font-size:0.85rem;">dカードの種類</h4>
-            <select id="card-select" onchange="updatePriceOptions();" disabled>
-              <option value="">-- 種類を選択 --</option>
-              <option value="regular">dカード　▲￥220</option>
-              <option value="GOLD-U">dカード GOLD U　▲￥550</option>
-              <option value="GOLD">dカード GOLD　▲￥550</option>
-              <option value="PLUTINUM">dカード PLUTINUM　▲￥550</option>
-            </select>
-          </div>
 
+        <div class="card">
+          <h2>その他費用</h2>
           <label class="checkbox-label">
-            <div class="label-left">
-              <input type="checkbox" id="net" value="Net" onchange="offOptions(); updatePriceOptions();" disabled>ドコモ光 / Home 5Gセット割　▲￥1,210
-            </div>
-            <span id="net-price" class="discount-price" style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
-          </label>
-          
-          <label class="checkbox-label">
-            <div class="label-left">
-              <input type="checkbox" id="ene" value="Ene" onchange="offOptions(); updatePriceOptions();" disabled>ドコモでんきセット割　▲￥110
-            </div>
-            <span id="ene-price" class="discount-price" style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
+            <input type="checkbox" id="admin-fee" value="4950" onchange="updatePriceOptions();" disabled> 事務手数料　￥4,950
           </label>
         </div>
 
-        <div class="subtotal-wrapper">
-          <div class="subtotal-box bg-discount">割引合計: <span id="subtotal-discount">￥0</span></div>
-          <div class="day-subtotal-box">割引（日割り）: <span id="day-subtotal-discount">￥0</span></div>
+        <div id="alert-error-banner" class="alert-banner"></div>
+
+        <div id="final-result-card" class="card" style="background: #fff; border: none;">
+          <h2 style="border-bottom-color: var(--primary-color); font-size: 1.3rem;">計算結果</h2>
+          <div class="result-container">
+            <div id="once-fee-box" class="price-box box-once disabled-box">
+              <strong>【店頭決済】本体代金（一括）</strong>
+              <div class="price-breakdown" id="breakdown-once">一括払いが選択されていません</div>
+              <div class="price-amount" id="price-once-total">￥0</div>
+            </div>
+
+            <!-- 💡 ① 初回（内訳と金額の順番を修正） -->
+            <div id="once-fee-box-1" class="price-box box-once disabled-box">
+              <strong>【1回目】お支払い金額</strong>
+              <div id="breakdown-once-1" class="price-breakdown"></div>
+              <div id="price-once-month-1" class="price-amount">¥0</div> <!-- 金額を下へ -->
+            </div>
+
+            <!-- 💡 ② 2回目以降（内訳と金額の順番を修正） -->
+            <div id="once-fee-box-2" class="price-box box-once disabled-box">
+              <strong>【2回目以降】月額料金</strong>
+              <div id="breakdown-once-continue" class="price-breakdown"></div>
+              <div id="price-once-continue" class="price-amount">¥0</div> <!-- 金額を下へ -->
+            </div>
+
+            <div class="price-box box-month1 disabled-box">
+              <strong>【1回目】お支払い金額</strong>
+              <div class="price-breakdown" id="breakdown-1"></div>
+              <div class="price-amount" id="price-month-1">￥0</div>
+            </div>
+
+            <div id="continue-fee-box-2" class="price-box box-continue disabled-box">
+              <strong>【2回目】お支払い金額</strong>
+              <div class="price-breakdown" id="breakdown-continue-2"></div>
+              <div class="price-amount" id="price-continue-2">￥0</div>
+            </div>
+
+            <div id="continue-fee-box-3" class="price-box box-continue disabled-box">
+              <strong>【3回目以降】月額料金</strong>
+              <div class="price-breakdown" id="breakdown-continue-3"></div>
+              <div class="price-amount" id="price-continue-total">￥0</div>
+            </div>
+
+            <div id="kaedoki-month2-box" class="price-box box-month2 disabled-box">
+              <strong>【2回目】お支払い金額</strong>
+              <div class="price-breakdown" id="breakdown-month-2"></div>
+              <div class="price-amount" id="price-month-2">￥0</div>
+            </div>
+
+            <div id="kaedoki-month3-23-box" class="price-box box-month2 disabled-box">
+              <strong>【3～23回目】月額料金</strong>
+              <div class="price-breakdown" id="breakdown-month-3-23"></div>
+              <div id="kaedoki-program-notice" class="error-msg-red" style="display:none; font-weight: bold;">
+                ⚠️ 返却時プログラム利用料￥22,000発生<br>
+                ※ドコモの指定機種に機種変更で免除
+              </div>
+              <div class="price-amount" id="price-month-22">￥0</div>
+            </div>
+
+            <div id="kaedoki-extend-box" class="price-box box-kaedoki disabled-box">
+              <strong>【24回目以降】返却しない場合の月額料金</strong>
+              <div class="price-breakdown" id="breakdown-kaedoki-status" style="margin-bottom: 5px;">
+                いつでもカエドキプログラムが選択されていません
+              </div>
+              <div class="kaedoki-inner-box" id="inner-k24" style="display:none;">
+                <div class="price-breakdown" id="breakdown-k24"></div>
+                <div class="price-amount" id="price-kaedoki-24"
+                  style="font-size: 1.5rem; margin-top:5px; padding-top:5px;">￥0</div>
+              </div>
+              <div class="kaedoki-inner-box" id="inner-k25" style="display:none; margin-top: 10px;">
+                <div class="price-breakdown" id="breakdown-k25"></div>
+                <div class="price-amount" id="price-kaedoki-25"
+                  style="font-size: 1.5rem; margin-top:5px; padding-top:5px;">￥0</div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
-
-      
-
-      <div class="card">
-        <h2>その他費用</h2>
-        <label class="checkbox-label">
-          <input type="checkbox" id="admin-fee" value="4950" onchange="updatePriceOptions();" disabled> 事務手数料　￥4,950
-        </label>
-      </div>
-
-      <div id="alert-error-banner" class="alert-banner"></div>
-
-      <div id="final-result-card" class="card" style="background: #fff; border: none;">
-        <h2 style="border-bottom-color: var(--primary-color); font-size: 1.3rem;">計算結果</h2>
-        <div class="result-container">
-  <div id="once-fee-box" class="price-box box-once disabled-box">
-  <strong>【店頭決済】本体代金（一括）</strong>
-  <div class="price-breakdown" id="breakdown-once">一括払いが選択されていません</div>
-  <div class="price-amount" id="price-once-total">￥0</div>
-</div>
-
-<!-- 💡 ① 初回（内訳と金額の順番を修正） -->
-<div id="once-fee-box-1" class="price-box box-once disabled-box">
-  <strong>【1回目】お支払い金額</strong>
-  <div id="breakdown-once-1" class="price-breakdown"></div>
-  <div id="price-once-month-1" class="price-amount">¥0</div> <!-- 金額を下へ -->
-</div>
-
-<!-- 💡 ② 2回目以降（内訳と金額の順番を修正） -->
-<div id="once-fee-box-2" class="price-box box-once disabled-box">
-  <strong>【2回目以降】月額料金</strong>
-  <div id="breakdown-once-continue" class="price-breakdown"></div>
-  <div id="price-once-continue" class="price-amount">¥0</div> <!-- 金額を下へ -->
-</div>
-
-  <div class="price-box box-month1 disabled-box">
-    <strong>【1回目】お支払い金額</strong>
-    <div class="price-breakdown" id="breakdown-1"></div>
-    <div class="price-amount" id="price-month-1">￥0</div>
-  </div>
-
-  <div id="continue-fee-box-2" class="price-box box-continue disabled-box">
-    <strong>【2回目】お支払い金額</strong>
-    <div class="price-breakdown" id="breakdown-continue-2"></div>
-    <div class="price-amount" id="price-continue-2">￥0</div>
-  </div>
-
-  <div id="continue-fee-box-3" class="price-box box-continue disabled-box">
-    <strong>【3回目以降】月額料金</strong>
-    <div class="price-breakdown" id="breakdown-continue-3"></div>
-    <div class="price-amount" id="price-continue-total">￥0</div>
-  </div>
-
-  <div id="kaedoki-month2-box" class="price-box box-month2 disabled-box">
-  <strong>【2回目】お支払い金額</strong>
-  <div class="price-breakdown" id="breakdown-month-2"></div> <div class="price-amount" id="price-month-2">￥0</div>
-</div>
-
-<div id="kaedoki-month3-23-box" class="price-box box-month2 disabled-box">
-  <strong>【3～23回目】月額料金</strong>
-  <div class="price-breakdown" id="breakdown-month-3-23"></div> <div id="kaedoki-program-notice" class="error-msg-red" style="display:none; font-weight: bold;">
-    ⚠️ 返却時プログラム利用料￥22,000発生<br>
-    ※ドコモの指定機種に機種変更で免除
-  </div>
-  <div class="price-amount" id="price-month-22">￥0</div>
-</div>
-
-  <div id="kaedoki-extend-box" class="price-box box-kaedoki disabled-box">
-    <strong>【24回目以降】返却しない場合の月額料金</strong>
-    <div class="price-breakdown" id="breakdown-kaedoki-status" style="margin-bottom: 5px;">
-      いつでもカエドキプログラムが選択されていません
-    </div>
-    <div class="kaedoki-inner-box" id="inner-k24" style="display:none;">
-      <div class="price-breakdown" id="breakdown-k24"></div>
-      <div class="price-amount" id="price-kaedoki-24" style="font-size: 1.5rem; margin-top:5px; padding-top:5px;">￥0</div>
-    </div>
-    <div class="kaedoki-inner-box" id="inner-k25" style="display:none; margin-top: 10px;">
-      <div class="price-breakdown" id="breakdown-k25"></div>
-      <div class="price-amount" id="price-kaedoki-25" style="font-size: 1.5rem; margin-top:5px; padding-top:5px;">￥0</div>
+      <button type="button" class="btn-reset" onclick="resetAllInputs()">
+        <span class="btn-reset-icon">🔄</span> 全てをリセット
+      </button>
     </div>
   </div>
-</div>
-      </div>
+  <h1 class="veil-outer-title">キャリア別月額料金</h1>
+  <div id="page-simulator">
+    <!-- シミュレーターの中身 -->
+  </div> <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
 
-    </div> 
-    <button type="button" class="btn-reset" onclick="resetAllInputs()">
-  <span class="btn-reset-icon">🔄</span> 全てをリセット
-</button>
-</div> 
-</div>
-<h1 class="veil-outer-title">キャリア別月額料金</h1>
-<div id="page-simulator">
-  <!-- シミュレーターの中身 -->
-</div> <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
+  <!-- その下に、完全に独立させて iframe を置く -->
+  <iframe id="page-compare" src="./compare.html"
+    style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
+  <iframe id="page-search" src="./search.html" style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
 
-<!-- その下に、完全に独立させて iframe を置く -->
-<iframe id="page-compare" src="compare.html" style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
-
-     <footer class="app-footer">
+  <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
       <span class="tab-icon">📱</span>
       <span class="tab-label">月額計算</span>
@@ -1091,196 +1167,196 @@
       <span class="tab-label">キャリア料金比較</span>
     </div>
 
-    <div class="footer-tab" onclick="switchTab('help')">
-      <span class="tab-icon">❓</span>
-      <span class="tab-label">ヘルプ</span>
+    <div class="footer-tab" onclick="switchTab('search')">
+      <span class="tab-icon">🔎</span>
+      <span class="tab-label">プラン検索</span>
     </div>
   </footer>
 
   <script>
     // =======================================================================================================================
-// ページを開いた瞬間の時間を記録
-const startTime = Date.now();
+    // ページを開いた瞬間の時間を記録
+    const startTime = Date.now();
 
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loader');
-  
-  const elapsedTime = Date.now() - startTime;
-  const minDisplayTime = 2400; // ★ここで演出時間を調整（1000 = 1秒）
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
 
-  // 1秒に満たない残りの時間を計算（終わっていれば0）
-  const remainingTime = Math.max(minDisplayTime - elapsedTime, 0);
+      const elapsedTime = Date.now() - startTime;
+      const minDisplayTime = 2400; // ★ここで演出時間を調整（1000 = 1秒）
 
-  // 計算した時間だけ待ってからフェードアウトを開始
-  setTimeout(() => {
-    loader.style.opacity = '0'; // 薄くしていく
-    
-    // CSSのtransition（0.4秒）が終わった頃に完全に非表示（クリックできるように）にする
-    setTimeout(() => {
-      loader.style.display = 'none';
-    }, 400);
-  }, remainingTime);
-});
+      // 1秒に満たない残りの時間を計算（終わっていれば0）
+      const remainingTime = Math.max(minDisplayTime - elapsedTime, 0);
+
+      // 計算した時間だけ待ってからフェードアウトを開始
+      setTimeout(() => {
+        loader.style.opacity = '0'; // 薄くしていく
+
+        // CSSのtransition（0.4秒）が終わった頃に完全に非表示（クリックできるように）にする
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 400);
+      }, remainingTime);
+    });
 
     let globalSalePrice = 0;
 
     // 本体代金や残価の入力、購入方法の変更時に即座に計算を回す
     function calcSalePrice() {
-  const buyMode = document.getElementById('buy-mode').value;
-  const textBadge = document.getElementById('salePriceText');
-  
-  if (buyMode === 'kaedoki') {
-    const phonePrice = Number(document.getElementById('phonePrice').value) || 0;
-    const phoneCredit = Number(document.getElementById('phoneCredit').value) || 0;
-    
-    let diff = phonePrice - phoneCredit;
-    
-    // 👇【修正位置】if文で使う前に、ここで先に要素を取得しておく！
-    const errorMsg = document.getElementById('kaedoki-error-message');
-    const nextSelect = document.getElementById('plan-select');
-    
-    if (diff < 0) {
-      if(errorMsg) errorMsg.innerText = "値がマイナスになります。入力し直してください";
-      if(nextSelect) {
-        nextSelect.disabled = true;
-        nextSelect.value = ""; 
-      }
-      diff = 0;
-    } else {
-      if(errorMsg) errorMsg.innerText = "";
-      if(nextSelect) nextSelect.disabled = false;
-    }
-    
-    globalSalePrice = diff;
-    if(textBadge) textBadge.innerText = "￥" + diff.toLocaleString();
-  } else {
-    globalSalePrice = 0;
-    if(textBadge) textBadge.innerText = "￥0";
+      const buyMode = document.getElementById('buy-mode').value;
+      const textBadge = document.getElementById('salePriceText');
 
-    // カエドキ以外が選ばれたときも、一応メッセージを消しておく
-    const errorMsg = document.getElementById('kaedoki-error-message');
-    // 👇【修正】else側でも nextSelect を使うので、ここでも取得するか、関数の最初で取得すると安全です
-    const nextSelect = document.getElementById('plan-select'); 
-    
-    if (errorMsg) errorMsg.innerText = "";
-    if(nextSelect) nextSelect.disabled = false;
-  }
-  // 金額が変わったら即座に最終合計を更新
-  updatePriceOptions();
-}
+      if (buyMode === 'kaedoki') {
+        const phonePrice = Number(document.getElementById('phonePrice').value) || 0;
+        const phoneCredit = Number(document.getElementById('phoneCredit').value) || 0;
+
+        let diff = phonePrice - phoneCredit;
+
+        // 👇【修正位置】if文で使う前に、ここで先に要素を取得しておく！
+        const errorMsg = document.getElementById('kaedoki-error-message');
+        const nextSelect = document.getElementById('plan-select');
+
+        if (diff < 0) {
+          if (errorMsg) errorMsg.innerText = "値がマイナスになります。入力し直してください";
+          if (nextSelect) {
+            nextSelect.disabled = true;
+            nextSelect.value = "";
+          }
+          diff = 0;
+        } else {
+          if (errorMsg) errorMsg.innerText = "";
+          if (nextSelect) nextSelect.disabled = false;
+        }
+
+        globalSalePrice = diff;
+        if (textBadge) textBadge.innerText = "￥" + diff.toLocaleString();
+      } else {
+        globalSalePrice = 0;
+        if (textBadge) textBadge.innerText = "￥0";
+
+        // カエドキ以外が選ばれたときも、一応メッセージを消しておく
+        const errorMsg = document.getElementById('kaedoki-error-message');
+        // 👇【修正】else側でも nextSelect を使うので、ここでも取得するか、関数の最初で取得すると安全です
+        const nextSelect = document.getElementById('plan-select');
+
+        if (errorMsg) errorMsg.innerText = "";
+        if (nextSelect) nextSelect.disabled = false;
+      }
+      // 金額が変わったら即座に最終合計を更新
+      updatePriceOptions();
+    }
 
     function buyMethod() {
-  const buyMode = document.getElementById('buy-mode').value;
-  const phonePrice = document.getElementById('phonePrice');
-  const selectTime = document.getElementById('select-time');
-  const phoneCredit = document.getElementById('phoneCredit');
-  const textBadge = document.getElementById('salePriceText');
+      const buyMode = document.getElementById('buy-mode').value;
+      const phonePrice = document.getElementById('phonePrice');
+      const selectTime = document.getElementById('select-time');
+      const phoneCredit = document.getElementById('phoneCredit');
+      const textBadge = document.getElementById('salePriceText');
 
-  const blockDivide = document.getElementById('block-divide');
-  const blockKaedoki = document.getElementById('block-kaedoki');
+      const blockDivide = document.getElementById('block-divide');
+      const blockKaedoki = document.getElementById('block-kaedoki');
 
-  // --- 💡【追加】HTMLの各料金ボックスの要素を取得 ---
-  const onceFeeBox = document.getElementById('once-fee-box');
-  const month1Box = document.querySelector('.box-month1'); // 初回
-  const continueFeeBox2 = document.getElementById('continue-fee-box-2'); // 2回目(通常)
-  const continueFeeBox3 = document.getElementById('continue-fee-box-3'); // 3回目~(通常)
-  const kaedokiMonth2Box = document.getElementById('kaedoki-month2-box'); // 2回目(カエドキ)
-  const kaedokiMonth323Box = document.getElementById('kaedoki-month3-23-box'); // 3~23回目(カエドキ)
-  const kaedokiExtendBox = document.getElementById('kaedoki-extend-box'); // 24回目~(カエドキ)
+      // --- 💡【追加】HTMLの各料金ボックスの要素を取得 ---
+      const onceFeeBox = document.getElementById('once-fee-box');
+      const month1Box = document.querySelector('.box-month1'); // 初回
+      const continueFeeBox2 = document.getElementById('continue-fee-box-2'); // 2回目(通常)
+      const continueFeeBox3 = document.getElementById('continue-fee-box-3'); // 3回目~(通常)
+      const kaedokiMonth2Box = document.getElementById('kaedoki-month2-box'); // 2回目(カエドキ)
+      const kaedokiMonth323Box = document.getElementById('kaedoki-month3-23-box'); // 3~23回目(カエドキ)
+      const kaedokiExtendBox = document.getElementById('kaedoki-extend-box'); // 24回目~(カエドキ)
 
-  // 値のリセット
-  if(phonePrice) phonePrice.value = ""; 
-  if(selectTime) selectTime.value = ""; 
-  if(phoneCredit) phoneCredit.value = ""; 
-  globalSalePrice = 0;
-  if(textBadge) textBadge.innerText = "￥0";
+      // 値のリセット
+      if (phonePrice) phonePrice.value = "";
+      if (selectTime) selectTime.value = "";
+      if (phoneCredit) phoneCredit.value = "";
+      globalSalePrice = 0;
+      if (textBadge) textBadge.innerText = "￥0";
 
-  if(blockDivide) { blockDivide.classList.add('disabled-box'); blockDivide.classList.remove('active-divide'); }
-  if(blockKaedoki) { blockKaedoki.classList.add('disabled-box'); blockKaedoki.classList.remove('active-kaedoki'); }
+      if (blockDivide) { blockDivide.classList.add('disabled-box'); blockDivide.classList.remove('active-divide'); }
+      if (blockKaedoki) { blockKaedoki.classList.add('disabled-box'); blockKaedoki.classList.remove('active-kaedoki'); }
 
-  // --- 💡【追加】すべての料金ボックスを一旦非表示（初期化） ---
-  const allFeeBoxes = [onceFeeBox, month1Box, continueFeeBox2, continueFeeBox3, kaedokiMonth2Box, kaedokiMonth323Box, kaedokiExtendBox];
-  allFeeBoxes.forEach(box => {
-    if (box) box.classList.add('disabled-box');
-  });
+      // --- 💡【追加】すべての料金ボックスを一旦非表示（初期化） ---
+      const allFeeBoxes = [onceFeeBox, month1Box, continueFeeBox2, continueFeeBox3, kaedokiMonth2Box, kaedokiMonth323Box, kaedokiExtendBox];
+      allFeeBoxes.forEach(box => {
+        if (box) box.classList.add('disabled-box');
+      });
 
-  // 選択されたモードに応じて出し分け
-  if (buyMode === "once") {
-    // 【一括払い】
-    if(phonePrice) phonePrice.disabled = false; 
-    if(selectTime) selectTime.disabled = true; 
-    if(phoneCredit) phoneCredit.disabled = true;
+      // 選択されたモードに応じて出し分け
+      if (buyMode === "once") {
+        // 【一括払い】
+        if (phonePrice) phonePrice.disabled = false;
+        if (selectTime) selectTime.disabled = true;
+        if (phoneCredit) phoneCredit.disabled = true;
 
-    // 💡 一括用のボックスだけ表示
-    if(onceFeeBox) onceFeeBox.classList.remove('disabled-box');
+        // 💡 一括用のボックスだけ表示
+        if (onceFeeBox) onceFeeBox.classList.remove('disabled-box');
 
-  } else if (buyMode === "divide"){
-    // 【分割払い】
-    if(phonePrice) phonePrice.disabled = false; 
-    if(selectTime) selectTime.disabled = false; 
-    if(phoneCredit) phoneCredit.disabled = true;
-    if(blockDivide) { blockDivide.classList.remove('disabled-box'); blockDivide.classList.add('active-divide'); }
+      } else if (buyMode === "divide") {
+        // 【分割払い】
+        if (phonePrice) phonePrice.disabled = false;
+        if (selectTime) selectTime.disabled = false;
+        if (phoneCredit) phoneCredit.disabled = true;
+        if (blockDivide) { blockDivide.classList.remove('disabled-box'); blockDivide.classList.add('active-divide'); }
 
-    // 💡 通常分割用のボックスを表示
-    if(month1Box) month1Box.classList.remove('disabled-box');
-    if(continueFeeBox2) continueFeeBox2.classList.remove('disabled-box');
-    if(continueFeeBox3) continueFeeBox3.classList.remove('disabled-box');
+        // 💡 通常分割用のボックスを表示
+        if (month1Box) month1Box.classList.remove('disabled-box');
+        if (continueFeeBox2) continueFeeBox2.classList.remove('disabled-box');
+        if (continueFeeBox3) continueFeeBox3.classList.remove('disabled-box');
 
-  } else if (buyMode === "kaedoki"){
-    // 【いつでもカエドキプログラム】
-    if(phonePrice) phonePrice.disabled = false; 
-    if(selectTime) selectTime.disabled = true; 
-    if(phoneCredit) phoneCredit.disabled = false;
-    if(blockKaedoki) { blockKaedoki.classList.remove('disabled-box'); blockKaedoki.classList.add('active-kaedoki'); }
+      } else if (buyMode === "kaedoki") {
+        // 【いつでもカエドキプログラム】
+        if (phonePrice) phonePrice.disabled = false;
+        if (selectTime) selectTime.disabled = true;
+        if (phoneCredit) phoneCredit.disabled = false;
+        if (blockKaedoki) { blockKaedoki.classList.remove('disabled-box'); blockKaedoki.classList.add('active-kaedoki'); }
 
-    // 💡 カエドキプログラム用のボックスを表示
-    if(month1Box) month1Box.classList.remove('disabled-box'); // カエドキでも初回はある想定
-    if(kaedokiMonth2Box) kaedokiMonth2Box.classList.remove('disabled-box');
-    if(kaedokiMonth323Box) kaedokiMonth323Box.classList.remove('disabled-box');
-    if(kaedokiExtendBox) kaedokiExtendBox.classList.remove('disabled-box');
+        // 💡 カエドキプログラム用のボックスを表示
+        if (month1Box) month1Box.classList.remove('disabled-box'); // カエドキでも初回はある想定
+        if (kaedokiMonth2Box) kaedokiMonth2Box.classList.remove('disabled-box');
+        if (kaedokiMonth323Box) kaedokiMonth323Box.classList.remove('disabled-box');
+        if (kaedokiExtendBox) kaedokiExtendBox.classList.remove('disabled-box');
 
-  } else {
-    // 【未選択時】
-    if(phonePrice) phonePrice.disabled = true; 
-    if(selectTime) selectTime.disabled = true; 
-    if(phoneCredit) phoneCredit.disabled = true;
-  }
-  
-  updatePriceOptions();
-}
+      } else {
+        // 【未選択時】
+        if (phonePrice) phonePrice.disabled = true;
+        if (selectTime) selectTime.disabled = true;
+        if (phoneCredit) phoneCredit.disabled = true;
+      }
+
+      updatePriceOptions();
+    }
 
     function clearAllGroup(groupType) {
       if (groupType === 'options') {
         const wrapper = document.getElementById('option-wrapper');
-        if(wrapper) {
+        if (wrapper) {
           const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]');
-          checkboxes.forEach(cb => { if(!cb.disabled) cb.checked = false; });
+          checkboxes.forEach(cb => { if (!cb.disabled) cb.checked = false; });
         }
         const clearOpt = document.getElementById('clear-options');
-        if(clearOpt) clearOpt.checked = false;
+        if (clearOpt) clearOpt.checked = false;
         optionRules();
       } else if (groupType === 'discounts') {
         const wrapper = document.getElementById('off');
-        if(wrapper) {
+        if (wrapper) {
           const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]');
-          checkboxes.forEach(cb => { if(!cb.disabled) cb.checked = false; });
+          checkboxes.forEach(cb => { if (!cb.disabled) cb.checked = false; });
         }
         const clearDisc = document.getElementById('clear-discounts');
-        if(clearDisc) clearDisc.checked = false;
+        if (clearDisc) clearDisc.checked = false;
         offOptions();
       }
     }
 
     const strageGallery = {
-      'MAX':[{ value: 'MAXst1', text: '~1GB'},{ value: 'MAXst2', text:'1~3GB'},{ value: 'MAXst3', text:'無制限'}],
-      'MAXP':[{ value: 'MAXPst', text: '無制限'}],
-      'Pt20':[{ value: 'Pt20st1', text: '~20GB'},{ value: 'Pt20st2', text:'無制限'}],
-      'mini':[{ value: 'minist1', text: '4GB'},{ value: 'minist2', text:'10GB'}],
-      'ahamo':[{ value: 'ahamost', text: '30GB'}]
+      'MAX': [{ value: 'MAXst1', text: '~1GB' }, { value: 'MAXst2', text: '1~3GB' }, { value: 'MAXst3', text: '無制限' }],
+      'MAXP': [{ value: 'MAXPst', text: '無制限' }],
+      'Pt20': [{ value: 'Pt20st1', text: '~20GB' }, { value: 'Pt20st2', text: '無制限' }],
+      'mini': [{ value: 'minist1', text: '4GB' }, { value: 'minist2', text: '10GB' }],
+      'ahamo': [{ value: 'ahamost', text: '30GB' }]
     };
 
     const priceList = {
-      'MAXst1':5698, 'MAXst2':6798, 'MAXst3':8448, 'MAXPst':11748, 'Pt20st1':7898, 'Pt20st2':9570, 'minist1':2750, 'minist2':3850, 'ahamost':2970
+      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'ahamost': 2970
     };
 
     const optionPrices = {
@@ -1288,44 +1364,44 @@ window.addEventListener('load', () => {
     };
 
     const osToSeries = {
-      'iOS': [ { value : 'iPhone', text : 'iPhone' } ],
-      'Android' : [
-        { value : 'Galaxy', text : 'Galaxy' }, { value : 'Pixel', text : 'Pixel' }, { value : 'Xperia', text : 'Xperia' }, { value : 'AQUOS', text : 'AQUOS' }, { value : 'other', text : 'その他' }
+      'iOS': [{ value: 'iPhone', text: 'iPhone' }],
+      'Android': [
+        { value: 'Galaxy', text: 'Galaxy' }, { value: 'Pixel', text: 'Pixel' }, { value: 'Xperia', text: 'Xperia' }, { value: 'AQUOS', text: 'AQUOS' }, { value: 'other', text: 'その他' }
       ]
     };
 
     const seriesToDevices = {
       'iPhone': [
-        { value : 'iPhone16', text : 'iPhone 16' }, { value : 'iPhone17e', text : 'iPhone 17e' }, { value : 'iPhone17', text : 'iPhone 17' }, { value : 'iPhoneAir', text : 'iPhone Air' }, { value : 'iPhone17Pro', text : 'iPhone 17 Pro' }, { value : 'iPhone17ProMax', text : 'iPhone 17 Pro MAX' }
+        { value: 'iPhone16', text: 'iPhone 16' }, { value: 'iPhone17e', text: 'iPhone 17e' }, { value: 'iPhone17', text: 'iPhone 17' }, { value: 'iPhoneAir', text: 'iPhone Air' }, { value: 'iPhone17Pro', text: 'iPhone 17 Pro' }, { value: 'iPhone17ProMax', text: 'iPhone 17 Pro MAX' }
       ],
-      'Galaxy' : [
-        { value : 'S26Ultra', text : 'S26 Ultra' }, { value : 'S26', text : 'S26' }, { value : 'S25', text : 'S25' }, { value : 'ZFlip7', text : 'Z Flip 7' }, { value : 'ZFold7', text : 'Z Fold 7' }, { value : 'A57', text : 'A57' }, { value : 'A36', text : 'A36' }, { value : 'A25', text : 'A25' }
+      'Galaxy': [
+        { value: 'S26Ultra', text: 'S26 Ultra' }, { value: 'S26', text: 'S26' }, { value: 'S25', text: 'S25' }, { value: 'ZFlip7', text: 'Z Flip 7' }, { value: 'ZFold7', text: 'Z Fold 7' }, { value: 'A57', text: 'A57' }, { value: 'A36', text: 'A36' }, { value: 'A25', text: 'A25' }
       ],
-      'Pixel' : [
-        { value : '10Pro', text : '10 Pro' }, { value : '10', text : '10' }, { value : '10a', text : '10a' }, { value : '9a', text : '9a' }
+      'Pixel': [
+        { value: '10Pro', text: '10 Pro' }, { value: '10', text: '10' }, { value: '10a', text: '10a' }, { value: '9a', text: '9a' }
       ],
-      'Xperia' : [
-        { value : '1-8', text : '1 Ⅷ' }, { value : '1-7', text : '1 Ⅶ' }, { value : '10-7', text : '10 Ⅶ' }
+      'Xperia': [
+        { value: '1-8', text: '1 Ⅷ' }, { value: '1-7', text: '1 Ⅶ' }, { value: '10-7', text: '10 Ⅶ' }
       ],
-      'AQUOS' : [
-        { value : 'R10', text : 'R10' }, { value : 'R9Pro', text : 'R9 pro' }, { value : 'sense10', text : 'sense 10' }, { value : 'sense9', text : 'sense 9' }, { value : 'wish5', text : 'wish 5' }
+      'AQUOS': [
+        { value: 'R10', text: 'R10' }, { value: 'R9Pro', text: 'R9 pro' }, { value: 'sense10', text: 'sense 10' }, { value: 'sense9', text: 'sense 9' }, { value: 'wish5', text: 'wish 5' }
       ],
-      'other' : [
-        { value : 'arrowsAlpha', text : 'arrows Alpha' }, { value : 'arrowsWe2', text : 'arrows We2' }, { value : 'arrowsWe3', text : 'arrows We3' }, { value : 'raku-sp', text : 'らくらくスマートフォン' }, { value : 'raku-ph', text : 'らくらくフォン' }, { value : 'motorola', text : 'motorola razr 60d' }, { value : 'DIGNO', text : 'DIGNO' }, { value : 'kids-ph', text : 'キッズケータイ' }
+      'other': [
+        { value: 'arrowsAlpha', text: 'arrows Alpha' }, { value: 'arrowsWe2', text: 'arrows We2' }, { value: 'arrowsWe3', text: 'arrows We3' }, { value: 'raku-sp', text: 'らくらくスマートフォン' }, { value: 'raku-ph', text: 'らくらくフォン' }, { value: 'motorola', text: 'motorola razr 60d' }, { value: 'DIGNO', text: 'DIGNO' }, { value: 'kids-ph', text: 'キッズケータイ' }
       ]
     };
 
     const compPrice = {
-      'iPhone16':880,'iPhone17e':1100,'iPhone17':1100,'iPhoneAir':1460,'iPhone17Pro':1460,'iPhone17ProMax':1720,
-      'S26Ultra':1460,'S26':1100,'S25':880,'ZFlip7':1100,'ZFold7':1720,'A57':990,'A36':330,'A25':330,
-      '10Pro':1100,'10':1100,'10a':990,'9a':880,
-      '1-8':1720,'1-7':1100,'10-7':990,
-      'R10':880,'R9Pro':880,'sense10':860,'sense9':605,'wish5':330,
-      'arrowsAlpha':990,'arrowsWe2':330,'arrowsWe3':490,'raku-sp':605,'raku-ph':490,'motorola':990,'DIGNO':330,'kids-ph':330
+      'iPhone16': 880, 'iPhone17e': 1100, 'iPhone17': 1100, 'iPhoneAir': 1460, 'iPhone17Pro': 1460, 'iPhone17ProMax': 1720,
+      'S26Ultra': 1460, 'S26': 1100, 'S25': 880, 'ZFlip7': 1100, 'ZFold7': 1720, 'A57': 990, 'A36': 330, 'A25': 330,
+      '10Pro': 1100, '10': 1100, '10a': 990, '9a': 880,
+      '1-8': 1720, '1-7': 1100, '10-7': 990,
+      'R10': 880, 'R9Pro': 880, 'sense10': 860, 'sense9': 605, 'wish5': 330,
+      'arrowsAlpha': 990, 'arrowsWe2': 330, 'arrowsWe3': 490, 'raku-sp': 605, 'raku-ph': 490, 'motorola': 990, 'DIGNO': 330, 'kids-ph': 330
     };
 
     const offPrice = {
-      'under2':550, 'over3':1210, 'under10':110, 'over20':220, 'regular':220, 'GOLD-U':550,'GOLD':550,'PLUTINUM':550, 'net': 1210, 'ene': 110   
+      'under2': 550, 'over3': 1210, 'under10': 110, 'over20': 220, 'regular': 220, 'GOLD-U': 550, 'GOLD': 550, 'PLUTINUM': 550, 'net': 1210, 'ene': 110
     };
 
     function toggleSmartAnshinOptions() {
@@ -1337,99 +1413,99 @@ window.addEventListener('load', () => {
       const priceDisplay = document.getElementById('smart-price-display');
 
       if (checkbox && checkbox.checked && !checkbox.disabled) {
-        if(container) container.classList.remove('disabled-box'); if(osSelect) osSelect.disabled = false;
+        if (container) container.classList.remove('disabled-box'); if (osSelect) osSelect.disabled = false;
       } else {
-        if(container) container.classList.add('disabled-box'); if(osSelect) { osSelect.value = ""; osSelect.disabled = true; }
-        if(seriesSelect) { seriesSelect.innerHTML = '<option value="">-- 先にOS --</option>'; seriesSelect.disabled = true; }
-        if(deviceSelect) { deviceSelect.innerHTML = '<option value="">-- 先にシリーズ --</option>'; deviceSelect.disabled = true; }
-        if(priceDisplay) priceDisplay.innerText = ""; optionPrices['smart'] = 0; 
+        if (container) container.classList.add('disabled-box'); if (osSelect) { osSelect.value = ""; osSelect.disabled = true; }
+        if (seriesSelect) { seriesSelect.innerHTML = '<option value="">-- 先にOS --</option>'; seriesSelect.disabled = true; }
+        if (deviceSelect) { deviceSelect.innerHTML = '<option value="">-- 先にシリーズ --</option>'; deviceSelect.disabled = true; }
+        if (priceDisplay) priceDisplay.innerText = ""; optionPrices['smart'] = 0;
       }
     }
- function updateOsSelect() {
-  const osSelect = document.getElementById('OS-select'); // IDのタイポ修正
-  const seriesSelect = document.getElementById('device-series');
-  const deviceSelect = document.getElementById('device-select');
-  const priceDisplay = document.getElementById('smart-price-display');
-  
-  if (!osSelect || !seriesSelect || !deviceSelect) return;
-  
-  const selectedOs = osSelect.value;
+    function updateOsSelect() {
+      const osSelect = document.getElementById('OS-select'); // IDのタイポ修正
+      const seriesSelect = document.getElementById('device-series');
+      const deviceSelect = document.getElementById('device-select');
+      const priceDisplay = document.getElementById('smart-price-display');
 
-  // 下位のプルダウンをリセット
-  seriesSelect.innerHTML = '';
-  deviceSelect.innerHTML = '<option value="">-- OSとシリーズを選択してください --</option>';
-  deviceSelect.disabled = true;
-  if (priceDisplay) priceDisplay.innerText = ""; 
+      if (!osSelect || !seriesSelect || !deviceSelect) return;
 
-  if (!selectedOs) {
-    seriesSelect.innerHTML = '<option value="">-- OSを選択してください --</option>';
-    seriesSelect.disabled = true;
-    optionPrices['smart'] = 0; 
-    updatePriceOptions();
-    return;
-  }
+      const selectedOs = osSelect.value;
 
-  // 「シリーズ」の選択肢を生成
-  const defaultOp = document.createElement('option');
-  defaultOp.value = ''; 
-  defaultOp.text = '-- シリーズを選択してください --';
-  seriesSelect.appendChild(defaultOp);
+      // 下位のプルダウンをリセット
+      seriesSelect.innerHTML = '';
+      deviceSelect.innerHTML = '<option value="">-- OSとシリーズを選択してください --</option>';
+      deviceSelect.disabled = true;
+      if (priceDisplay) priceDisplay.innerText = "";
 
-  const seriesList = osToSeries[selectedOs];
-  if (seriesList) {
-    seriesList.forEach(s => {
-      const op = document.createElement('option'); 
-      op.value = s.value; 
-      op.text = s.text; 
-      seriesSelect.appendChild(op);
-    });
-  }
+      if (!selectedOs) {
+        seriesSelect.innerHTML = '<option value="">-- OSを選択してください --</option>';
+        seriesSelect.disabled = true;
+        optionPrices['smart'] = 0;
+        updatePriceOptions();
+        return;
+      }
 
-  seriesSelect.disabled = false;
-  optionPrices['smart'] = 0;
-  updatePriceOptions();
-}
+      // 「シリーズ」の選択肢を生成
+      const defaultOp = document.createElement('option');
+      defaultOp.value = '';
+      defaultOp.text = '-- シリーズを選択してください --';
+      seriesSelect.appendChild(defaultOp);
 
-// 2. シリーズが変更された時の処理
-function updateSeriesSelect() {
-  const seriesSelect = document.getElementById('device-series');
-  const deviceSelect = document.getElementById('device-select');
-  const priceDisplay = document.getElementById('smart-price-display');
-  
-  if (!seriesSelect || !deviceSelect) return;
-  const selectedSeries = seriesSelect.value;
+      const seriesList = osToSeries[selectedOs];
+      if (seriesList) {
+        seriesList.forEach(s => {
+          const op = document.createElement('option');
+          op.value = s.value;
+          op.text = s.text;
+          seriesSelect.appendChild(op);
+        });
+      }
 
-  deviceSelect.innerHTML = ''; 
-  if (priceDisplay) priceDisplay.innerText = ""; 
+      seriesSelect.disabled = false;
+      optionPrices['smart'] = 0;
+      updatePriceOptions();
+    }
 
-  if (!selectedSeries) {
-    deviceSelect.innerHTML = '<option value="">-- 先にシリーズを選択 --</option>';
-    deviceSelect.disabled = true; 
-    optionPrices['smart'] = 0; 
-    updatePriceOptions();
-    return;
-  }
+    // 2. シリーズが変更された時の処理
+    function updateSeriesSelect() {
+      const seriesSelect = document.getElementById('device-series');
+      const deviceSelect = document.getElementById('device-select');
+      const priceDisplay = document.getElementById('smart-price-display');
 
-  // 「機種名」の選択肢を生成
-  const defaultOp = document.createElement('option');
-  defaultOp.value = ''; 
-  defaultOp.text = '-- 機種名を選択してください --';
-  deviceSelect.appendChild(defaultOp);
+      if (!seriesSelect || !deviceSelect) return;
+      const selectedSeries = seriesSelect.value;
 
-  const deviceList = seriesToDevices[selectedSeries];
-  if (deviceList) {
-    deviceList.forEach(d => {
-      const op = document.createElement('option'); 
-      op.value = d.value; 
-      op.text = d.text; 
-      deviceSelect.appendChild(op);
-    });
-  }
+      deviceSelect.innerHTML = '';
+      if (priceDisplay) priceDisplay.innerText = "";
 
-  deviceSelect.disabled = false; 
-  optionPrices['smart'] = 0;
-  updatePriceOptions();
-}
+      if (!selectedSeries) {
+        deviceSelect.innerHTML = '<option value="">-- 先にシリーズを選択 --</option>';
+        deviceSelect.disabled = true;
+        optionPrices['smart'] = 0;
+        updatePriceOptions();
+        return;
+      }
+
+      // 「機種名」の選択肢を生成
+      const defaultOp = document.createElement('option');
+      defaultOp.value = '';
+      defaultOp.text = '-- 機種名を選択してください --';
+      deviceSelect.appendChild(defaultOp);
+
+      const deviceList = seriesToDevices[selectedSeries];
+      if (deviceList) {
+        deviceList.forEach(d => {
+          const op = document.createElement('option');
+          op.value = d.value;
+          op.text = d.text;
+          deviceSelect.appendChild(op);
+        });
+      }
+
+      deviceSelect.disabled = false;
+      optionPrices['smart'] = 0;
+      updatePriceOptions();
+    }
 
     // 割引対象外ルール制御
     function offOptions() {
@@ -1451,56 +1527,56 @@ function updateSeriesSelect() {
 
       if (!planSelect || !planSelect.value) {
         const allChecks = [familyCheck, userCheck, cardCheck, netCheck, eneCheck];
-        allChecks.forEach(ch => { if(ch) { ch.checked = false; ch.disabled = true; } });
-        if(familyBox) familyBox.classList.add('disabled-box'); if(familySelect) { familySelect.value = ""; familySelect.disabled = true; }
-        if(userBox) userBox.classList.add('disabled-box'); if(userSelect) { userSelect.value = ""; userSelect.disabled = true; }
-        if(cardBox) cardBox.classList.add('disabled-box'); if(cardSelect) { cardSelect.value = ""; cardSelect.disabled = true; }
-        if(adminFeeCheck) { adminFeeCheck.checked = false; adminFeeCheck.disabled = true; }
+        allChecks.forEach(ch => { if (ch) { ch.checked = false; ch.disabled = true; } });
+        if (familyBox) familyBox.classList.add('disabled-box'); if (familySelect) { familySelect.value = ""; familySelect.disabled = true; }
+        if (userBox) userBox.classList.add('disabled-box'); if (userSelect) { userSelect.value = ""; userSelect.disabled = true; }
+        if (cardBox) cardBox.classList.add('disabled-box'); if (cardSelect) { cardSelect.value = ""; cardSelect.disabled = true; }
+        if (adminFeeCheck) { adminFeeCheck.checked = false; adminFeeCheck.disabled = true; }
         updatePriceOptions();
         return;
       }
 
       const allChecks = [familyCheck, userCheck, cardCheck, netCheck, eneCheck];
-      allChecks.forEach(ch => { if(ch) ch.disabled = false; });
-      if(adminFeeCheck) adminFeeCheck.disabled = false;
+      allChecks.forEach(ch => { if (ch) ch.disabled = false; });
+      if (adminFeeCheck) adminFeeCheck.disabled = false;
 
       // プランごとの排他無効化
       if (planSelect.value === 'ahamo') {
-        allChecks.forEach(ch => { if(ch) { ch.checked = false; ch.disabled = true; } });
+        allChecks.forEach(ch => { if (ch) { ch.checked = false; ch.disabled = true; } });
       } else if (planSelect.value === 'Pt20') {
-        if(userCheck) { userCheck.checked = false; userCheck.disabled = true; }
+        if (userCheck) { userCheck.checked = false; userCheck.disabled = true; }
       } else if (planSelect.value === 'mini') {
-        if(familyCheck) { familyCheck.checked = false; familyCheck.disabled = true; }
-        if(userCheck) { userCheck.checked = false; userCheck.disabled = true; }
+        if (familyCheck) { familyCheck.checked = false; familyCheck.disabled = true; }
+        if (userCheck) { userCheck.checked = false; userCheck.disabled = true; }
       }
 
       // 表示切り替えとテキスト初期化
       if (familyCheck && familyCheck.checked && !familyCheck.disabled) {
-        if(familyBox) familyBox.classList.remove('disabled-box'); if(familySelect) familySelect.disabled = false;
+        if (familyBox) familyBox.classList.remove('disabled-box'); if (familySelect) familySelect.disabled = false;
       } else {
-        if(familyBox) familyBox.classList.add('disabled-box'); if(familySelect) { familySelect.value = ""; familySelect.disabled = true; }
-        const fp = document.getElementById('family-price'); if(fp) fp.innerText = "";
+        if (familyBox) familyBox.classList.add('disabled-box'); if (familySelect) { familySelect.value = ""; familySelect.disabled = true; }
+        const fp = document.getElementById('family-price'); if (fp) fp.innerText = "";
       }
 
       if (userCheck && userCheck.checked && !userCheck.disabled) {
-        if(userBox) userBox.classList.remove('disabled-box'); if(userSelect) userSelect.disabled = false;
+        if (userBox) userBox.classList.remove('disabled-box'); if (userSelect) userSelect.disabled = false;
       } else {
-        if(userBox) userBox.classList.add('disabled-box'); if(userSelect) { userSelect.value = ""; userSelect.disabled = true; }
-        const up = document.getElementById('user-price'); if(up) up.innerText = "";
+        if (userBox) userBox.classList.add('disabled-box'); if (userSelect) { userSelect.value = ""; userSelect.disabled = true; }
+        const up = document.getElementById('user-price'); if (up) up.innerText = "";
       }
 
       if (cardCheck && cardCheck.checked && !cardCheck.disabled) {
-        if(cardBox) cardBox.classList.remove('disabled-box'); if(cardSelect) cardSelect.disabled = false;
+        if (cardBox) cardBox.classList.remove('disabled-box'); if (cardSelect) cardSelect.disabled = false;
       } else {
-        if(cardBox) cardBox.classList.add('disabled-box'); if(cardSelect) { cardSelect.value = ""; cardSelect.disabled = true; }
-        const cp = document.getElementById('card-price'); if(cp) cp.innerText = "";
+        if (cardBox) cardBox.classList.add('disabled-box'); if (cardSelect) { cardSelect.value = ""; cardSelect.disabled = true; }
+        const cp = document.getElementById('card-price'); if (cp) cp.innerText = "";
       }
 
       if (netCheck && (!netCheck.checked || netCheck.disabled)) {
-        const np = document.getElementById('net-price'); if(np) np.innerText = "";
+        const np = document.getElementById('net-price'); if (np) np.innerText = "";
       }
       if (eneCheck && (!eneCheck.checked || eneCheck.disabled)) {
-        const ep = document.getElementById('ene-price'); if(ep) ep.innerText = "";
+        const ep = document.getElementById('ene-price'); if (ep) ep.innerText = "";
       }
 
       updatePriceOptions();
@@ -1509,14 +1585,14 @@ function updateSeriesSelect() {
     // 通話オプションの排他制御
     const tel5m = document.getElementById('5mtel');
     const telEd = document.getElementById('ed-tel');
-    if(tel5m) {
-      tel5m.addEventListener('change', function() {
+    if (tel5m) {
+      tel5m.addEventListener('change', function () {
         if (this.checked && telEd) telEd.checked = false;
         updatePriceOptions();
       });
     }
-    if(telEd) {
-      telEd.addEventListener('change', function() {
+    if (telEd) {
+      telEd.addEventListener('change', function () {
         if (this.checked && tel5m) tel5m.checked = false;
         updatePriceOptions();
       });
@@ -1539,29 +1615,29 @@ function updateSeriesSelect() {
       const allOps = [op5mTel, opEdTel, opMail, opSmart, opSec, opKs, opDval, opBst, opAhTel, opAhMega, opAhPt];
 
       if (!planSelect || !planSelect.value) {
-        allOps.forEach(op => { if(op) { op.checked = false; op.disabled = true; } });
-        toggleSmartAnshinOptions(); 
+        allOps.forEach(op => { if (op) { op.checked = false; op.disabled = true; } });
+        toggleSmartAnshinOptions();
         updatePriceOptions();
         return;
       }
 
-      allOps.forEach(op => { if(op) op.disabled = false; });
+      allOps.forEach(op => { if (op) op.disabled = false; });
 
       if (planSelect.value === 'MAX' || planSelect.value === 'MAXP' || planSelect.value === 'Pt20') {
-        if(opMail) { opMail.checked = false; opMail.disabled = true; }
-        if(opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
-        if(opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
-        if(opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
+        if (opMail) { opMail.checked = false; opMail.disabled = true; }
+        if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
+        if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
+        if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
       } else if (planSelect.value === 'mini') {
-        if(opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
-        if(opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
-        if(opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
+        if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
+        if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
+        if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
       } else if (planSelect.value === 'ahamo') {
-        if(op5mTel) { op5mTel.checked = false; op5mTel.disabled = true; }
-        if(opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
-        if(opMail) { opMail.checked = false; opMail.disabled = true; }
+        if (op5mTel) { op5mTel.checked = false; op5mTel.disabled = true; }
+        if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
+        if (opMail) { opMail.checked = false; opMail.disabled = true; }
       }
-      
+
       toggleSmartAnshinOptions();
       updatePriceOptions();
     }
@@ -1569,7 +1645,7 @@ function updateSeriesSelect() {
     function updateStrageSelect() {
       const planSelect = document.getElementById('plan-select');
       const strageSelect = document.getElementById('strage-select');
-      if(!planSelect || !strageSelect) return;
+      if (!planSelect || !strageSelect) return;
       const selectedValue = planSelect.value;
 
       strageSelect.innerHTML = '';
@@ -1593,683 +1669,695 @@ function updateSeriesSelect() {
         });
       }
 
-      strageSelect.disabled = false; 
+      strageSelect.disabled = false;
       resetPriceSelect();
     }
 
     // ★【修正箇所】エラーチェックのみを独立させ、途中で合計計算を強制終了させないように変更
     function validateInputs() {
-  const errors = [];
-  
-  // ハイライト消去処理
-  const elms = document.querySelectorAll('.input-error-highlight');
-  elms.forEach(function(e) { e.classList.remove('input-error-highlight'); });
+      const errors = [];
 
-  // 基本要素の取得
-  const buyMode = document.getElementById('buy-mode');
-  const phonePrice = document.getElementById('phonePrice');
-  const selectTime = document.getElementById('select-time');
-  const phoneCredit = document.getElementById('phoneCredit');
-  const planSelect = document.getElementById('plan-select');
-  const strageSelect = document.getElementById('strage-select');
-  const today = document.getElementById('today');
-  
-  // 🔍 HTMLのID名と100%一致させた割引要素の取得
-  const dFamily = document.getElementById('d-family');       // みんなドコモ割チェック
-  const peopleSelect = document.getElementById('people-select'); // 家族グループ対象人数
-  
-  const dUserCheck = document.getElementById('d-user-check'); // 長期利用割チェック
-  const userSelect = document.getElementById('user-select');   // 利用年数
-  
-  const dCardCheck = document.getElementById('d-card-check'); // dカードお支払割チェック
-  const cardSelect = document.getElementById('card-select');   // dカードの種類
+      // ハイライト消去処理
+      const elms = document.querySelectorAll('.input-error-highlight');
+      elms.forEach(function (e) { e.classList.remove('input-error-highlight'); });
+
+      // 基本要素の取得
+      const buyMode = document.getElementById('buy-mode');
+      const phonePrice = document.getElementById('phonePrice');
+      const selectTime = document.getElementById('select-time');
+      const phoneCredit = document.getElementById('phoneCredit');
+      const planSelect = document.getElementById('plan-select');
+      const strageSelect = document.getElementById('strage-select');
+      const today = document.getElementById('today');
+
+      // 🔍 HTMLのID名と100%一致させた割引要素の取得
+      const dFamily = document.getElementById('d-family');       // みんなドコモ割チェック
+      const peopleSelect = document.getElementById('people-select'); // 家族グループ対象人数
+
+      const dUserCheck = document.getElementById('d-user-check'); // 長期利用割チェック
+      const userSelect = document.getElementById('user-select');   // 利用年数
+
+      const dCardCheck = document.getElementById('d-card-check'); // dカードお支払割チェック
+      const cardSelect = document.getElementById('card-select');   // dカードの種類
 
 
-  // 1. 購入方法のチェック
-  if (!buyMode || !buyMode.value || buyMode.value === "") {
-    errors.push("購入方法");
-    if(buyMode) buyMode.classList.add('input-error-highlight');
-  } else {
-    if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
-      errors.push("本体代金");
-      if(phonePrice) phonePrice.classList.add('input-error-highlight');
-    }
-    if (buyMode.value === 'divide' && (!selectTime || !selectTime.value)) {
-      errors.push("分割回数");
-      if(selectTime) selectTime.classList.add('input-error-highlight');
-    }
-    if (buyMode.value === 'kaedoki') {
-      if (!phoneCredit || !phoneCredit.value || Number(phoneCredit.value) <= 0) {
-        errors.push("残価");
-        if(phoneCredit) phoneCredit.classList.add('input-error-highlight');
+      // 1. 購入方法のチェック
+      if (!buyMode || !buyMode.value || buyMode.value === "") {
+        errors.push("購入方法");
+        if (buyMode) buyMode.classList.add('input-error-highlight');
+      } else {
+        if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
+          errors.push("本体代金");
+          if (phonePrice) phonePrice.classList.add('input-error-highlight');
+        }
+        if (buyMode.value === 'divide' && (!selectTime || !selectTime.value)) {
+          errors.push("分割回数");
+          if (selectTime) selectTime.classList.add('input-error-highlight');
+        }
+        if (buyMode.value === 'kaedoki') {
+          if (!phoneCredit || !phoneCredit.value || Number(phoneCredit.value) <= 0) {
+            errors.push("残価");
+            if (phoneCredit) phoneCredit.classList.add('input-error-highlight');
+          }
+        }
       }
+
+      // 2. プラン・容量のチェック
+      if (!planSelect || !planSelect.value || planSelect.value === "") {
+        errors.push("プラン");
+        if (planSelect) planSelect.classList.add('input-error-highlight');
+      } else {
+        if (!strageSelect || !strageSelect.value || strageSelect.value === "") {
+          errors.push("容量");
+          if (strageSelect) strageSelect.classList.add('input-error-highlight');
+        }
+      }
+
+      // 3. 日付のチェック
+      if (!today || !today.value || today.value === "") {
+        errors.push("日付");
+        if (today) today.classList.add('input-error-highlight');
+      }
+
+      // ⚡ 4. 【新設】割引の未選択（中途半端な状態）をブロック！
+
+      // ① みんなドコモ割にチェックがあるのに、人数が未選択の場合
+      if (dFamily && dFamily.checked) {
+        if (!peopleSelect || !peopleSelect.value || peopleSelect.value === "") {
+          errors.push("家族人数");
+          if (peopleSelect) peopleSelect.classList.add('input-error-highlight');
+        }
+      }
+
+      // ② 長期利用割にチェックがあるのに、利用年数が未選択の場合
+      if (dUserCheck && dUserCheck.checked) {
+        if (!userSelect || !userSelect.value || userSelect.value === "") {
+          errors.push("利用年数");
+          if (userSelect) userSelect.classList.add('input-error-highlight');
+        }
+      }
+
+      // ③ dカードお支払割にチェックがあるのに、カードの種類が未選択の場合
+      if (dCardCheck && dCardCheck.checked) {
+        if (!cardSelect || !cardSelect.value || cardSelect.value === "") {
+          errors.push("カードの種類");
+          if (cardSelect) cardSelect.classList.add('input-error-highlight');
+        }
+      }
+
+
+      // 不要になった上部バナーがあれば非表示にする
+      const banner = document.getElementById('alert-error-banner');
+      if (banner) banner.style.display = 'none';
+
+      return errors;
     }
-  }
 
-  // 2. プラン・容量のチェック
-  if (!planSelect || !planSelect.value || planSelect.value === "") {
-    errors.push("プラン");
-    if(planSelect) planSelect.classList.add('input-error-highlight');
-  } else {
-    if (!strageSelect || !strageSelect.value || strageSelect.value === "") {
-      errors.push("容量");
-      if(strageSelect) strageSelect.classList.add('input-error-highlight');
-    }
-  }
-
-  // 3. 日付のチェック
-  if (!today || !today.value || today.value === "") {
-    errors.push("日付");
-    if(today) today.classList.add('input-error-highlight');
-  }
-
-  // ⚡ 4. 【新設】割引の未選択（中途半端な状態）をブロック！
-  
-  // ① みんなドコモ割にチェックがあるのに、人数が未選択の場合
-  if (dFamily && dFamily.checked) {
-    if (!peopleSelect || !peopleSelect.value || peopleSelect.value === "") {
-      errors.push("家族人数");
-      if(peopleSelect) peopleSelect.classList.add('input-error-highlight');
-    }
-  }
-
-  // ② 長期利用割にチェックがあるのに、利用年数が未選択の場合
-  if (dUserCheck && dUserCheck.checked) {
-    if (!userSelect || !userSelect.value || userSelect.value === "") {
-      errors.push("利用年数");
-      if(userSelect) userSelect.classList.add('input-error-highlight');
-    }
-  }
-
-  // ③ dカードお支払割にチェックがあるのに、カードの種類が未選択の場合
-  if (dCardCheck && dCardCheck.checked) {
-    if (!cardSelect || !cardSelect.value || cardSelect.value === "") {
-      errors.push("カードの種類");
-      if(cardSelect) cardSelect.classList.add('input-error-highlight');
-    }
-  }
-
-
-  // 不要になった上部バナーがあれば非表示にする
-  const banner = document.getElementById('alert-error-banner');
-  if (banner) banner.style.display = 'none';
-
-  return errors;
-}
-
-  // (※smartあんしん補償や割引のチェックは長くなるため省略していますが、元のロジックのまま errors.push("〜") してあればOKです！)
+    // (※smartあんしん補償や割引のチェックは長くなるため省略していますが、元のロジックのまま errors.push("〜") してあればOKです！)
 
     // ★【修正箇所】金額計算メインロジック。未入力項目があっても途中で処理を殺さず最後まで計算して合計を反映
     function updatePriceOptions() {
-  // 1. 要素の取得と基本チェック
-  const isValid = typeof validateInputs === 'function' ? validateInputs() : true;
-  const strageSelect = document.getElementById('strage-select');
-  const selectedStrage = strageSelect ? strageSelect.value : '';
-  
-  const checkbox = document.getElementById('smart');
-  const deviceSelect = document.getElementById('device-select');
-  const priceDisplay = document.getElementById('smart-price-display');
-  
-  if (checkbox && checkbox.checked && !checkbox.disabled && deviceSelect && deviceSelect.value) {
-    const currentPrice = (typeof compPrice !== 'undefined' && compPrice[deviceSelect.value]) || 0;
-    if (typeof optionPrices !== 'undefined') optionPrices['smart'] = Number(currentPrice);
-    if(priceDisplay) priceDisplay.innerText = '月額: ¥' + currentPrice.toLocaleString();
-  } else {
-    if (typeof optionPrices !== 'undefined') optionPrices['smart'] = 0; 
-    if(priceDisplay) priceDisplay.innerText = ''; 
-  }
+      // 1. 要素の取得と基本チェック
+      const isValid = typeof validateInputs === 'function' ? validateInputs() : true;
+      const strageSelect = document.getElementById('strage-select');
+      const selectedStrage = strageSelect ? strageSelect.value : '';
 
-  // 表示用要素の取得
-  const planSpan = document.getElementById('subtotal-plan');
-  const optionSpan = document.getElementById('subtotal-option');
-  const discountSpan = document.getElementById('subtotal-discount');
-  const dayPlanSpan = document.getElementById('day-subtotal-plan');
-  const dayOptionSpan = document.getElementById('day-subtotal-option');
-  const dayDiscountSpan = document.getElementById('day-subtotal-discount');
-  
-  const onceBox = document.getElementById('once-fee-box');
-  const onceBox1 = document.getElementById('once-fee-box-1');
-  const onceBox2 = document.getElementById('once-fee-box-2');
-  const priceOnceSpan = document.getElementById('price-once-total');
-  const bkOnce = document.getElementById('breakdown-once');
-  const priceMonth1Span = document.getElementById('price-month-1');
-  const bk1 = document.getElementById('breakdown-1');
+      const checkbox = document.getElementById('smart');
+      const deviceSelect = document.getElementById('device-select');
+      const priceDisplay = document.getElementById('smart-price-display');
 
-  const continueFeeBox2 = document.getElementById('continue-fee-box-2');
-  const bkContinue2 = document.getElementById('breakdown-continue-2');
-  const priceContinue2Span = document.getElementById('price-continue-2');
-  const continueFeeBox3 = document.getElementById('continue-fee-box-3');
-  const bkContinue3 = document.getElementById('breakdown-continue-3');
-  const priceContinue3Span = document.getElementById('price-continue-total');
-
-  const kaedokiMonth2Box = document.getElementById('kaedoki-month2-box');
-  const bkMonth2 = document.getElementById('breakdown-month-2');
-  const priceMonth2Span = document.getElementById('price-month-2');
-  const kaedokiMonth323Box = document.getElementById('kaedoki-month3-23-box');
-  const bkMonth323 = document.getElementById('breakdown-month-3-23');
-  const priceMonth22Span = document.getElementById('price-month-22');
-
-  const kaedokiBox = document.getElementById('kaedoki-extend-box');
-  const priceK24Span = document.getElementById('price-kaedoki-24');
-  const priceK25Span = document.getElementById('price-kaedoki-25');
-  const bkK24 = document.getElementById('breakdown-k24');
-  const bkK25 = document.getElementById('breakdown-k25');
-  const statusK = document.getElementById('breakdown-kaedoki-status');
-  
-  const innerK24 = document.getElementById('inner-k24');
-  const innerK25 = document.getElementById('inner-k25');
-  const pNotice = document.getElementById('kaedoki-program-notice');
-
-  // 2. プラン料金・オプション・割引の集計
-  let planSubtotal = (typeof priceList !== 'undefined' && priceList[selectedStrage]) || 0;
-
-  let optionSubtotal = 0;
-  if (typeof optionPrices !== 'undefined') {
-    for (const key in optionPrices) {
-      const opCheck = document.getElementById(key);
-      if (opCheck && opCheck.checked && !opCheck.disabled) {
-        optionSubtotal += optionPrices[key];
+      if (checkbox && checkbox.checked && !checkbox.disabled && deviceSelect && deviceSelect.value) {
+        const currentPrice = (typeof compPrice !== 'undefined' && compPrice[deviceSelect.value]) || 0;
+        if (typeof optionPrices !== 'undefined') optionPrices['smart'] = Number(currentPrice);
+        if (priceDisplay) priceDisplay.innerText = '月額: ¥' + currentPrice.toLocaleString();
+      } else {
+        if (typeof optionPrices !== 'undefined') optionPrices['smart'] = 0;
+        if (priceDisplay) priceDisplay.innerText = '';
       }
-    }
-  }
 
-  let discountSubtotal = 0;
-  if (typeof offPrice !== 'undefined') {
-    let familyCheck = document.getElementById('d-family');
-    let familySelect = document.getElementById('people-select');
-    let familyDiscount = (familyCheck && familyCheck.checked && !familyCheck.disabled && familySelect) ? (offPrice[familySelect.value] || 0) : 0;
-    let fp = document.getElementById('family-price'); if(fp) fp.innerText = familyDiscount > 0 ? '-¥' + familyDiscount.toLocaleString() : '';
-    discountSubtotal += familyDiscount;
+      // 表示用要素の取得
+      const planSpan = document.getElementById('subtotal-plan');
+      const optionSpan = document.getElementById('subtotal-option');
+      const discountSpan = document.getElementById('subtotal-discount');
+      const dayPlanSpan = document.getElementById('day-subtotal-plan');
+      const dayOptionSpan = document.getElementById('day-subtotal-option');
+      const dayDiscountSpan = document.getElementById('day-subtotal-discount');
 
-    let userCheck = document.getElementById('d-user-check'); let userSelect = document.getElementById('user-select');
-    let userDiscount = (userCheck && userCheck.checked && !userCheck.disabled && userSelect) ? (offPrice[userSelect.value] || 0) : 0;
-    let up = document.getElementById('user-price'); if(up) up.innerText = userDiscount > 0 ? '-¥' + userDiscount.toLocaleString() : '';
-    discountSubtotal += userDiscount;
+      const onceBox = document.getElementById('once-fee-box');
+      const onceBox1 = document.getElementById('once-fee-box-1');
+      const onceBox2 = document.getElementById('once-fee-box-2');
+      const priceOnceSpan = document.getElementById('price-once-total');
+      const bkOnce = document.getElementById('breakdown-once');
+      const priceMonth1Span = document.getElementById('price-month-1');
+      const bk1 = document.getElementById('breakdown-1');
 
-    let cardCheck = document.getElementById('d-card-check'); let cardSelect = document.getElementById('card-select');
-    let cardDiscount = (cardCheck && cardCheck.checked && !cardCheck.disabled && cardSelect) ? (offPrice[cardSelect.value] || 0) : 0;
-    let cp = document.getElementById('card-price'); if(cp) cp.innerText = cardDiscount > 0 ? '-¥' + cardDiscount.toLocaleString() : '';
-    discountSubtotal += cardDiscount;
+      const continueFeeBox2 = document.getElementById('continue-fee-box-2');
+      const bkContinue2 = document.getElementById('breakdown-continue-2');
+      const priceContinue2Span = document.getElementById('price-continue-2');
+      const continueFeeBox3 = document.getElementById('continue-fee-box-3');
+      const bkContinue3 = document.getElementById('breakdown-continue-3');
+      const priceContinue3Span = document.getElementById('price-continue-total');
 
-    let netCheck = document.getElementById('net'); let netDiscount = (netCheck && netCheck.checked && !netCheck.disabled) ? (offPrice['net'] || 0) : 0;
-    let np = document.getElementById('net-price'); if(np) np.innerText = netDiscount > 0 ? '-¥' + netDiscount.toLocaleString() : '';
-    discountSubtotal += netDiscount;
+      const kaedokiMonth2Box = document.getElementById('kaedoki-month2-box');
+      const bkMonth2 = document.getElementById('breakdown-month-2');
+      const priceMonth2Span = document.getElementById('price-month-2');
+      const kaedokiMonth323Box = document.getElementById('kaedoki-month3-23-box');
+      const bkMonth323 = document.getElementById('breakdown-month-3-23');
+      const priceMonth22Span = document.getElementById('price-month-22');
 
-    let eneCheck = document.getElementById('ene'); let eneDiscount = (eneCheck && eneCheck.checked && !eneCheck.disabled) ? (offPrice['ene'] || 0) : 0;
-    let ep = document.getElementById('ene-price'); if(ep) ep.innerText = eneDiscount > 0 ? '-¥' + eneDiscount.toLocaleString() : '';
-    discountSubtotal += eneDiscount;
-  }
+      const kaedokiBox = document.getElementById('kaedoki-extend-box');
+      const priceK24Span = document.getElementById('price-kaedoki-24');
+      const priceK25Span = document.getElementById('price-kaedoki-25');
+      const bkK24 = document.getElementById('breakdown-k24');
+      const bkK25 = document.getElementById('breakdown-k25');
+      const statusK = document.getElementById('breakdown-kaedoki-status');
 
-  if(planSpan) planSpan.innerText = '¥' + planSubtotal.toLocaleString();
-  if(optionSpan) optionSpan.innerText = '¥' + optionSubtotal.toLocaleString();
-  if(discountSpan) discountSpan.innerText = '¥' + discountSubtotal.toLocaleString();
+      const innerK24 = document.getElementById('inner-k24');
+      const innerK25 = document.getElementById('inner-k25');
+      const pNotice = document.getElementById('kaedoki-program-notice');
 
-  let communicationPureTotal = planSubtotal + optionSubtotal - discountSubtotal;
-  if(communicationPureTotal < 0) communicationPureTotal = 0;
+      // 2. プラン料金・オプション・割引の集計
+      let planSubtotal = (typeof priceList !== 'undefined' && priceList[selectedStrage]) || 0;
 
-  // 3. 日割り計算 ＆ 事務手数料の判定
-  let planDayPrice = 0; 
-  let optionDayPrice = 0; // 日割りするオプションの合計用
-  let optionFullPrice = 0; // 日割りせず満額にするオプションの合計用
-  let discountDayPrice = 0;
+      let optionSubtotal = 0;
+      if (typeof optionPrices !== 'undefined') {
+        for (const key in optionPrices) {
+          const opCheck = document.getElementById(key);
+          if (opCheck && opCheck.checked && !opCheck.disabled) {
+            optionSubtotal += optionPrices[key];
+          }
+        }
+      }
 
-  // 日割りから「除外」したいオプションのIDリスト
-  const fixedPriceOptions = ['ks', 'bst']; // あんしんモバイル、詐欺バスター
+      let discountSubtotal = 0;
+      if (typeof offPrice !== 'undefined') {
+        let familyCheck = document.getElementById('d-family');
+        let familySelect = document.getElementById('people-select');
+        let familyDiscount = (familyCheck && familyCheck.checked && !familyCheck.disabled && familySelect) ? (offPrice[familySelect.value] || 0) : 0;
+        let fp = document.getElementById('family-price'); if (fp) fp.innerText = familyDiscount > 0 ? '-¥' + familyDiscount.toLocaleString() : '';
+        discountSubtotal += familyDiscount;
 
-  const todayEl = document.getElementById('today');
-  const todayVal = todayEl ? todayEl.value : '';
+        let userCheck = document.getElementById('d-user-check'); let userSelect = document.getElementById('user-select');
+        let userDiscount = (userCheck && userCheck.checked && !userCheck.disabled && userSelect) ? (offPrice[userSelect.value] || 0) : 0;
+        let up = document.getElementById('user-price'); if (up) up.innerText = userDiscount > 0 ? '-¥' + userDiscount.toLocaleString() : '';
+        discountSubtotal += userDiscount;
 
-  if (todayVal) {
-    const todayObj = new Date(todayVal);
-    const todayDate = todayObj.getDate();
-    const totalDays = new Date(todayObj.getFullYear(), todayObj.getMonth() + 1, 0).getDate();
-    const targetDays = totalDays - todayDate + 1;
+        let cardCheck = document.getElementById('d-card-check'); let cardSelect = document.getElementById('card-select');
+        let cardDiscount = (cardCheck && cardCheck.checked && !cardCheck.disabled && cardSelect) ? (offPrice[cardSelect.value] || 0) : 0;
+        let cp = document.getElementById('card-price'); if (cp) cp.innerText = cardDiscount > 0 ? '-¥' + cardDiscount.toLocaleString() : '';
+        discountSubtotal += cardDiscount;
 
-    // プランの日割り
-    planDayPrice = Math.round(planSubtotal / totalDays) * targetDays;
+        let netCheck = document.getElementById('net'); let netDiscount = (netCheck && netCheck.checked && !netCheck.disabled) ? (offPrice['net'] || 0) : 0;
+        let np = document.getElementById('net-price'); if (np) np.innerText = netDiscount > 0 ? '-¥' + netDiscount.toLocaleString() : '';
+        discountSubtotal += netDiscount;
 
-    // オプションの仕分け計算
-    if (typeof optionPrices !== 'undefined') {
-      for (const key in optionPrices) {
-        const opCheck = document.getElementById(key);
-        // チェックが入っていて、無効化されていない場合のみ計算
-        if (opCheck && opCheck.checked && !opCheck.disabled) {
-          if (fixedPriceOptions.includes(key)) {
-            // 日割り対象外：そのまま満額をキープ
-            optionFullPrice += optionPrices[key];
-          } else {
-            // 日割り対象：日割り計算を行う
-            optionDayPrice += Math.round(optionPrices[key] / totalDays) * targetDays;
+        let eneCheck = document.getElementById('ene'); let eneDiscount = (eneCheck && eneCheck.checked && !eneCheck.disabled) ? (offPrice['ene'] || 0) : 0;
+        let ep = document.getElementById('ene-price'); if (ep) ep.innerText = eneDiscount > 0 ? '-¥' + eneDiscount.toLocaleString() : '';
+        discountSubtotal += eneDiscount;
+      }
+
+      if (planSpan) planSpan.innerText = '¥' + planSubtotal.toLocaleString();
+      if (optionSpan) optionSpan.innerText = '¥' + optionSubtotal.toLocaleString();
+      if (discountSpan) discountSpan.innerText = '¥' + discountSubtotal.toLocaleString();
+
+      let communicationPureTotal = planSubtotal + optionSubtotal - discountSubtotal;
+      if (communicationPureTotal < 0) communicationPureTotal = 0;
+
+      // 3. 日割り計算 ＆ 事務手数料の判定
+      let planDayPrice = 0;
+      let optionDayPrice = 0; // 日割りするオプションの合計用
+      let optionFullPrice = 0; // 日割りせず満額にするオプションの合計用
+      let discountDayPrice = 0;
+
+      // 日割りから「除外」したいオプションのIDリスト
+      const fixedPriceOptions = ['ks', 'bst']; // あんしんモバイル、詐欺バスター
+
+      const todayEl = document.getElementById('today');
+      const todayVal = todayEl ? todayEl.value : '';
+
+      if (todayVal) {
+        const todayObj = new Date(todayVal);
+        const todayDate = todayObj.getDate();
+        const totalDays = new Date(todayObj.getFullYear(), todayObj.getMonth() + 1, 0).getDate();
+        const targetDays = totalDays - todayDate + 1;
+
+        // プランの日割り
+        planDayPrice = Math.round(planSubtotal / totalDays) * targetDays;
+
+        // オプションの仕分け計算
+        if (typeof optionPrices !== 'undefined') {
+          for (const key in optionPrices) {
+            const opCheck = document.getElementById(key);
+            // チェックが入っていて、無効化されていない場合のみ計算
+            if (opCheck && opCheck.checked && !opCheck.disabled) {
+              if (fixedPriceOptions.includes(key)) {
+                // 日割り対象外：そのまま満額をキープ
+                optionFullPrice += optionPrices[key];
+              } else {
+                // 日割り対象：日割り計算を行う
+                optionDayPrice += Math.round(optionPrices[key] / totalDays) * targetDays;
+              }
+            }
+          }
+        }
+
+        // 割引の日割り
+        discountDayPrice = Math.round(discountSubtotal / totalDays) * targetDays;
+      }
+
+      // 画面表示用の「オプション日割り合計」は、日割り分 ＋ 満額分 の合算値にする
+      let totalOptionDayPrice = optionDayPrice + optionFullPrice;
+
+      if (dayPlanSpan) dayPlanSpan.innerText = '¥' + planDayPrice.toLocaleString();
+      if (dayOptionSpan) dayOptionSpan.innerText = '¥' + totalOptionDayPrice.toLocaleString();
+      if (dayDiscountSpan) dayDiscountSpan.innerText = '¥' + discountDayPrice.toLocaleString();
+
+      // 日割り料金の最終合計（満額オプション分もここにしっかり入ります）
+      let commsDayTotal = planDayPrice + totalOptionDayPrice - discountDayPrice;
+      if (commsDayTotal < 0) commsDayTotal = 0;
+      const divPriceElm = document.getElementById('div-price'); if (divPriceElm) divPriceElm.innerText = '¥' + commsDayTotal.toLocaleString();
+
+      let adminFee = 0;
+      const adminFeeCheck = document.getElementById('admin-fee');
+      if (adminFeeCheck && adminFeeCheck.checked && !adminFeeCheck.disabled) {
+        adminFee = 4950;
+      }
+
+      // 4. 購入方法に応じた端末代金の計算 ＆ ボックス表示制御
+      const buyModeEl = document.getElementById('buy-mode');
+      const buyMode = buyModeEl ? buyModeEl.value : '';
+      const phonePriceEl = document.getElementById('phonePrice');
+      const rawPhonePrice = phonePriceEl ? (Number(phonePriceEl.value) || 0) : 0;
+      const selectTimeEl = document.getElementById('select-time');
+      const selectTime = selectTimeEl ? (Number(selectTimeEl.value) || 1) : 1;
+      const phoneCreditEl = document.getElementById('phoneCredit');
+      const phoneCredit = phoneCreditEl ? (Number(phoneCreditEl.value) || 0) : 0;
+
+      let phoneMonth1 = 0;
+      let phoneMonth2 = 0;
+      let phoneMonth3 = 0;
+      let phoneOnce = 0;
+      let phoneK24 = 0;
+      let phoneK25 = 0;
+
+      // 全ボックスのリセット（一旦非表示）
+      if (onceBox) onceBox.classList.add('disabled-box');
+      if (onceBox1) onceBox1.classList.add('disabled-box');
+      if (onceBox2) onceBox2.classList.add('disabled-box');
+      if (priceOnceSpan) priceOnceSpan.innerText = '¥0';
+      if (bkOnce) bkOnce.innerHTML = '<span class="breakdown-line">一括払いが選択されていません</span>';
+
+      if (continueFeeBox2) continueFeeBox2.classList.add('disabled-box');
+      if (continueFeeBox3) continueFeeBox3.classList.add('disabled-box');
+      // if(bkContinue2) bkContinue2.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
+      // if(bkContinue3) bkContinue3.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
+
+      if (kaedokiMonth2Box) kaedokiMonth2Box.classList.add('disabled-box');
+      if (kaedokiMonth323Box) kaedokiMonth323Box.classList.add('disabled-box');
+      if (kaedokiBox) kaedokiBox.classList.add('disabled-box');
+      if (priceK24Span) priceK24Span.innerText = '¥0';
+      if (priceK25Span) priceK25Span.innerText = '¥0';
+      if (bkK24) bkK24.innerHTML = ''; if (bkK25) bkK25.innerHTML = '';
+      if (statusK) { statusK.style.display = 'block'; statusK.innerHTML = 'いつでもカエドキプログラムが選択されていません'; }
+      if (innerK24) innerK24.style.display = 'none'; if (innerK25) innerK25.style.display = 'none';
+      if (pNotice) pNotice.style.display = 'none';
+
+      // 分岐処理
+      if (buyMode === 'once') {
+        if (onceBox) onceBox.classList.remove('disabled-box');
+        if (onceBox1) onceBox1.classList.remove('disabled-box');
+        if (onceBox2) onceBox2.classList.remove('disabled-box');
+
+        phoneOnce = rawPhonePrice;
+        // 🟥【修正】一括の店頭決済本体代（エラーなし時の赤色化はelseで行うため、ここでは金額のみ）
+        if (priceOnceSpan) priceOnceSpan.innerText = '¥' + phoneOnce.toLocaleString();
+        if (bkOnce) bkOnce.innerHTML =
+          '<div style="background-color: #f8f6ff; padding: 10px; border-radius: 6px;">' +
+          '<span class="breakdown-line">本体代</span>' +
+          '</div>';
+
+        const priceOnceMonth1 = document.getElementById('price-once-month-1');
+        const bkOnce1 = document.getElementById('breakdown-once-1');
+        let totalOnceMonth1 = commsDayTotal + adminFee;
+        if (priceOnceMonth1) {
+          priceOnceMonth1.innerText = '¥' + totalOnceMonth1.toLocaleString();
+          // 🟥【修正】自分自身の変数（priceOnceMonth1）を赤色にします
+          priceOnceMonth1.style.setProperty('color', '#c92a2a', 'important');
+          priceOnceMonth1.style.fontWeight = 'bold';
+        }
+        if (bkOnce1) {
+          bkOnce1.innerHTML = '<div style="background-color: #f0f7ff; padding: 10px; border-radius: 6px;">' +
+            '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' +
+            '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' +
+            '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
+            '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>' +
+            '</div>';
+        }
+
+        const priceOnceContinue = document.getElementById('price-once-continue');
+        const bkOnceContinue = document.getElementById('breakdown-once-continue');
+        if (priceOnceContinue) {
+          priceOnceContinue.innerText = '¥' + communicationPureTotal.toLocaleString();
+          // 🟥【修正】自分自身の変数（priceOnceContinue）を赤色にします
+          priceOnceContinue.style.setProperty('color', '#c92a2a', 'important');
+          priceOnceContinue.style.fontWeight = 'bold';
+        }
+        if (bkOnceContinue) {
+          bkOnceContinue.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' +
+            '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+            '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+            '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' + // 💡末尾を「+」に修正
+            '</div>';
+        }
+
+        phoneMonth1 = 0; phoneMonth2 = 0; phoneMonth3 = 0;
+
+      } else if (buyMode === 'divide') {
+        if (continueFeeBox2) continueFeeBox2.classList.remove('disabled-box');
+        if (continueFeeBox3) continueFeeBox3.classList.remove('disabled-box');
+
+        phoneMonth3 = Math.floor(rawPhonePrice / selectTime);
+        let fraction = (rawPhonePrice / selectTime) - phoneMonth3;
+        let totalFraction = Math.round(fraction * selectTime);
+        phoneMonth2 = phoneMonth3 + totalFraction;
+        phoneMonth1 = 0;
+
+      } else if (buyMode === 'kaedoki') {
+        if (kaedokiMonth2Box) kaedokiMonth2Box.classList.remove('disabled-box');
+        if (kaedokiMonth323Box) kaedokiMonth323Box.classList.remove('disabled-box');
+        if (pNotice) pNotice.style.display = 'block';
+        if (kaedokiBox) kaedokiBox.classList.remove('disabled-box');
+        if (statusK) {
+          statusK.style.display = 'block';
+          statusK.innerHTML = '<span class="badge-info">　自動で24回再分割</span><br>' +
+            '<span style="white-space: nowrap;">　　残価：<strong style="display: inline;">¥' + phoneCredit.toLocaleString() + '</strong></span><br>' +
+            '<span style="font-size:0.85rem; color:#555; font-weight:normal;">　　※23ヶ月目に返却しない場合、本体代が自動で再分割されます。</span>';
+        }
+        if (innerK24) innerK24.style.display = 'block';
+        if (innerK25) innerK25.style.display = 'block';
+
+        let targetPrice = typeof globalSalePrice !== 'undefined' ? globalSalePrice : 0;
+        if (targetPrice < 0) targetPrice = 0;
+
+        phoneMonth3 = Math.floor(targetPrice / 23);
+        let fractionK = (targetPrice / 23) - phoneMonth3;
+        let totalFractionK = Math.round(fractionK * 23);
+        phoneMonth2 = phoneMonth3 + totalFractionK;
+        phoneMonth1 = 0;
+
+        phoneK25 = Math.floor(phoneCredit / 24);
+        phoneK24 = phoneCredit - (phoneK25 * 23);
+      }
+
+      // 5. 各支払いタイミングの最終合計金額の計算
+      let totalMonth1 = commsDayTotal + phoneMonth1 + adminFee;
+      if (totalMonth1 < 0) totalMonth1 = 0;
+      let totalMonth2 = communicationPureTotal + phoneMonth2;
+      if (totalMonth2 < 0) totalMonth2 = 0;
+      let totalContinue = communicationPureTotal + phoneMonth3;
+      if (totalContinue < 0) totalContinue = 0;
+      let totalK24 = communicationPureTotal + phoneK24;
+      if (totalContinue < 0) totalContinue = 0;
+      let totalK25 = communicationPureTotal + phoneK25;
+      if (totalContinue < 0) totalContinue = 0;
+
+      // 💡【追加】エラーがあるかチェック
+      const errorList = typeof validateInputs === 'function' ? validateInputs() : [];
+      const hasError = errorList.length > 0;
+
+      // 表示用メッセージ（例：「⚠️ 未入力があります：[プランの選択]」など短くスマートに）
+      const errorMsgText = `<span style="font-size:0.85rem; color:#d9534f; font-weight:normal;">⚠️ 未入力の項目があります！：<br>${errorList.join('、')}</span>`;
+
+      // 6. 画面（HTML）への最終出力の反映（エラー時は文字を上書き、金額を消す）
+      // 日割り内訳の表示（ここはエラーに関係なく出しておいてOKです）
+      if (bk1) {
+        bk1.innerHTML = '<div style="background-color: #f0f7ff; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+          '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>'; +
+            '</div>'
+      }
+
+      // 💡 ここからがポイント！エラーがある場合とない場合で出力を完全に分ける
+      // エラーがある場合とない場合で出力を分ける
+      if (hasError) {
+        // 💡 昔の長いメッセージ（errorMsgText）は無視！
+        // 💡 コメントアウトされていた変数をここで活かします（関数内で使い回せるように設定）
+        const pureErrorHtml = `<strong class="error-msg-red">⚠️未入力の項目があります！</strong>`;
+
+        // 🎨 【大改造】要素（elm）と一緒に、適用したい色（colorCode）も受け取る関数にします
+        const setForceErrorBox = (elm, colorCode) => {
+          if (!elm) return;
+          elm.innerHTML = pureErrorHtml;
+
+          // 指定されたカラーコードで文字色を強制上書きします
+          elm.style.setProperty('color', colorCode, 'important');
+        };
+
+        // 🟦 【1回目タイミング：プレミアム・ブルー枠に連動】
+        // 💡 第2引数にブルー（例: #1e40af）を渡します
+        setForceErrorBox(document.getElementById('price-month-1'), '#1e40af');       // 通常＆カエドキの1回目
+        setForceErrorBox(document.getElementById('price-once-month-1'), '#1e40af');  // 一括の1回目 
+
+        // 🟩 【2回目タイミング：フレッシュ・グリーン枠に連動】
+        // 💡 第2引数にグリーン（例: #15803d）を渡します
+        setForceErrorBox(document.getElementById('price-continue-2'), '#15803d');    // 通常分割の2回目
+        setForceErrorBox(document.getElementById('price-month-2'), '#15803d');       // カエドキの2回目
+
+        // 🟨 【3回目以降・続きタイミング：アンバー・オレンジ枠に連動】
+        // 💡 第2引数にオレンジ（例: #b45309）を渡します
+        setForceErrorBox(document.getElementById('price-continue-total'), '#b45309'); // 通常分割の3回目以降
+        setForceErrorBox(document.getElementById('price-month-22'), '#b45309');       // カエドキの3〜23回目
+        setForceErrorBox(document.getElementById('price-once-total'), '#b45309');     // 一括の店頭決済本体代
+        setForceErrorBox(document.getElementById('price-once-continue'), '#b45309');  // 一括の2回目以降
+
+        // 🟪 【カエドキ残価タイミング：ノーブル・パープル枠に連動】
+        const ik24 = document.getElementById('inner-k24');
+        if (ik24) ik24.style.display = 'block';
+        const ik25 = document.getElementById('inner-k25');
+        if (ik25) ik25.style.display = 'block';
+
+        // 💡 第2引数にパープル（例: #6b21a8）を渡します
+        setForceErrorBox(document.getElementById('price-kaedoki-24'), '#6b21a8');
+        setForceErrorBox(document.getElementById('price-kaedoki-25'), '#6b21a8');
+
+      } else {
+        // 💡 エラーがない時だけ、通常の金額を綺麗に表示する
+        if (priceMonth1Span) {
+          priceMonth1Span.innerText = '¥' + totalMonth1.toLocaleString();
+          priceMonth1Span.style.setProperty('color', '#c92a2a', 'important');
+          priceMonth1Span.style.fontWeight = 'bold';
+        }
+
+        // 🟥【追加】一括払いの時の店頭決済本体代をここで赤色に固定します！
+        if (buyMode === 'once') {
+          if (priceOnceSpan) {
+            priceOnceSpan.innerText = '¥' + phoneOnce.toLocaleString();
+            priceOnceSpan.style.setProperty('color', '#c92a2a', 'important');
+            priceOnceSpan.style.fontWeight = 'bold';
+          }
+        }
+
+        if (buyMode === 'divide') {
+          if (bkContinue2) {
+            bkContinue2.innerHTML = '<div style="background-color: #f2fdf5; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>';
+            '</div>'
+          }
+          if (priceContinue2Span) {
+            priceContinue2Span.innerText = '¥' + totalMonth2.toLocaleString();
+            // 🟥 通常分割2回目の合計金額を赤色に
+            priceContinue2Span.style.setProperty('color', '#c92a2a', 'important');
+            priceContinue2Span.style.fontWeight = 'bold';
+          }
+
+          if (bkContinue3) {
+            bkContinue3.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>';
+            '</div>'
+          }
+          if (priceContinue3Span) {
+            priceContinue3Span.innerText = '¥' + totalContinue.toLocaleString();
+            // 🟥 通常分割3回目以降の合計金額を赤色に
+            priceContinue3Span.style.setProperty('color', '#c92a2a', 'important');
+            priceContinue3Span.style.fontWeight = 'bold';
+          }
+        }
+
+        if (buyMode === 'kaedoki') {
+          if (bkMonth2) {
+            bkMonth2.innerHTML = '<div style="background-color: #f2fdf5; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>';
+            '</div>'
+          }
+          if (priceMonth2Span) {
+            priceMonth2Span.innerText = '¥' + totalMonth2.toLocaleString();
+            // 🟥 カエドキ2回目の合計金額を赤色に
+            priceMonth2Span.style.setProperty('color', '#c92a2a', 'important');
+            priceMonth2Span.style.fontWeight = 'bold';
+          }
+
+          if (bkMonth323) {
+            bkMonth323.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>';
+            '</div>'
+          }
+          if (priceMonth22Span) {
+            priceMonth22Span.innerText = '¥' + totalContinue.toLocaleString();
+            // 🟥 カエドキ3〜23回目の合計金額を赤色に
+            priceMonth22Span.style.setProperty('color', '#c92a2a', 'important');
+            priceMonth22Span.style.fontWeight = 'bold';
+          }
+
+          if (bkK24) {
+            bkK24.innerHTML = '<span color:#555; class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション月額：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代(24回目)：¥' + phoneK24.toLocaleString() + '</span>';
+          }
+          if (priceK24Span) {
+            priceK24Span.innerText = '¥' + totalK24.toLocaleString();
+            // 🟥 カエドキ24回目の合計金額を赤色に
+            priceK24Span.style.setProperty('color', '#c92a2a', 'important');
+            priceK24Span.style.fontWeight = 'bold';
+          }
+
+          if (bkK25) {
+            bkK25.innerHTML = '<div style="background-color: #f6edff; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
+              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">オプション月額：¥' + optionSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+              '<span class="breakdown-line">本体代月額　(25〜47回目)：¥' + phoneK25.toLocaleString() + '</span>';
+            '</div>'
+          }
+          if (priceK25Span) {
+            priceK25Span.innerText = '¥' + totalK25.toLocaleString();
+            // 🟥 カエドキ25回目の合計金額を赤色に
+            priceK25Span.style.setProperty('color', '#c92a2a', 'important');
+            priceK25Span.style.fontWeight = 'bold';
           }
         }
       }
     }
 
-    // 割引の日割り
-    discountDayPrice = Math.round(discountSubtotal / totalDays) * targetDays;
-  }
-
-  // 画面表示用の「オプション日割り合計」は、日割り分 ＋ 満額分 の合算値にする
-  let totalOptionDayPrice = optionDayPrice + optionFullPrice;
-
-  if(dayPlanSpan) dayPlanSpan.innerText = '¥' + planDayPrice.toLocaleString();
-  if(dayOptionSpan) dayOptionSpan.innerText = '¥' + totalOptionDayPrice.toLocaleString();
-  if(dayDiscountSpan) dayDiscountSpan.innerText = '¥' + discountDayPrice.toLocaleString();
-
-  // 日割り料金の最終合計（満額オプション分もここにしっかり入ります）
-  let commsDayTotal = planDayPrice + totalOptionDayPrice - discountDayPrice;
-  if(commsDayTotal < 0) commsDayTotal = 0;
-  const divPriceElm = document.getElementById('div-price'); if(divPriceElm) divPriceElm.innerText = '¥' + commsDayTotal.toLocaleString();
-
-  let adminFee = 0;
-  const adminFeeCheck = document.getElementById('admin-fee');
-  if (adminFeeCheck && adminFeeCheck.checked && !adminFeeCheck.disabled) {
-    adminFee = 4950;
-  }
-
-  // 4. 購入方法に応じた端末代金の計算 ＆ ボックス表示制御
-  const buyModeEl = document.getElementById('buy-mode');
-  const buyMode = buyModeEl ? buyModeEl.value : '';
-  const phonePriceEl = document.getElementById('phonePrice');
-  const rawPhonePrice = phonePriceEl ? (Number(phonePriceEl.value) || 0) : 0;
-  const selectTimeEl = document.getElementById('select-time');
-  const selectTime = selectTimeEl ? (Number(selectTimeEl.value) || 1) : 1; 
-  const phoneCreditEl = document.getElementById('phoneCredit');
-  const phoneCredit = phoneCreditEl ? (Number(phoneCreditEl.value) || 0) : 0;
-
-  let phoneMonth1 = 0;
-  let phoneMonth2 = 0;
-  let phoneMonth3 = 0; 
-  let phoneOnce = 0;
-  let phoneK24 = 0;
-  let phoneK25 = 0;
-
-  // 全ボックスのリセット（一旦非表示）
-  if(onceBox) onceBox.classList.add('disabled-box');
-  if(onceBox1) onceBox1.classList.add('disabled-box');
-  if(onceBox2) onceBox2.classList.add('disabled-box');
-  if(priceOnceSpan) priceOnceSpan.innerText = '¥0';
-  if(bkOnce) bkOnce.innerHTML = '<span class="breakdown-line">一括払いが選択されていません</span>';
-  
-  if(continueFeeBox2) continueFeeBox2.classList.add('disabled-box');
-  if(continueFeeBox3) continueFeeBox3.classList.add('disabled-box');
-  // if(bkContinue2) bkContinue2.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
-  // if(bkContinue3) bkContinue3.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
-  
-  if(kaedokiMonth2Box) kaedokiMonth2Box.classList.add('disabled-box');
-  if(kaedokiMonth323Box) kaedokiMonth323Box.classList.add('disabled-box');
-  if(kaedokiBox) kaedokiBox.classList.add('disabled-box');
-  if(priceK24Span) priceK24Span.innerText = '¥0';
-  if(priceK25Span) priceK25Span.innerText = '¥0';
-  if(bkK24) bkK24.innerHTML = ''; if(bkK25) bkK25.innerHTML = '';
-  if(statusK) { statusK.style.display = 'block'; statusK.innerHTML = 'いつでもカエドキプログラムが選択されていません'; }
-  if(innerK24) innerK24.style.display = 'none'; if(innerK25) innerK25.style.display = 'none';
-  if(pNotice) pNotice.style.display = 'none';
-
-  // 分岐処理
-  if (buyMode === 'once') {
-    if(onceBox) onceBox.classList.remove('disabled-box');
-    if(onceBox1) onceBox1.classList.remove('disabled-box');
-    if(onceBox2) onceBox2.classList.remove('disabled-box');
-
-    phoneOnce = rawPhonePrice;
-    // 🟥【修正】一括の店頭決済本体代（エラーなし時の赤色化はelseで行うため、ここでは金額のみ）
-    if(priceOnceSpan) priceOnceSpan.innerText = '¥' + phoneOnce.toLocaleString();
-    if(bkOnce) bkOnce.innerHTML = 
-    '<div style="background-color: #f8f6ff; padding: 10px; border-radius: 6px;">' +
-    '<span class="breakdown-line">本体代</span>' +
-    '</div>';
-    
-    const priceOnceMonth1 = document.getElementById('price-once-month-1');
-    const bkOnce1 = document.getElementById('breakdown-once-1');
-    let totalOnceMonth1 = commsDayTotal + adminFee;
-    if (priceOnceMonth1) {
-      priceOnceMonth1.innerText = '¥' + totalOnceMonth1.toLocaleString();
-      // 🟥【修正】自分自身の変数（priceOnceMonth1）を赤色にします
-      priceOnceMonth1.style.setProperty('color', '#c92a2a', 'important');
-      priceOnceMonth1.style.fontWeight = 'bold';
-    }
-    if (bkOnce1) {
-      bkOnce1.innerHTML = '<div style="background-color: #f0f7ff; padding: 10px; border-radius: 6px;">' + 
-      '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' + 
-      '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' + 
-      '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
-      '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>' +
-      '</div>';
-    }
-
-    const priceOnceContinue = document.getElementById('price-once-continue');
-    const bkOnceContinue = document.getElementById('breakdown-once-continue');
-    if (priceOnceContinue) {
-      priceOnceContinue.innerText = '¥' + communicationPureTotal.toLocaleString();
-      // 🟥【修正】自分自身の変数（priceOnceContinue）を赤色にします
-      priceOnceContinue.style.setProperty('color', '#c92a2a', 'important');
-      priceOnceContinue.style.fontWeight = 'bold';
-    }
-    if (bkOnceContinue) {
-      bkOnceContinue.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' + 
-      '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-      '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-      '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' + // 💡末尾を「+」に修正
-      '</div>';
-    }
-
-    phoneMonth1 = 0; phoneMonth2 = 0; phoneMonth3 = 0; 
-
-  } else if (buyMode === 'divide') {
-    if(continueFeeBox2) continueFeeBox2.classList.remove('disabled-box');
-    if(continueFeeBox3) continueFeeBox3.classList.remove('disabled-box');
-
-    phoneMonth3 = Math.floor(rawPhonePrice / selectTime); 
-    let fraction = (rawPhonePrice / selectTime) - phoneMonth3; 
-    let totalFraction = Math.round(fraction * selectTime);
-    phoneMonth2 = phoneMonth3 + totalFraction; 
-    phoneMonth1 = 0; 
-
-  } else if (buyMode === 'kaedoki') {
-    if(kaedokiMonth2Box) kaedokiMonth2Box.classList.remove('disabled-box');
-    if(kaedokiMonth323Box) kaedokiMonth323Box.classList.remove('disabled-box');
-    if(pNotice) pNotice.style.display = 'block';
-    if(kaedokiBox) kaedokiBox.classList.remove('disabled-box');
-    if(statusK) {
-      statusK.style.display = 'block';
-      statusK.innerHTML = '<span class="badge-info">　自動で24回再分割</span><br>' +
-                    '<span style="white-space: nowrap;">　　残価：<strong style="display: inline;">¥' + phoneCredit.toLocaleString() + '</strong></span><br>' +
-                    '<span style="font-size:0.85rem; color:#555; font-weight:normal;">　　※23ヶ月目に返却しない場合、本体代が自動で再分割されます。</span>';
-    }
-    if(innerK24) innerK24.style.display = 'block';
-    if(innerK25) innerK25.style.display = 'block';
-
-    let targetPrice = typeof globalSalePrice !== 'undefined' ? globalSalePrice : 0;
-    if(targetPrice < 0) targetPrice = 0;
-    
-    phoneMonth3 = Math.floor(targetPrice / 23); 
-    let fractionK = (targetPrice / 23) - phoneMonth3; 
-    let totalFractionK = Math.round(fractionK * 23);
-    phoneMonth2 = phoneMonth3 + totalFractionK; 
-    phoneMonth1 = 0;
-
-    phoneK25 = Math.floor(phoneCredit / 24); 
-    phoneK24 = phoneCredit - (phoneK25 * 23); 
-  }
-
-  // 5. 各支払いタイミングの最終合計金額の計算
-  let totalMonth1 = commsDayTotal + phoneMonth1 + adminFee; 
-  if (totalMonth1 < 0) totalMonth1 = 0;
-  let totalMonth2 = communicationPureTotal + phoneMonth2;
-  if (totalMonth2 < 0) totalMonth2 = 0;
-  let totalContinue = communicationPureTotal + phoneMonth3; 
-  if (totalContinue < 0) totalContinue = 0;
-  let totalK24 = communicationPureTotal + phoneK24; 
-  if (totalContinue < 0) totalContinue = 0;
-  let totalK25 = communicationPureTotal + phoneK25; 
-  if (totalContinue < 0) totalContinue = 0;
-
-  // 💡【追加】エラーがあるかチェック
-  const errorList = typeof validateInputs === 'function' ? validateInputs() : [];
-  const hasError = errorList.length > 0;
-
-  // 表示用メッセージ（例：「⚠️ 未入力があります：[プランの選択]」など短くスマートに）
-  const errorMsgText = `<span style="font-size:0.85rem; color:#d9534f; font-weight:normal;">⚠️ 未入力の項目があります！：<br>${errorList.join('、')}</span>`;
-
-  // 6. 画面（HTML）への最終出力の反映（エラー時は文字を上書き、金額を消す）
-  // 日割り内訳の表示（ここはエラーに関係なく出しておいてOKです）
-  if(bk1) {
-    bk1.innerHTML = '<div style="background-color: #f0f7ff; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-                    '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' + 
-                    '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' + 
-                    '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
-                    '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>' ; + 
-                    '</div>'
-  }
-
-  // 💡 ここからがポイント！エラーがある場合とない場合で出力を完全に分ける
-  // エラーがある場合とない場合で出力を分ける
-  if (hasError) {
-    // 💡 昔の長いメッセージ（errorMsgText）は無視！
-    // 💡 コメントアウトされていた変数をここで活かします（関数内で使い回せるように設定）
-    const pureErrorHtml = `<strong class="error-msg-red">⚠️未入力の項目があります！</strong>`;
-
-    // 🎨 【大改造】要素（elm）と一緒に、適用したい色（colorCode）も受け取る関数にします
-    const setForceErrorBox = (elm, colorCode) => {
-      if (!elm) return;
-      elm.innerHTML = pureErrorHtml;
-      
-      // 指定されたカラーコードで文字色を強制上書きします
-      elm.style.setProperty('color', colorCode, 'important');
-    };
-
-    // 🟦 【1回目タイミング：プレミアム・ブルー枠に連動】
-    // 💡 第2引数にブルー（例: #1e40af）を渡します
-    setForceErrorBox(document.getElementById('price-month-1'), '#1e40af');       // 通常＆カエドキの1回目
-    setForceErrorBox(document.getElementById('price-once-month-1'), '#1e40af');  // 一括の1回目 
-
-    // 🟩 【2回目タイミング：フレッシュ・グリーン枠に連動】
-    // 💡 第2引数にグリーン（例: #15803d）を渡します
-    setForceErrorBox(document.getElementById('price-continue-2'), '#15803d');    // 通常分割の2回目
-    setForceErrorBox(document.getElementById('price-month-2'), '#15803d');       // カエドキの2回目
-
-    // 🟨 【3回目以降・続きタイミング：アンバー・オレンジ枠に連動】
-    // 💡 第2引数にオレンジ（例: #b45309）を渡します
-    setForceErrorBox(document.getElementById('price-continue-total'), '#b45309'); // 通常分割の3回目以降
-    setForceErrorBox(document.getElementById('price-month-22'), '#b45309');       // カエドキの3〜23回目
-    setForceErrorBox(document.getElementById('price-once-total'), '#b45309');     // 一括の店頭決済本体代
-    setForceErrorBox(document.getElementById('price-once-continue'), '#b45309');  // 一括の2回目以降
-
-    // 🟪 【カエドキ残価タイミング：ノーブル・パープル枠に連動】
-    const ik24 = document.getElementById('inner-k24');
-    if(ik24) ik24.style.display = 'block';
-    const ik25 = document.getElementById('inner-k25');
-    if(ik25) ik25.style.display = 'block';
-
-    // 💡 第2引数にパープル（例: #6b21a8）を渡します
-    setForceErrorBox(document.getElementById('price-kaedoki-24'), '#6b21a8');
-    setForceErrorBox(document.getElementById('price-kaedoki-25'), '#6b21a8');
-
- } else {
-    // 💡 エラーがない時だけ、通常の金額を綺麗に表示する
-    if(priceMonth1Span) {
-      priceMonth1Span.innerText = '¥' + totalMonth1.toLocaleString();
-      priceMonth1Span.style.setProperty('color', '#c92a2a', 'important');
-      priceMonth1Span.style.fontWeight = 'bold';
-    }
-
-    // 🟥【追加】一括払いの時の店頭決済本体代をここで赤色に固定します！
-    if (buyMode === 'once') {
-      if(priceOnceSpan) {
-        priceOnceSpan.innerText = '¥' + phoneOnce.toLocaleString();
-        priceOnceSpan.style.setProperty('color', '#c92a2a', 'important');
-        priceOnceSpan.style.fontWeight = 'bold';
-      }
-    }
-    
-    if (buyMode === 'divide') {
-      if(bkContinue2) {
-        bkContinue2.innerHTML = '<div style="background-color: #f2fdf5; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-        '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                                '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                                '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-                                '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>' ;
-                                '</div>'
-      }
-      if(priceContinue2Span) {
-        priceContinue2Span.innerText = '¥' + totalMonth2.toLocaleString();
-        // 🟥 通常分割2回目の合計金額を赤色に
-        priceContinue2Span.style.setProperty('color', '#c92a2a', 'important');
-        priceContinue2Span.style.fontWeight = 'bold';
-      }
-
-      if(bkContinue3) {
-        bkContinue3.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-                                '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                                '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                                '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-                                '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>' ;
-                                '</div>'
-      }
-      if(priceContinue3Span) {
-        priceContinue3Span.innerText = '¥' + totalContinue.toLocaleString();
-        // 🟥 通常分割3回目以降の合計金額を赤色に
-        priceContinue3Span.style.setProperty('color', '#c92a2a', 'important');
-        priceContinue3Span.style.fontWeight = 'bold';
-      }
-    }
-
-    if (buyMode === 'kaedoki') {
-      if(bkMonth2) {
-        bkMonth2.innerHTML = '<div style="background-color: #f2fdf5; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-        '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                             '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                             '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-                             '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>' ;
-                             '</div>'
-      }
-      if(priceMonth2Span) {
-        priceMonth2Span.innerText = '¥' + totalMonth2.toLocaleString();
-        // 🟥 カエドキ2回目の合計金額を赤色に
-        priceMonth2Span.style.setProperty('color', '#c92a2a', 'important');
-        priceMonth2Span.style.fontWeight = 'bold';
-      }
-
-      if(bkMonth323) {
-        bkMonth323.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-                              '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                               '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-                               '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>' ;
-                               '</div>'
-      }
-      if(priceMonth22Span) {
-        priceMonth22Span.innerText = '¥' + totalContinue.toLocaleString();
-        // 🟥 カエドキ3〜23回目の合計金額を赤色に
-        priceMonth22Span.style.setProperty('color', '#c92a2a', 'important');
-        priceMonth22Span.style.fontWeight = 'bold';
-      }
-
-      if(bkK24) {
-        bkK24.innerHTML = '<span color:#555; class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                          '<span class="breakdown-line">オプション月額：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                          '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>'  +
-                          '<span class="breakdown-line">本体代(24回目)：¥' + phoneK24.toLocaleString() + '</span>';
-      }
-      if(priceK24Span) {
-        priceK24Span.innerText = '¥' + totalK24.toLocaleString();
-        // 🟥 カエドキ24回目の合計金額を赤色に
-        priceK24Span.style.setProperty('color', '#c92a2a', 'important');
-        priceK24Span.style.fontWeight = 'bold';
-      }
-
-      if(bkK25) {
-        bkK25.innerHTML = '<div style="background-color: #f6edff; padding: 10px; border-radius: 6px;">' + // 内枠のスタート
-        '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' + 
-                          '<span class="breakdown-line">オプション月額：¥' + optionSubtotal.toLocaleString() + '</span>' + 
-                          '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-                          '<span class="breakdown-line">本体代月額　(25〜47回目)：¥' + phoneK25.toLocaleString() + '</span>';
-                          '</div>'
-      }
-      if(priceK25Span) {
-        priceK25Span.innerText = '¥' + totalK25.toLocaleString();
-        // 🟥 カエドキ25回目の合計金額を赤色に
-        priceK25Span.style.setProperty('color', '#c92a2a', 'important');
-        priceK25Span.style.fontWeight = 'bold';
-      }
-    }
-  }
-  }
-
-  function resetPriceSelect() {
+    function resetPriceSelect() {
       const ids = ['subtotal-plan', 'subtotal-option', 'subtotal-discount', 'day-subtotal-plan', 'day-subtotal-option', 'day-subtotal-discount', 'price-once-total', 'price-month-1', 'price-month-2', 'price-continue-total', 'price-kaedoki-24', 'price-kaedoki-25'];
       ids.forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.innerText = '¥0';
+        if (el) el.innerText = '¥0';
       });
 
       const divPriceElm = document.getElementById('div-price');
-      if(divPriceElm) divPriceElm.innerText = '¥0';
+      if (divPriceElm) divPriceElm.innerText = '¥0';
 
-      if(document.getElementById('breakdown-once')) document.getElementById('breakdown-once').innerHTML = '<span class="breakdown-line">一括払いが選択されていません</span>';
-      if(document.getElementById('breakdown-1')) document.getElementById('breakdown-1').innerHTML = '';
-      if(document.getElementById('breakdown-2')) document.getElementById('breakdown-2').innerHTML = '';
-      if(document.getElementById('breakdown-continue')) document.getElementById('breakdown-continue').innerHTML = '';
-      if(document.getElementById('breakdown-k24')) document.getElementById('breakdown-k24').innerHTML = '';
-      if(document.getElementById('breakdown-k25')) document.getElementById('breakdown-k25').innerHTML = '';
-      if(document.getElementById('kaedoki-program-notice')) document.getElementById('kaedoki-program-notice').style.display = 'none';
-      
+      if (document.getElementById('breakdown-once')) document.getElementById('breakdown-once').innerHTML = '<span class="breakdown-line">一括払いが選択されていません</span>';
+      if (document.getElementById('breakdown-1')) document.getElementById('breakdown-1').innerHTML = '';
+      if (document.getElementById('breakdown-2')) document.getElementById('breakdown-2').innerHTML = '';
+      if (document.getElementById('breakdown-continue')) document.getElementById('breakdown-continue').innerHTML = '';
+      if (document.getElementById('breakdown-k24')) document.getElementById('breakdown-k24').innerHTML = '';
+      if (document.getElementById('breakdown-k25')) document.getElementById('breakdown-k25').innerHTML = '';
+      if (document.getElementById('kaedoki-program-notice')) document.getElementById('kaedoki-program-notice').style.display = 'none';
+
       const statusK = document.getElementById('breakdown-kaedoki-status');
-      if(statusK) {
+      if (statusK) {
         statusK.style.display = 'block';
         statusK.innerText = 'いつでもカエドキプログラムが選択されていません';
       }
-      if(document.getElementById('inner-k24')) document.getElementById('inner-k24').style.display = 'none';
-      if(document.getElementById('inner-k25')) document.getElementById('inner-k25').style.display = 'none';
-      if(document.getElementById('once-fee-box')) document.getElementById('once-fee-box').classList.add('disabled-box');
-      if(document.getElementById('continue-fee-box-2')) document.getElementById('continue-fee-box-2').classList.add('disabled-box');
-      if(document.getElementById('continue-fee-box-3')) document.getElementById('continue-fee-box-3').classList.add('disabled-box');
-      if(document.getElementById('kaedoki-month2-box')) document.getElementById('kaedoki-month2-box').classList.add('disabled-box');
-      if(document.getElementById('kaedoki-extend-box')) document.getElementById('kaedoki-extend-box').classList.add('disabled-box');
-      if(document.getElementById('final-result-card')) document.getElementById('final-result-card').classList.remove('result-locked');
+      if (document.getElementById('inner-k24')) document.getElementById('inner-k24').style.display = 'none';
+      if (document.getElementById('inner-k25')) document.getElementById('inner-k25').style.display = 'none';
+      if (document.getElementById('once-fee-box')) document.getElementById('once-fee-box').classList.add('disabled-box');
+      if (document.getElementById('continue-fee-box-2')) document.getElementById('continue-fee-box-2').classList.add('disabled-box');
+      if (document.getElementById('continue-fee-box-3')) document.getElementById('continue-fee-box-3').classList.add('disabled-box');
+      if (document.getElementById('kaedoki-month2-box')) document.getElementById('kaedoki-month2-box').classList.add('disabled-box');
+      if (document.getElementById('kaedoki-extend-box')) document.getElementById('kaedoki-extend-box').classList.add('disabled-box');
+      if (document.getElementById('final-result-card')) document.getElementById('final-result-card').classList.remove('result-locked');
     }
 
+    const tabs = document.querySelectorAll('.footer-tab');
+    const pageSimulator = document.getElementById('page-simulator');
+    const pageCompare = document.getElementById('page-compare');
+    const pageSearch = document.getElementById('page-search');
+
     function switchTab(tabName) {
-  const tabs = document.querySelectorAll('.footer-tab');
-  tabs.forEach(tab => tab.classList.remove('active'));
+  // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
+  if (pageSimulator) pageSimulator.style.display = 'none';
+  if (pageCompare) pageCompare.style.display = 'none';
+  if (pageSearch) pageSearch.style.display = 'none';
+  
+  // 2. すべてのタブボタンから一旦 active クラスを消す
+  if (tabs[0]) tabs[0].classList.remove('active');
+  if (tabs[1]) tabs[1].classList.remove('active');
+  if (tabs[2]) tabs[2].classList.remove('active');
 
-  const pageSimulator = document.getElementById('page-simulator');
-  const pageCompare = document.getElementById('page-compare');
-
+  // 3. クリックされたタブだけを「表示」にする
   if (tabName === 'simulator') {
     if (tabs[0]) tabs[0].classList.add('active'); 
-    if (pageSimulator) pageSimulator.style.display = 'block';
-    if (pageCompare) pageCompare.style.display = 'none';
+    if (pageSimulator) pageSimulator.style.display = 'block'; // シミュレーターを表示
   } 
   else if (tabName === 'prices') {
     if (tabs[1]) tabs[1].classList.add('active'); 
-    if (pageSimulator) pageSimulator.style.display = 'none';
-    if (pageCompare) pageCompare.style.display = 'block';
+    if (pageCompare) pageCompare.style.display = 'block'; // キャリア比較（iframe）を表示
+  } 
+  else if (tabName === 'search') {
+    if (tabs[2]) tabs[2].classList.add('active'); 
+    if (pageSearch) pageSearch.style.display = 'block'; // プラン検索（iframe）を表示
+  }
 }
-    }
     function resetAllInputs() {
-  // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す
-  const buyMode = document.getElementById('buy-mode');
-  const planSelect = document.getElementById('plan-select');
-  const strageSelect = document.getElementById('strage-select');
-  const today = document.getElementById('today');
-  const adminFeeCheck = document.getElementById('admin-fee');
-  
-  if (buyMode) buyMode.value = "";
-  if (planSelect) planSelect.value = "";
-  if (today) today.value = "";
-  if (adminFeeCheck) adminFeeCheck.checked = false;
+      // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す
+      const buyMode = document.getElementById('buy-mode');
+      const planSelect = document.getElementById('plan-select');
+      const strageSelect = document.getElementById('strage-select');
+      const today = document.getElementById('today');
+      const adminFeeCheck = document.getElementById('admin-fee');
 
-  // 「容量」はプランに連動するので、選択肢をリセットして無効化
-  if (strageSelect) {
-    strageSelect.innerHTML = '<option value="">-- 最初にプランを選んでください --</option>';
-    strageSelect.disabled = true;
-  }
+      if (buyMode) buyMode.value = "";
+      if (planSelect) planSelect.value = "";
+      if (today) today.value = "";
+      if (adminFeeCheck) adminFeeCheck.checked = false;
 
-  // 2. 既存の「オプション」と「割引」のチェックボックス一括解除を呼び出す
-  clearAllGroup('options');
-  clearAllGroup('discounts');
-  
-  // 3. smartあんしん補償の下位プルダウンも連動して初期化
-  if (typeof toggleSmartAnshinOptions === 'function') {
-    toggleSmartAnshinOptions();
-  }
+      // 「容量」はプランに連動するので、選択肢をリセットして無効化
+      if (strageSelect) {
+        strageSelect.innerHTML = '<option value="">-- 最初にプランを選んでください --</option>';
+        strageSelect.disabled = true;
+      }
 
-  // 4. 購入方法変更時のリセット処理を呼び出して、本体代・残価の入力欄や各種表示ボックスを全消し！
-  if (typeof buyMethod === 'function') {
-    buyMethod();
-  }
+      // 2. 既存の「オプション」と「割引」のチェックボックス一括解除を呼び出す
+      clearAllGroup('options');
+      clearAllGroup('discounts');
 
-  // 5. 念のため画面上の残存テキストやエラーバナーも消去して再計算を回す
-  if (typeof resetPriceSelect === 'function') {
-    resetPriceSelect();
-  }
-  if (typeof updatePriceOptions === 'function') {
-    updatePriceOptions();
-  }
-}
-window.addEventListener('DOMContentLoaded', updatePriceOptions);
+      // 3. smartあんしん補償の下位プルダウンも連動して初期化
+      if (typeof toggleSmartAnshinOptions === 'function') {
+        toggleSmartAnshinOptions();
+      }
+
+      // 4. 購入方法変更時のリセット処理を呼び出して、本体代・残価の入力欄や各種表示ボックスを全消し！
+      if (typeof buyMethod === 'function') {
+        buyMethod();
+      }
+
+      // 5. 念のため画面上の残存テキストやエラーバナーも消去して再計算を回す
+      if (typeof resetPriceSelect === 'function') {
+        resetPriceSelect();
+      }
+      if (typeof updatePriceOptions === 'function') {
+        updatePriceOptions();
+      }
+    }
+    window.addEventListener('DOMContentLoaded', updatePriceOptions);
   </script>
 </body>
 
