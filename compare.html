@@ -1231,6 +1231,15 @@
                 if (target === 'discount') {
                     const container = document.getElementById(`sim-${side}-discount-container`);
                     if (container) {
+                        // 💡 連動プルダウンの枠がこの中に入ったままだと、innerHTMLのクリアで
+                        //     DOMごと消えてしまうため、先に外（親要素）へ退避させておく
+                        ['use', 'family', 'card', 'select'].forEach(t => {
+                            const f = document.getElementById(`sim-${side}-${t}-field`);
+                            if (f && container.contains(f)) {
+                                container.parentElement.appendChild(f);
+                            }
+                        });
+
                         // 💡 会社自体が未選択なら「プランを〜」、会社選択済なら「容量を〜」に動的変更
                         container.innerHTML = company
                             ? '<span class="sim-placeholder">容量を選択ください</span>'
