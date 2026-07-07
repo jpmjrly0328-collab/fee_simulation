@@ -861,6 +861,8 @@
             const planSelect = document.getElementById(`sim-${side}-plan`);
 
             sim_resetSelect(side, ['plan', 'strage', 'option', 'discount']);
+
+            if (company && simData.plans[company]) {
                 simData.plans[company].forEach(plan => {
                     const opt = document.createElement("option");
                     opt.value = plan.id;
