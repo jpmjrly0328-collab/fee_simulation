@@ -143,11 +143,12 @@
             color: #e07b00;
         }
 
-        .sim-monthly-label {
+        .sim-total-column .sim-monthly-label {
             font-size: 13px;
             font-weight: bold;
-            color: #6c757d;
-            margin: 10px 0 2px 0;
+            color: #000000;
+            text-align: left;
+            margin: 20px 0 2px 0;
             letter-spacing: 0.05em;
         }
 
@@ -369,7 +370,7 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-left-total-container">
-                        <p class="sim-result-title">比較プラン A 合計料金</p>
+                        <p class="sim-result-title">比較プラン A 月額</p>
                         <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-left-total">¥0</span></p>
                     </div>
@@ -464,7 +465,7 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-right-total-container">
-                        <p class="sim-result-title">比較プラン B 合計料金</p>
+                        <p class="sim-result-title">比較プラン B 月額</p>
                         <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-right-total">¥0</span></p>
                     </div>
@@ -516,8 +517,9 @@
         }
 
         .sim-checkbox-container .sim-field select {
-            width: auto;
-            max-width: 220px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             padding: 4px 8px;
             font-size: 12px;
         }
@@ -800,7 +802,8 @@
                         name: "長期利用割",
                         value: 0,
                         useYears: [
-                            { id: "d_use10_20", name: "20年未満", value: 110 },
+                            { id: "d_use_under10", name: "10年未満", value: 0 },
+                            { id: "d_use10_20", name: "10年以上20年未満", value: 110 },
                             { id: "d_use_20", name: "20年以上", value: 220 }
                         ]
                     },
@@ -1240,7 +1243,7 @@
                         `<span class="sim-title-line sim-title-label-strage">③容量</span>` +
                         `<span class="sim-title-line sim-title-value">${strageName}</span>`;
                 } else {
-                    titleElement.textContent = `比較プラン ${sideLabel} 合計料金`;
+                    titleElement.textContent = `比較プラン ${sideLabel} 月額`;
                 }
             }
 
