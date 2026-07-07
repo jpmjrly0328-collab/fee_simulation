@@ -1157,15 +1157,23 @@
       </button>
     </div>
   </div>
-  <h1 class="veil-outer-title">キャリア別月額料金</h1>
   <div id="page-simulator">
     <!-- シミュレーターの中身 -->
   </div> <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
 
   <!-- その下に、完全に独立させて iframe を置く -->
-  <iframe id="page-compare" src="./compare.html"
-    style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
-  <iframe id="page-search" src="./search.html" style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
+  <!-- 💡 高さは固定せず、中身の実際の高さに合わせてJSで自動調整する -->
+  <!-- 💡 タブごとに専用の見出しを持たせ、見出しとiframeをセットで表示/非表示できるようにする -->
+  <div id="page-compare-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">キャリア別月額料金</h1>
+    <iframe id="page-compare" src="./compare.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
+  <div id="page-search-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">プランかんたん検索</h1>
+    <iframe id="page-search" src="./search.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
 
   <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
@@ -2301,12 +2309,59 @@
     const pageSimulator = document.getElementById('page-simulator');
     const pageCompare = document.getElementById('page-compare');
     const pageSearch = document.getElementById('page-search');
+    const pageCompareWrapper = document.getElementById('page-compare-wrapper');
+    const pageSearchWrapper = document.getElementById('page-search-wrapper');
+
+    // =======================================================================================================================
+    // 🛠 iframe自動リサイズ：中身の実際の高さに合わせてiframe自体の高さを伸縮させることで、
+    // iframe内部だけがスクロールする状態を防ぎ、外側のページ全体が一体でスクロールするようにする。
+    function resizeIframeToContent(iframe) {
+      if (!iframe) return;
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (doc && doc.documentElement) {
+          const newHeight = Math.max(doc.documentElement.scrollHeight, doc.body ? doc.body.scrollHeight : 0);
+          if (newHeight > 0) iframe.style.height = newHeight + 'px';
+        }
+      } catch (e) {
+        // 読み込みタイミングやクロスオリジン等で取得できない場合は何もしない
+      }
+    }
+
+    // iframeの中身（同一オリジン）の変化を監視して、変化があるたびに高さを再計算する
+    function watchIframeResize(iframe) {
+      if (!iframe) return;
+      iframe.addEventListener('load', () => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          if (!doc || !doc.body) return;
+
+          resizeIframeToContent(iframe);
+
+          const observer = new MutationObserver(() => resizeIframeToContent(iframe));
+          observer.observe(doc.body, { childList: true, subtree: true, attributes: true, characterData: true });
+
+          iframe.contentWindow.addEventListener('resize', () => resizeIframeToContent(iframe));
+        } catch (e) {
+          // クロスオリジン等で監視できない場合は何もしない
+        }
+      });
+    }
+
+    watchIframeResize(pageCompare);
+    watchIframeResize(pageSearch);
+
+    // ウィンドウ幅が変わった時（画面回転など）も、表示中のiframeがあれば高さを再計算
+    window.addEventListener('resize', () => {
+      if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
+      if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+    });
 
     function switchTab(tabName) {
       // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
       if (pageSimulator) pageSimulator.style.display = 'none';
-      if (pageCompare) pageCompare.style.display = 'none';
-      if (pageSearch) pageSearch.style.display = 'none';
+      if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
+      if (pageSearchWrapper) pageSearchWrapper.style.display = 'none';
 
       // 2. すべてのタブボタンから一旦 active クラスを消す
       if (tabs[0]) tabs[0].classList.remove('active');
@@ -2320,11 +2375,19 @@
       }
       else if (tabName === 'prices') {
         if (tabs[1]) tabs[1].classList.add('active');
-        if (pageCompare) pageCompare.style.display = 'block'; // キャリア比較（iframe）を表示
+        if (pageCompareWrapper) {
+          pageCompareWrapper.style.display = 'block'; // 見出し＋キャリア比較（iframe）を表示
+          // 💡 表示された直後は display:none 中に測った高さが正しくないことがあるため、
+          // 描画が済んだ次のフレームで改めて高さを測り直す
+          requestAnimationFrame(() => resizeIframeToContent(pageCompare));
+        }
       }
       else if (tabName === 'search') {
         if (tabs[2]) tabs[2].classList.add('active');
-        if (pageSearch) pageSearch.style.display = 'block'; // プラン検索（iframe）を表示
+        if (pageSearchWrapper) {
+          pageSearchWrapper.style.display = 'block'; // 見出し＋プラン検索（iframe）を表示
+          requestAnimationFrame(() => resizeIframeToContent(pageSearch));
+        }
       }
     }
     function resetAllInputs() {
@@ -2390,6 +2453,41 @@
         }, 400); // フェードアウトの時間
       }
     }, 2400); // 👈 ここで「最低限表示したい秒数」を確実にロックします
+
+    // =======================================================================================================================
+    // 🛡 セーフティネット：スマホでアプリを切り替えたりロック画面にしたりすると、
+    // バックグラウンドのタブは setTimeout の実行が遅延・停止されることがあり、
+    // その間に is-loading の解除が行われずに画面が固まったままになることがある。
+    // また、ブラウザの「戻る」操作等でページがbfcache（メモリ上のスナップショット）から
+    // 復元された場合も、一度きりのタイマーは再実行されず同じ問題が起こり得る。
+    // そのため、演出に十分な時間が経過していれば、いつでも強制的にロックを解除する。
+    function forceUnlockScrollIfStuck() {
+      const elapsed = Date.now() - startTime;
+      // 演出時間(2400ms) + フェードアウト(400ms) より確実に長い時間が経っていれば、
+      // 通常のタイマーで既に解除されているはずなので、念のため強制的にも解除する
+      if (elapsed >= 3000) {
+        document.body.classList.remove('is-loading');
+        const loader = document.getElementById('loader');
+        if (loader && loader.style.display !== 'none') {
+          loader.style.opacity = '0';
+          loader.style.display = 'none';
+        }
+      }
+    }
+
+    // タブが再表示された時（他アプリから戻ってきた時・ロック解除時など）に発火
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        forceUnlockScrollIfStuck();
+      }
+    });
+
+    // ブラウザの戻る/進むでbfcacheから復元された時に発火
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        forceUnlockScrollIfStuck();
+      }
+    });
   </script>
 </body>
 
