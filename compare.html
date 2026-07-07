@@ -122,9 +122,13 @@
 
         .sim-title-value {
             margin-left: 18px;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #1a1a1a;
+        }
+
+        .sim-title-value:last-of-type {
+            margin-bottom: 4px;
         }
 
         .sim-title-label-company {
@@ -137,6 +141,14 @@
 
         .sim-title-label-strage {
             color: #e07b00;
+        }
+
+        .sim-monthly-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #6c757d;
+            margin: 10px 0 2px 0;
+            letter-spacing: 0.05em;
         }
 
         .sim-result-price {
@@ -193,14 +205,12 @@
             padding: 10px;
             border-radius: 4px;
             min-height: 38px;
-            overflow-x: auto;
         }
 
         .sim-checkbox-label {
             display: block;
             margin-bottom: 5px;
             cursor: pointer;
-            white-space: nowrap;
         }
 
         .sim-checkbox-label input {
@@ -360,6 +370,7 @@
                 <div class="sim-total-column">
                     <div id="sim-left-total-container">
                         <p class="sim-result-title">比較プラン A 合計料金</p>
+                        <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-left-total">¥0</span></p>
                     </div>
                     <p id="sim-left-error-msg" class="sim-error-message" style="display: none;"></p>
@@ -454,6 +465,7 @@
                 <div class="sim-total-column">
                     <div id="sim-right-total-container">
                         <p class="sim-result-title">比較プラン B 合計料金</p>
+                        <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-right-total">¥0</span></p>
                     </div>
                     <p id="sim-right-error-msg" class="sim-error-message" style="display: none;"></p>
@@ -474,14 +486,12 @@
             padding: 10px;
             border-radius: 4px;
             min-height: 38px;
-            overflow-x: auto;
         }
 
         .sim-checkbox-label {
             display: block;
             margin-bottom: 5px;
             cursor: pointer;
-            white-space: nowrap;
         }
 
         .sim-checkbox-label input {
