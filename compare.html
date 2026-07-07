@@ -113,6 +113,20 @@
             font-weight: bold;
         }
 
+        /* 💡 合計金額タイトルを①キャリア/②プラン名/③容量でネスト表示する */
+        .sim-title-line {
+            display: block;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .sim-title-value {
+            margin-left: 18px;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
         .sim-result-price {
             font-size: 28px;
             font-weight: bold;
@@ -167,12 +181,14 @@
             padding: 10px;
             border-radius: 4px;
             min-height: 38px;
+            overflow-x: auto;
         }
 
         .sim-checkbox-label {
             display: block;
             margin-bottom: 5px;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .sim-checkbox-label input {
@@ -438,12 +454,14 @@
             padding: 10px;
             border-radius: 4px;
             min-height: 38px;
+            overflow-x: auto;
         }
 
         .sim-checkbox-label {
             display: block;
             margin-bottom: 5px;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .sim-checkbox-label input {
@@ -1180,7 +1198,13 @@
                 if (company && currentPlan && strageSelect && strageSelect.value) {
                     const companyName = companyEl.options[companyEl.selectedIndex].text;
                     const strageName = strageSelect.options[strageSelect.selectedIndex].text.split('　')[0];
-                    titleElement.textContent = `${companyName} / ${currentPlan.name} / ${strageName}`;
+                    titleElement.innerHTML =
+                        `<span class="sim-title-line">①キャリア：</span>` +
+                        `<span class="sim-title-line sim-title-value">${companyName}</span>` +
+                        `<span class="sim-title-line">②プラン名：</span>` +
+                        `<span class="sim-title-line sim-title-value">${currentPlan.name}</span>` +
+                        `<span class="sim-title-line">③容量：</span>` +
+                        `<span class="sim-title-line sim-title-value">${strageName}</span>`;
                 } else {
                     titleElement.textContent = `比較プラン ${sideLabel} 合計料金`;
                 }
