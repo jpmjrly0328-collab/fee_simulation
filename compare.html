@@ -119,13 +119,19 @@
             display: block;
             text-align: left;
             font-weight: bold;
+            font-size: 13px;
         }
 
         .sim-title-value {
             margin-left: 18px;
             margin-bottom: 10px;
             font-weight: 600;
+            font-size: 12px;
             color: #1a1a1a;
+            /* 💡 長いプラン名・容量名でも枠からはみ出さないよう折り返す */
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .sim-title-value:last-of-type {
