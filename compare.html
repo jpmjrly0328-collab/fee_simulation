@@ -8,6 +8,12 @@
     <!-- index.htmlで使っているCSSファイルをここでも読み込む -->
     <link rel="stylesheet" href="style.css">
     <style>
+        html,
+        body {
+            /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）や、リロード機能を無効化します */
+            overscroll-behavior-y: none !important;
+        }
+
         body {
             background-color: transparent;
             margin-top: 0 !important;
@@ -33,20 +39,30 @@
 
         /* 💡 1. プラン選択フォーム（上段）の横並び設定 */
         .sim-main-box {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            /* スマホ対応 */
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+
+            /* 👈 左右の箱の間に 8px の隙間を開ける */
+            gap: 8px !important;
         }
 
         .sim-plan-column {
-            flex: 1;
-            min-width: 300px;
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
+            /* ⚠️ gap をあける場合は、50%だとハミ出るので「calc」で隙間分を引きます */
+            width: calc(50% - 4px) !important;
+
+            background-color: #f8fafc !important;
+            /* 枠の中を着色 */
+            border-radius: 8px !important;
+            /* 角を少し丸めるとスマホアプリっぽくなります */
+            padding: 12px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 最後の要素（右側の枠）だけは、右側の境界線を消すとスッキリします */
+        .compare-pane:last-child {
+            border-right: none !important;
         }
 
         /* 各カラムのタイトル（枠の最上部に固定） */
@@ -212,9 +228,8 @@
 
 <body>
 
-    <h1 class="veil-outer-title">料金比較</h1>
-
     <div class="sim-base-card">
+        <h1 class="veil-outer-title">料金比較</h1>
         <h2 class="sim-title">料金比較（主要プラン及び通話、主要割引のみ）</h2>
 
         <!-- 1. 上段：プラン選択エリア（左右に並ぶ） -->
