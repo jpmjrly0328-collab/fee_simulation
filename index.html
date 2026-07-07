@@ -70,6 +70,12 @@
     display: inline-block !important;
   }
 
+  html,
+  body {
+    /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）や、リロード機能を無効化します */
+    overscroll-behavior-y: none !important;
+  }
+
   body {
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
     background-color: var(--bg-body);
@@ -743,7 +749,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color:#7a99cf;
+    background-color: #7a99cf;
     /* 画像の背景色に合わせると綺麗です */
     z-index: 99999;
     transition: opacity 0.4s ease;
@@ -790,9 +796,11 @@
       opacity: 0.4;
     }
   }
+
   body.is-loading {
-  overflow: hidden !important; /* 👈 縦横のスクロールを完全に禁止する */
-}
+    overflow: hidden !important;
+    /* 👈 縦横のスクロールを完全に禁止する */
+  }
 </style>
 </head>
 
@@ -2295,30 +2303,30 @@
     const pageSearch = document.getElementById('page-search');
 
     function switchTab(tabName) {
-  // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
-  if (pageSimulator) pageSimulator.style.display = 'none';
-  if (pageCompare) pageCompare.style.display = 'none';
-  if (pageSearch) pageSearch.style.display = 'none';
-  
-  // 2. すべてのタブボタンから一旦 active クラスを消す
-  if (tabs[0]) tabs[0].classList.remove('active');
-  if (tabs[1]) tabs[1].classList.remove('active');
-  if (tabs[2]) tabs[2].classList.remove('active');
+      // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
+      if (pageSimulator) pageSimulator.style.display = 'none';
+      if (pageCompare) pageCompare.style.display = 'none';
+      if (pageSearch) pageSearch.style.display = 'none';
 
-  // 3. クリックされたタブだけを「表示」にする
-  if (tabName === 'simulator') {
-    if (tabs[0]) tabs[0].classList.add('active'); 
-    if (pageSimulator) pageSimulator.style.display = 'block'; // シミュレーターを表示
-  } 
-  else if (tabName === 'prices') {
-    if (tabs[1]) tabs[1].classList.add('active'); 
-    if (pageCompare) pageCompare.style.display = 'block'; // キャリア比較（iframe）を表示
-  } 
-  else if (tabName === 'search') {
-    if (tabs[2]) tabs[2].classList.add('active'); 
-    if (pageSearch) pageSearch.style.display = 'block'; // プラン検索（iframe）を表示
-  }
-}
+      // 2. すべてのタブボタンから一旦 active クラスを消す
+      if (tabs[0]) tabs[0].classList.remove('active');
+      if (tabs[1]) tabs[1].classList.remove('active');
+      if (tabs[2]) tabs[2].classList.remove('active');
+
+      // 3. クリックされたタブだけを「表示」にする
+      if (tabName === 'simulator') {
+        if (tabs[0]) tabs[0].classList.add('active');
+        if (pageSimulator) pageSimulator.style.display = 'block'; // シミュレーターを表示
+      }
+      else if (tabName === 'prices') {
+        if (tabs[1]) tabs[1].classList.add('active');
+        if (pageCompare) pageCompare.style.display = 'block'; // キャリア比較（iframe）を表示
+      }
+      else if (tabName === 'search') {
+        if (tabs[2]) tabs[2].classList.add('active');
+        if (pageSearch) pageSearch.style.display = 'block'; // プラン検索（iframe）を表示
+      }
+    }
     function resetAllInputs() {
       // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す
       const buyMode = document.getElementById('buy-mode');
@@ -2362,26 +2370,26 @@
     }
     window.addEventListener('DOMContentLoaded', updatePriceOptions);
     // 1. ページが開いた瞬間、即座にスクロールを禁止
-document.body.classList.add('is-loading');
+    document.body.classList.add('is-loading');
 
-// 2. ページを開いた瞬間から「2400ms（2.4秒）」のカウントダウンをスタート
-setTimeout(() => {
-  const loader = document.getElementById('loader');
-  
-  if (loader) {
-    // まず不透明度を0にして、じわっと消し始める（CSSの transition: opacity 0.4s が効く）
-    loader.style.opacity = '0';
-    
-    // 3. フェードアウトのアニメーション（0.4秒 = 400ms）が終わるのを待ってから完全に消す
+    // 2. ページを開いた瞬間から「2400ms（2.4秒）」のカウントダウンをスタート
     setTimeout(() => {
-      loader.style.display = 'none';
-      
-      // 🔄 ここで満を持してスクロールを解禁！
-      document.body.classList.remove('is-loading');
-      window.scrollTo(0, 0);
-    }, 400); // フェードアウトの時間
-  }
-}, 2400); // 👈 ここで「最低限表示したい秒数」を確実にロックします
+      const loader = document.getElementById('loader');
+
+      if (loader) {
+        // まず不透明度を0にして、じわっと消し始める（CSSの transition: opacity 0.4s が効く）
+        loader.style.opacity = '0';
+
+        // 3. フェードアウトのアニメーション（0.4秒 = 400ms）が終わるのを待ってから完全に消す
+        setTimeout(() => {
+          loader.style.display = 'none';
+
+          // 🔄 ここで満を持してスクロールを解禁！
+          document.body.classList.remove('is-loading');
+          window.scrollTo(0, 0);
+        }, 400); // フェードアウトの時間
+      }
+    }, 2400); // 👈 ここで「最低限表示したい秒数」を確実にロックします
   </script>
 </body>
 
