@@ -133,26 +133,20 @@
             margin-left: 18px;
             margin-bottom: 10px;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 7px;
             color: #1a1a1a;
-            /* 💡 長いプラン名・容量名でも枠からはみ出さないよう折り返す */
-            white-space: normal;
-            overflow-wrap: break-word;
-            word-break: break-word;
+            /* 💡 一番長い「auバリューリンク マネ活2」でも折り返さず1行に収まるサイズに統一 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .sim-title-value:last-of-type {
             margin-bottom: 4px;
         }
 
-        /* 💡 ②プラン名の値は、一番長い「auバリューリンク マネ活2」でも
-              折り返さず1行に収まるよう、文字を小さくする */
         .sim-title-value-plan {
-            font-size: 7px;
             margin-left: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .sim-title-label-company {
@@ -413,7 +407,6 @@
                     <select id="sim-left-use" onchange="sim_calculateTotal('left')">
                         <option value="">利用年数を選択してください</option>
                     </select>
-                    <div id="sim-left-use-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-family-field" style="display: none;">
@@ -421,7 +414,6 @@
                     <select id="sim-left-family" onchange="sim_calculateTotal('left')">
                         <option value="">家族割対象人数を選択してください</option>
                     </select>
-                    <div id="sim-left-family-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-card-field" style="display: none;">
@@ -429,7 +421,6 @@
                     <select id="sim-left-card" onchange="sim_calculateTotal('left')">
                         <option value="">カードを選択してください</option>
                     </select>
-                    <div id="sim-left-card-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-select-field" style="display: none;">
@@ -442,7 +433,7 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-left-total-container">
-                        <p class="sim-result-title">比較プラン A 月額</p>
+                        <p class="sim-result-title"></p>
                         <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-left-total">¥0</span></p>
                     </div>
@@ -508,7 +499,6 @@
                     <select id="sim-right-use" onchange="sim_calculateTotal('right')">
                         <option value="">利用年数を選択してください</option>
                     </select>
-                    <div id="sim-right-use-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-family-field" style="display: none;">
@@ -516,7 +506,6 @@
                     <select id="sim-right-family" onchange="sim_calculateTotal('right')">
                         <option value="">家族割対象人数を選択してください</option>
                     </select>
-                    <div id="sim-right-family-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-card-field" style="display: none;">
@@ -524,7 +513,6 @@
                     <select id="sim-right-card" onchange="sim_calculateTotal('right')">
                         <option value="">カードを選択してください</option>
                     </select>
-                    <div id="sim-right-card-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-select-field" style="display: none;">
@@ -537,7 +525,7 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-right-total-container">
-                        <p class="sim-result-title">比較プラン B 月額</p>
+                        <p class="sim-result-title"></p>
                         <p class="sim-monthly-label">月額</p>
                         <p class="sim-result-price"><span id="sim-right-total">¥0</span></p>
                     </div>
@@ -1334,13 +1322,9 @@
             const strageSubtotal = document.getElementById(`sim-${side}-strage-subtotal`);
             const optionSubtotal = document.getElementById(`sim-${side}-option-subtotal`);
             const discountSubtotal = document.getElementById(`sim-${side}-discount-subtotal`);
-            const useSubtotal = document.getElementById(`sim-${side}-use-subtotal`);
-            const familySubtotal = document.getElementById(`sim-${side}-family-subtotal`);
-            const cardSubtotal = document.getElementById(`sim-${side}-card-subtotal`);
 
             // 💡 合計金額欄のタイトルを「選択した①携帯会社／②プラン名／③容量」の表記に変更する
             if (titleElement) {
-                const sideLabel = side === 'left' ? 'A' : 'B';
                 if (company && currentPlan && strageSelect && strageSelect.value) {
                     const companyName = companyEl.options[companyEl.selectedIndex].text;
                     const strageName = strageSelect.options[strageSelect.selectedIndex].text.split('　')[0];
@@ -1352,7 +1336,8 @@
                         `<span class="sim-title-line sim-title-label-strage">③容量</span>` +
                         `<span class="sim-title-line sim-title-value">${strageName}</span>`;
                 } else {
-                    titleElement.textContent = `比較プラン ${sideLabel} 月額`;
+                    // 💡 未選択時のデフォルトメッセージは表示しない
+                    titleElement.textContent = "";
                 }
             }
 
@@ -1386,21 +1371,6 @@
             if (planSubtotal) {
                 planSubtotal.innerHTML = currentPlan
                     ? `<span class="sim-plan-subtotal-label">選択中：</span><span class="sim-plan-subtotal-value">${currentPlan.name}</span>`
-                    : "";
-            }
-            if (useSubtotal) {
-                useSubtotal.textContent = (useSelect && useSelect.value)
-                    ? `小計：▲¥${parseInt(useSelect.value).toLocaleString()}`
-                    : "";
-            }
-            if (familySubtotal) {
-                familySubtotal.textContent = (familySelect && familySelect.value)
-                    ? `小計：▲¥${parseInt(familySelect.value).toLocaleString()}`
-                    : "";
-            }
-            if (cardSubtotal) {
-                cardSubtotal.textContent = (cardSelect && cardSelect.value)
-                    ? `小計：▲¥${parseInt(cardSelect.value).toLocaleString()}`
                     : "";
             }
             if (strageSubtotal) {
