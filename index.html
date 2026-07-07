@@ -1227,6 +1227,13 @@
       if (!footer) return;
 
       const hiddenBottom = vv ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
+      const newFooterHeight = footer.offsetHeight + hiddenBottom;
+
+      // 💡 実質的に値が変わっていなければ何も書き換えない（不要な再計算・再描画を避ける）
+      const prevFooterHeight = parseFloat(document.documentElement.style.getPropertyValue('--footer-height')) || 0;
+      if (Math.abs(newFooterHeight - prevFooterHeight) <= 1 && footer.style.bottom === hiddenBottom + 'px') {
+        return;
+      }
 
       // 💡 CSS側の "bottom: 0 !important" に勝つよう、important優先度で上書きする
       footer.style.setProperty('bottom', hiddenBottom + 'px', 'important');
@@ -1235,7 +1242,7 @@
         document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
       }
       // フッター自体の高さ＋ツールバー分のズレを合算して #app-scroll-area の下端オフセットにする
-      document.documentElement.style.setProperty('--footer-height', (footer.offsetHeight + hiddenBottom) + 'px');
+      document.documentElement.style.setProperty('--footer-height', newFooterHeight + 'px');
     }
 
     syncFooterToVisualViewport();
@@ -1244,7 +1251,10 @@
     window.addEventListener('resize', syncFooterToVisualViewport);
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', syncFooterToVisualViewport);
-      window.visualViewport.addEventListener('scroll', syncFooterToVisualViewport);
+      // 💡【重要】'scroll' は監視しない。#app-scroll-area 内をスクロールする操作そのものが
+      //     visualViewportの scroll イベントを発火させることがあり、そのたびにフッター位置や
+      //     スクロールエリアの高さを再計算すると、スクロールする度に範囲が変化してしまう
+      //     不安定な状態（スクロールしてもしても終わらないように見える不具合）の原因になっていた。
     }
 
     // ページを開いた瞬間の時間を記録
@@ -2395,32 +2405,38 @@
       }
     }
 
-    // iframeの中身（同一オリジン）の変化を監視して、変化があるたびに高さを再計算する
+    // iframeが読み込まれた直後に一度だけ高さを合わせておく
     function watchIframeResize(iframe) {
       if (!iframe) return;
       iframe.addEventListener('load', () => {
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          if (!doc || !doc.body) return;
-
-          resizeIframeToContent(iframe);
-
-          const observer = new MutationObserver(() => resizeIframeToContent(iframe));
-          observer.observe(doc.body, { childList: true, subtree: true, attributes: true, characterData: true });
-
-          // 💡【重要】iframe内部の resize イベントは監視しない。
-          //     こちらがJSでiframe自体の高さを変更すると、その変化によってiframe内部の
-          //     window にも resize イベントが発火してしまい、「高さを測る→変更する→
-          //     また resize が発火する→また測る…」という無限ループになり、
-          //     高さが際限なく伸び続けてしまう不具合の原因になっていたため削除。
-        } catch (e) {
-          // クロスオリジン等で監視できない場合は何もしない
-        }
+        resizeIframeToContent(iframe);
       });
     }
 
     watchIframeResize(pageCompare);
     watchIframeResize(pageSearch);
+
+    // =======================================================================================================================
+    // 💡 以前はiframe内部の変化をMutationObserverで監視して都度リサイズしていたが、
+    // 何らかの要因で再計算が連鎖し、高さが際限なく伸び続けてしまう不具合が起きたため、
+    // 「イベントに反応して測り直す」方式ではなく、「表示中のタブだけ一定間隔でチェックする」
+    // シンプルなポーリング方式に変更する。resizeIframeToContent自体に
+    // 「高さが変わっていなければ何もしない」ガードが入っているため、暴走のしようがない。
+    let iframeResizePollTimer = null;
+    function startIframeResizePolling() {
+      stopIframeResizePolling();
+      iframeResizePollTimer = setInterval(() => {
+        if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
+        if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+      }, 500);
+    }
+    function stopIframeResizePolling() {
+      if (iframeResizePollTimer) {
+        clearInterval(iframeResizePollTimer);
+        iframeResizePollTimer = null;
+      }
+    }
+    startIframeResizePolling();
 
     // ウィンドウ幅が変わった時（画面回転など）も、表示中のiframeがあれば高さを再計算
     window.addEventListener('resize', () => {
