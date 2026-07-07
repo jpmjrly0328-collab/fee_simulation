@@ -145,6 +145,16 @@
             margin-bottom: 4px;
         }
 
+        /* 💡 ②プラン名の値は、一番長い「auバリューリンク マネ活2」でも
+              折り返さず1行に収まるよう、文字を小さくする */
+        .sim-title-value-plan {
+            font-size: 7px;
+            margin-left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .sim-title-label-company {
             color: #007bff;
         }
@@ -1338,7 +1348,7 @@
                         `<span class="sim-title-line sim-title-label-company">①キャリア</span>` +
                         `<span class="sim-title-line sim-title-value">${companyName}</span>` +
                         `<span class="sim-title-line sim-title-label-plan">②プラン名</span>` +
-                        `<span class="sim-title-line sim-title-value">${currentPlan.name}</span>` +
+                        `<span class="sim-title-line sim-title-value sim-title-value-plan">${currentPlan.name}</span>` +
                         `<span class="sim-title-line sim-title-label-strage">③容量</span>` +
                         `<span class="sim-title-line sim-title-value">${strageName}</span>`;
                 } else {
@@ -1414,19 +1424,19 @@
 
             // 利用年数のチェック
             if (useSelect && useSelect.disabled === false && useSelect.value === "") {
-                errors.push("「利用年数」を選択してください。");
+                errors.push("「利用年数」<br>を選択してください。");
             }
             // 家族割のチェック
             if (familySelect && familySelect.disabled === false && familySelect.value === "") {
-                errors.push("「家族割対象人数」を選択してください。");
+                errors.push("「家族割対象人数」<br>を選択してください。");
             }
             // カード割のチェック
             if (cardSelect && cardSelect.disabled === false && cardSelect.value === "") {
-                errors.push("「支払いカード」を選択してください。");
+                errors.push("「支払いカード」<br>を選択してください。");
             }
             // いずれか選択のチェック
             if (selectSelect && selectSelect.disabled === false && selectSelect.value === "") {
-                errors.push("「いずれかの項目」を選択してください。");
+                errors.push("「いずれかの項目」<br>を選択してください。");
             }
 
             // 3. エラーがあった場合の処理（一時的に金額を隠して警告を出す）
