@@ -743,7 +743,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #7a99cf;
+    background-color:#7a99cf;
     /* 画像の背景色に合わせると綺麗です */
     z-index: 99999;
     transition: opacity 0.4s ease;
@@ -790,6 +790,9 @@
       opacity: 0.4;
     }
   }
+  body.is-loading {
+  overflow: hidden !important; /* 👈 縦横のスクロールを完全に禁止する */
+}
 </style>
 </head>
 
@@ -2358,6 +2361,27 @@
       }
     }
     window.addEventListener('DOMContentLoaded', updatePriceOptions);
+    // 1. ページが開いた瞬間、即座にスクロールを禁止
+document.body.classList.add('is-loading');
+
+// 2. ページを開いた瞬間から「2400ms（2.4秒）」のカウントダウンをスタート
+setTimeout(() => {
+  const loader = document.getElementById('loader');
+  
+  if (loader) {
+    // まず不透明度を0にして、じわっと消し始める（CSSの transition: opacity 0.4s が効く）
+    loader.style.opacity = '0';
+    
+    // 3. フェードアウトのアニメーション（0.4秒 = 400ms）が終わるのを待ってから完全に消す
+    setTimeout(() => {
+      loader.style.display = 'none';
+      
+      // 🔄 ここで満を持してスクロールを解禁！
+      document.body.classList.remove('is-loading');
+      window.scrollTo(0, 0);
+    }, 400); // フェードアウトの時間
+  }
+}, 2400); // 👈 ここで「最低限表示したい秒数」を確実にロックします
   </script>
 </body>
 
