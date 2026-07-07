@@ -10,12 +10,6 @@
     <style>
         html,
         body {
-            /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）を抑えつつ、
-                  iframeとして埋め込まれた際に、下端/上端まで来たらスクロールを
-                  親ページ（外側）へきちんと引き継げるよう "auto"（既定値）にする。
-                  ※ "contain" や "none" だと、親ページへのスクロールの伝播（チェイン）が
-                     ブロックされてしまい、スクロールバーを直接ドラッグしないと
-                     動かせなくなってしまう */
             overscroll-behavior-y: auto;
         }
 
@@ -26,7 +20,6 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* 画面全体の白い大きなベース枠 */
         .sim-base-card {
             max-width: 1000px;
             margin: 0 auto;
@@ -42,39 +35,35 @@
             color: #1a1a1a;
         }
 
-        /* 💡 1. プラン選択フォーム（上段）の横並び設定 */
         .sim-main-box {
             display: flex !important;
             flex-direction: row !important;
             width: 100% !important;
             box-sizing: border-box !important;
-
-            /* 👈 左右の箱の間に 8px の隙間を開ける */
             gap: 8px !important;
         }
 
         .sim-plan-column {
-            /* ⚠️ gap をあける場合は、50%だとハミ出るので「calc」で隙間分を引きます */
             width: calc(50% - 4px) !important;
-
             background-color: #f8fafc !important;
-            /* 枠の中を着色 */
             border-radius: 8px !important;
-            /* 角を少し丸めるとスマホアプリっぽくなります */
             padding: 12px !important;
             box-sizing: border-box !important;
-
-            /* 💡 中身を縦方向のflexにして、コメント欄を一番下に固定できるようにする */
             display: flex !important;
             flex-direction: column !important;
+
+            /* 💡 日本語の中に英数字（例：￥5,800、auスマートバリュー）が混ざっても、
+                  その部分だけ不自然にはみ出したり、変な位置で千切れたりしないようにする。
+                  word-break: keep-all で英数字のまとまりはできるだけ崩さず、
+                  それでも入りきらない場合だけ overflow-wrap: break-word で強制的に折り返す */
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
 
-        /* 最後の要素（右側の枠）だけは、右側の境界線を消すとスッキリします */
         .compare-pane:last-child {
             border-right: none !important;
         }
 
-        /* 各カラムのタイトル（枠の最上部に固定） */
         .sim-column-title {
             margin-top: 0;
             border-bottom: 3px solid #007bff;
@@ -83,12 +72,10 @@
             font-size: 20px;
         }
 
-        /* 💡 2. 合計金額表示（各プラン枠の中に内包する） */
         .sim-total-column {
             width: 100%;
             box-sizing: border-box;
             background: #f0f7ff;
-            /* 合計金額っぽく少し青みのある色に */
             border: 2px solid #007bff;
             border-radius: 8px;
             padding: 20px;
@@ -98,8 +85,6 @@
 
         .sim-total-column p {
             margin: 5px 0;
-            /* 上下のすき間をちょっと綺麗に整える */
-            /* 💡 横並び固定(nowrap)をやめ、狭い枠でも折り返せるようにする */
             white-space: normal;
             overflow-wrap: break-word;
             word-break: break-word;
@@ -119,8 +104,6 @@
             margin: 0;
         }
 
-        /* 💡 スマホ幅では、プラン枠が画面の半分しかなく窮屈になるため、
-              合計金額の文字サイズを小さくしてはみ出しを防ぐ */
         @media (max-width: 480px) {
             .sim-result-title {
                 font-size: 13px;
@@ -129,11 +112,35 @@
             .sim-result-price {
                 font-size: 20px;
             }
+
+            /* 💡 プラン枠が画面の半分しかなく窮屈なため、ラベル・コメント・割引の
+                  文字サイズも一段階小さくして、中途半端な折り返しが起きにくいようにする */
+            .sim-field label {
+                font-size: 12px;
+            }
+
+            .sim-column-title {
+                font-size: 16px;
+            }
+
+            .sim-comment-title {
+                font-size: 0.8em;
+            }
+
+            .sim-comment-content {
+                font-size: 0.78em;
+            }
+
+            .sim-checkbox-label,
+            .sim-placeholder {
+                font-size: 0.8em;
+            }
+
+            .sim-item-subtotal {
+                font-size: 11px;
+            }
         }
 
-        /* 💡 コンテンツの一番下に置く「ここまでです」の目印。
-              固定ヘッダー/フッター構成では、内容が短い時に下に余白ができるため、
-              「もう内容は終わっている」ことが分かるようにしておく */
         .sim-end-marker {
             text-align: center;
             color: #adb5bd;
@@ -143,7 +150,6 @@
             padding-bottom: 10px;
         }
 
-        /* 各フォームパーツの装飾 */
         .sim-field {
             margin-bottom: 20px;
         }
@@ -171,7 +177,6 @@
             cursor: not-allowed;
         }
 
-        /* チェックボックス・コメント・リセットボタン等の装飾 */
         .sim-checkbox-container {
             background: #f9f9f9;
             border: 1px solid #ccc;
@@ -250,10 +255,8 @@
 
         h2 {
             margin-top: 0 !important;
-            /* <h2>の上の隙間を限界まで狭くする */
         }
 
-        /* 💡 各項目（容量・通話オプション・割引）の真下に出す内訳（小計）表示 */
         .sim-item-subtotal {
             text-align: right;
             font-size: 13px;
@@ -265,9 +268,6 @@
         .sim-item-subtotal.is-discount {
             color: #0d6efd;
         }
-
-        /* 💡 以前はiframe埋め込み時のフッター被り防止でここに余白を追加していたが、
-              親ページ側で専用スクロールエリアを導入したことで不要になったため削除 */
     </style>
 </head>
 
@@ -277,10 +277,8 @@
         <h1 class="veil-outer-title">料金比較</h1>
         <h2 class="sim-title">料金比較（主要プラン及び通話、主要割引のみ）</h2>
 
-        <!-- 1. 上段：プラン選択エリア（左右に並ぶ） -->
         <div class="sim-main-box">
 
-            <!-- 左側プランフォーム -->
             <div class="sim-plan-column">
                 <h3 class="sim-column-title">比較プラン A</h3>
 
@@ -361,7 +359,6 @@
                     <div id="sim-left-comment" class="sim-comment-content">プランを選択すると、ここに特徴や注意点が表示されます。</div>
                 </div>
 
-                <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-left-total-container">
                         <p class="sim-result-title">比較プラン A 合計料金</p>
@@ -375,7 +372,6 @@
                 </div>
             </div>
 
-            <!-- 右側プランフォーム -->
             <div class="sim-plan-column">
                 <h3 class="sim-column-title">比較プラン B</h3>
 
@@ -456,7 +452,6 @@
                     <div id="sim-right-comment" class="sim-comment-content">プランを選択すると、ここに特徴や注意点が表示されます。</div>
                 </div>
 
-                <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-right-total-container">
                         <p class="sim-result-title">比較プラン B 合計料金</p>
@@ -475,7 +470,6 @@
     </div>
 
     <style>
-        /* 既存のスタイル */
         .sim-checkbox-container {
             background: #f9f9f9;
             border: 1px solid #ccc;
@@ -499,10 +493,7 @@
             font-size: 0.9em;
         }
 
-        /* 【新規追加】コメント欄のスタイル */
         .sim-comment-box {
-            /* 💡 margin-top: auto により、内容量に関わらずコメント欄とリセットボタンが
-                  カラムの一番下に揃うようになり、比較プランA・Bの高さが揃って見える */
             margin-top: auto;
             background: #fffde7;
             border: 1px solid #fff59d;
@@ -523,7 +514,6 @@
             line-height: 1.4;
         }
 
-        /* 【新規追加】リセットボタンのスタイル */
         .sim-reset-box {
             margin-top: 15px;
             text-align: right;
@@ -546,14 +536,10 @@
 
         #comment-display-area {
             white-space: pre-wrap;
-            /* 💡これを指定すると、\n や改行がそのまま画面で改行されます */
         }
     </style>
 
     <script>
-        // =======================================================================================================================
-        // 📱 携帯料金マスターデータ
-        // =======================================================================================================================
         const simData = {
             plans: {
                 docomo: [
@@ -902,10 +888,6 @@
             }
         };
 
-        // ========================================================================================================================
-        // 🛠️ 連動ロジック
-        // ========================================================================================================================
-
         function sim_updatePlans(side) {
             const company = document.getElementById(`sim-${side}-company`).value;
             const planSelect = document.getElementById(`sim-${side}-plan`);
@@ -980,7 +962,6 @@
             if (currentPlan && currentPlan.allowDiscount === true && discountContainer) {
                 discountContainer.innerHTML = '';
 
-                // 💡 先にプルダウン側の初期テキストをリセットしておく（初回クリックの不発を防ぐ）
                 const useSelect = document.getElementById(`sim-${side}-use`);
                 const familySelect = document.getElementById(`sim-${side}-family`);
                 const cardSelect = document.getElementById(`sim-${side}-card`);
@@ -1054,7 +1035,7 @@
             if (hasUseDiscount && useSelect) {
                 if (useSelect.innerHTML === '<option value="">利用年数を選択してください</option>') {
                     useDiscountData.useYears.forEach(item => {
-                        if (denyList.includes(item.id)) return; // 💡除外リストにあればスキップ
+                        if (denyList.includes(item.id)) return;
                         const o = document.createElement("option");
                         o.value = item.value;
                         o.textContent = `${item.name}　▲¥${item.value}`;
@@ -1072,7 +1053,7 @@
             if (hasFamilyDiscount && familySelect) {
                 if (familySelect.innerHTML === '<option value="">家族割対象人数を選択してください</option>') {
                     familyDiscountData.family.forEach(item => {
-                        if (denyList.includes(item.id)) return; // 💡除外リストにあればスキップ
+                        if (denyList.includes(item.id)) return;
                         const o = document.createElement("option");
                         o.value = item.value;
                         o.textContent = `${item.name}　▲¥${item.value}`;
@@ -1090,7 +1071,7 @@
             if (hasCardDiscount && cardSelect) {
                 if (cardSelect.innerHTML === '<option value="">カードを選択してください</option>') {
                     cardDiscountData.cards.forEach(card => {
-                        if (denyList.includes(card.id)) return; // 💡除外リストにあればスキップ
+                        if (denyList.includes(card.id)) return;
                         const o = document.createElement("option");
                         o.value = card.value;
                         o.textContent = `${card.name}　▲¥${card.value}`;
@@ -1118,7 +1099,6 @@
                 if (selectField) selectField.style.display = 'block';
                 selectSelect.disabled = false;
             } else if (selectSelect) {
-                // 💡「カードを選んでください」のタイポも修正
                 selectSelect.innerHTML = '<option value="">いずれか選択してください</option>';
                 if (selectField) selectField.style.display = 'none';
                 selectSelect.disabled = true;
@@ -1144,19 +1124,17 @@
             commentDiv.innerHTML = "プランを選択すると、ここに特徴や注意点が表示されます。";
         }
 
-        // 💡 各種プルダウンメニューの初期化
         function sim_resetSelect(side, targets) {
             const labels = {
                 plan: 'プランを選択してください',
                 strage: '容量を選択ください',
-                option: 'いずれか選択してください', // 💡「容量」から「オプション」に修正
+                option: 'いずれか選択してください',
                 use: '利用年数を選択してください',
                 family: '家族割対象人数を選択してください',
                 card: 'カードを選択ください',
                 select: 'いずれか選択ください'
             };
 
-            // 💡 現在の会社の選択状況を取得
             const companyEl = document.getElementById(`sim-${side}-company`);
             const company = companyEl ? companyEl.value : "";
 
@@ -1164,7 +1142,6 @@
                 if (target === 'discount') {
                     const container = document.getElementById(`sim-${side}-discount-container`);
                     if (container) {
-                        // 💡 会社自体が未選択なら「プランを〜」、会社選択済なら「容量を〜」に動的変更
                         container.innerHTML = company
                             ? '<span class="sim-placeholder">容量を選択ください</span>'
                             : '<span class="sim-placeholder">プランを選択してください</span>';
@@ -1178,7 +1155,6 @@
                     el.disabled = true;
                 }
 
-                // 追加フィールドの非表示化
                 const field = document.getElementById(`sim-${side}-${target}-field`);
                 if (field) field.style.display = 'none';
             });
@@ -1189,7 +1165,6 @@
             const company = companyEl ? companyEl.value : "";
             const errorMsg = document.getElementById(`sim-${side}-error-msg`);
 
-            // 【修正】totalDisplay と totalSpan が重複していたので統合
             const totalSpan = document.getElementById(`sim-${side}-total`);
             const totalContainer = document.getElementById(`sim-${side}-total-container`);
             const priceElement = totalContainer ? totalContainer.querySelector('.sim-result-price') : null;
@@ -1201,12 +1176,10 @@
             const cardSelect = document.getElementById(`sim-${side}-card`);
             const selectSelect = document.getElementById(`sim-${side}-select`);
 
-            // 💡 各項目（容量・通話オプション・割引）の真下に出す内訳（小計）表示欄
             const strageSubtotal = document.getElementById(`sim-${side}-strage-subtotal`);
             const optionSubtotal = document.getElementById(`sim-${side}-option-subtotal`);
             const discountSubtotal = document.getElementById(`sim-${side}-discount-subtotal`);
 
-            // 安全に対象の値を取得（要素が存在しない、または未選択なら 0 ）
             const basePrice = (strageSelect && strageSelect.value) ? parseInt(strageSelect.value) : 0;
             const optionPrice = (optionSelect && optionSelect.value) ? parseInt(optionSelect.value) : 0;
 
@@ -1232,7 +1205,6 @@
                 });
             }
 
-            // 💡 各項目の小計は、下の合計欄の入力状況に関わらず、選択した時点で常に表示する
             if (strageSubtotal) {
                 strageSubtotal.textContent = (strageSelect && strageSelect.value)
                     ? `小計：¥${basePrice.toLocaleString()}`
@@ -1249,68 +1221,53 @@
                     : "";
             }
 
-            // 2. チェックボックスがON、かつプルダウンが未選択（空）のものを探す
             let errors = [];
 
-            // 利用年数のチェック
             if (useSelect && useSelect.disabled === false && useSelect.value === "") {
                 errors.push("「利用年数」を選択してください。");
             }
-            // 家族割のチェック
             if (familySelect && familySelect.disabled === false && familySelect.value === "") {
                 errors.push("「家族割対象人数」を選択してください。");
             }
-            // カード割のチェック
             if (cardSelect && cardSelect.disabled === false && cardSelect.value === "") {
                 errors.push("「支払いカード」を選択してください。");
             }
-            // いずれか選択のチェック
             if (selectSelect && selectSelect.disabled === false && selectSelect.value === "") {
                 errors.push("「いずれかの項目」を選択してください。");
             }
 
-            // 3. エラーがあった場合の処理（一時的に金額を隠して警告を出す）
             if (errors.length > 0) {
                 if (errorMsg) {
                     errorMsg.innerHTML = errors.join("<br>");
                     errorMsg.style.display = "block";
                 }
-                // 金額の文字だけをピンポイントで非表示にする
                 if (priceElement) priceElement.style.display = "none";
                 return;
             }
 
-            // --- エラーがなかった場合の処理 ---
             if (errorMsg) errorMsg.style.display = "none";
 
-            // 【修正】エラーがないなら金額エリア（.sim-result-price）を表示する
             if (priceElement) priceElement.style.display = "inline-block";
 
-            // 【修正】元のコードで「totalDisplay.style.display = "none"」になっていた部分を削除し、
-            // 代わりに金額を表示するコンテナが表示状態（block等）になるように担保します
             if (totalSpan) {
-                totalSpan.style.display = "inline"; // 必要に応じて inline-block などに適宜変更してください
+                totalSpan.style.display = "inline";
             } else {
-                return; // そもそも合計表示エリアがなければ終了
+                return;
             }
 
-            // 計算と金額の描画
             const total = basePrice + optionPrice - totalDiscountPrice;
             totalSpan.textContent = `¥${total.toLocaleString()}`;
         }
 
-        // 【新規追加】「やり直す」ボタンの全面クリア処理
         function sim_resetAll(side) {
             const companySelect = document.getElementById(`sim-${side}-company`);
             if (companySelect) companySelect.value = "";
 
-            // 全てをリセット
             sim_resetSelect(side, ['plan', 'strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
 
             sim_updateComment(side);
             sim_calculateTotal(side);
         }
-        // iframeの中から、親画面（ブラウザのタブ）のタイトルを強制的に書き換える
         window.parent.document.title = "キャリア料金比較";
     </script>
 </body>
