@@ -52,10 +52,10 @@
             /* 👈 左右の箱の間に 8px の隙間を開ける */
             gap: 8px !important;
 
-            /* 💡 左右で選択状況が違うと片方だけ縦に伸びて、もう片方に無駄な余白が
-                  できてしまうため、高さを強制的に揃えず、それぞれの中身の分だけ
-                  高さを持つようにする */
-            align-items: flex-start !important;
+            /* 💡 片方で割引を複数選択して縦に長くなっても、左右の高さを揃えて
+                  合計金額欄（.sim-total-column、margin-top: auto）の下端が
+                  常に揃うようにする */
+            align-items: stretch !important;
         }
 
         .sim-plan-column {
@@ -178,7 +178,7 @@
               合計金額の文字サイズを小さくしてはみ出しを防ぐ */
         @media (max-width: 480px) {
             .sim-total-column .sim-result-title {
-                font-size: 13px;
+                font-size: 11px;
             }
 
             .sim-result-price {
@@ -305,17 +305,34 @@
         /* 💡「選択中：」とプラン名を2行に分け、プラン名は「選択中：」より小さく表示する */
         .sim-plan-subtotal-label {
             display: block;
+            text-align: left;
             font-size: 14px;
         }
 
         .sim-plan-subtotal-value {
             display: block;
+            text-align: left;
             margin-left: 14px;
             font-size: 11px;
             font-weight: normal;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        /* 💡 スマホ幅ではさらに文字を小さくして、省略（...）されずに収まりやすくする */
+        @media (max-width: 480px) {
+            .sim-total-column .sim-error-message {
+                font-size: 11px;
+            }
+
+            .sim-plan-subtotal-label {
+                font-size: 12px;
+            }
+
+            .sim-plan-subtotal-value {
+                font-size: 10px;
+            }
         }
 
         /* 💡 以前はiframe埋め込み時のフッター被り防止でここに余白を追加していたが、
