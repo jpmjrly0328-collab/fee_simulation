@@ -51,6 +51,11 @@
 
             /* 👈 左右の箱の間に 8px の隙間を開ける */
             gap: 8px !important;
+
+            /* 💡 左右で選択状況が違うと片方だけ縦に伸びて、もう片方に無駄な余白が
+                  できてしまうため、高さを強制的に揃えず、それぞれの中身の分だけ
+                  高さを持つようにする */
+            align-items: flex-start !important;
         }
 
         .sim-plan-column {
@@ -119,13 +124,19 @@
             display: block;
             text-align: left;
             font-weight: bold;
+            font-size: 13px;
         }
 
         .sim-title-value {
             margin-left: 18px;
             margin-bottom: 10px;
             font-weight: 600;
+            font-size: 12px;
             color: #1a1a1a;
+            /* 💡 長いプラン名・容量名でも枠からはみ出さないよう折り返す */
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .sim-title-value:last-of-type {
@@ -151,6 +162,7 @@
             text-align: left;
             margin: 20px 0 2px 0;
             letter-spacing: 0.05em;
+            white-space: nowrap;
         }
 
         .sim-result-price {
@@ -277,6 +289,9 @@
             font-weight: bold;
             margin-top: 6px;
             color: #495057;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .sim-item-subtotal.is-discount {
@@ -1216,6 +1231,15 @@
                 if (target === 'discount') {
                     const container = document.getElementById(`sim-${side}-discount-container`);
                     if (container) {
+                        // 💡 連動プルダウンの枠がこの中に入ったままだと、innerHTMLのクリアで
+                        //     DOMごと消えてしまうため、先に外（親要素）へ退避させておく
+                        ['use', 'family', 'card', 'select'].forEach(t => {
+                            const f = document.getElementById(`sim-${side}-${t}-field`);
+                            if (f && container.contains(f)) {
+                                container.parentElement.appendChild(f);
+                            }
+                        });
+
                         // 💡 会社自体が未選択なら「プランを〜」、会社選択済なら「容量を〜」に動的変更
                         container.innerHTML = company
                             ? '<span class="sim-placeholder">容量を選択ください</span>'

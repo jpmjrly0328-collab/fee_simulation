@@ -2387,7 +2387,12 @@
       try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         if (doc && doc.documentElement) {
-          let newHeight = Math.max(doc.documentElement.scrollHeight, doc.body ? doc.body.scrollHeight : 0);
+          // 💡 documentElement.scrollHeight は「ルート要素のscrollHeightは
+          //     ビューポート（＝このiframe自身の現在の高さ）を下回らない」という
+          //     仕様があるため、一度大きくなった後は中身が縮んでも小さくならない
+          //     （常に自分自身の現在の高さ以上を返し続けてしまう）。
+          //     body.scrollHeight はこの制約を受けないため、縮む方向にも正しく追従する。
+          let newHeight = doc.body ? doc.body.scrollHeight : doc.documentElement.scrollHeight;
 
           // 💡 想定外の理由で高さが際限なく大きくなってしまうのを防ぐための安全上限
           const SAFE_MAX_HEIGHT = 8000;
