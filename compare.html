@@ -121,16 +121,19 @@
             text-overflow: ellipsis;
         }
 
-        /* 💡 合計金額タイトルを①キャリア/②プラン名/③容量でネスト表示する */
+        /* 💡 合計金額タイトルを①キャリア/②プラン名/③容量でネスト表示する。
+              ラベル（①②③）側を字下げし、値はフラットな位置のままにすることで、
+              ラベルの真下が空いて見えるようにする */
         .sim-title-line {
             display: block;
             text-align: left;
             font-weight: bold;
             font-size: 13px;
+            margin-left: 18px;
         }
 
         .sim-title-value {
-            margin-left: 18px;
+            margin-left: 0;
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 8px;
@@ -143,10 +146,6 @@
 
         .sim-title-value:last-of-type {
             margin-bottom: 4px;
-        }
-
-        .sim-title-value-plan {
-            margin-left: 0;
         }
 
         .sim-title-label-company {
@@ -1332,7 +1331,7 @@
                         `<span class="sim-title-line sim-title-label-company">①キャリア</span>` +
                         `<span class="sim-title-line sim-title-value">${companyName}</span>` +
                         `<span class="sim-title-line sim-title-label-plan">②プラン名</span>` +
-                        `<span class="sim-title-line sim-title-value sim-title-value-plan">${currentPlan.name}</span>` +
+                        `<span class="sim-title-line sim-title-value">${currentPlan.name}</span>` +
                         `<span class="sim-title-line sim-title-label-strage">③容量</span>` +
                         `<span class="sim-title-line sim-title-value">${strageName}</span>`;
                 } else {
