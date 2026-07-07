@@ -131,6 +131,18 @@
             }
         }
 
+        /* 💡 コンテンツの一番下に置く「ここまでです」の目印。
+              固定ヘッダー/フッター構成では、内容が短い時に下に余白ができるため、
+              「もう内容は終わっている」ことが分かるようにしておく */
+        .sim-end-marker {
+            text-align: center;
+            color: #adb5bd;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            margin-top: 30px;
+            padding-bottom: 10px;
+        }
+
         /* 各フォームパーツの装飾 */
         .sim-field {
             margin-bottom: 20px;
@@ -458,6 +470,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="sim-end-marker">―― ここまでです ――</div>
     </div>
 
     <style>
