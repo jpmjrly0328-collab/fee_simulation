@@ -117,6 +117,8 @@
             margin: 0 0 5px 0;
             font-weight: bold;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* 💡 合計金額タイトルを①キャリア/②プラン名/③容量でネスト表示する */
@@ -175,7 +177,7 @@
         /* 💡 スマホ幅では、プラン枠が画面の半分しかなく窮屈になるため、
               合計金額の文字サイズを小さくしてはみ出しを防ぐ */
         @media (max-width: 480px) {
-            .sim-result-title {
+            .sim-total-column .sim-result-title {
                 font-size: 13px;
             }
 
@@ -271,10 +273,12 @@
             padding: 10px;
             border-radius: 5px;
             margin: 10px 0;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             text-align: center;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         h2 {
@@ -296,6 +300,22 @@
 
         .sim-item-subtotal.is-discount {
             color: #0d6efd;
+        }
+
+        /* 💡「選択中：」とプラン名を2行に分け、プラン名は「選択中：」より小さく表示する */
+        .sim-plan-subtotal-label {
+            display: block;
+            font-size: 14px;
+        }
+
+        .sim-plan-subtotal-value {
+            display: block;
+            margin-left: 14px;
+            font-size: 11px;
+            font-weight: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* 💡 以前はiframe埋め込み時のフッター被り防止でここに余白を追加していたが、
@@ -1337,7 +1357,9 @@
 
             // 💡 各項目の小計は、下の合計欄の入力状況に関わらず、選択した時点で常に表示する
             if (planSubtotal) {
-                planSubtotal.textContent = currentPlan ? `選択中：${currentPlan.name}` : "";
+                planSubtotal.innerHTML = currentPlan
+                    ? `<span class="sim-plan-subtotal-label">選択中：</span><span class="sim-plan-subtotal-value">${currentPlan.name}</span>`
+                    : "";
             }
             if (useSubtotal) {
                 useSubtotal.textContent = (useSelect && useSelect.value)
