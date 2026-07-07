@@ -51,6 +51,11 @@
 
             /* 👈 左右の箱の間に 8px の隙間を開ける */
             gap: 8px !important;
+
+            /* 💡 左右で選択状況が違うと片方だけ縦に伸びて、もう片方に無駄な余白が
+                  できてしまうため、高さを強制的に揃えず、それぞれの中身の分だけ
+                  高さを持つようにする */
+            align-items: flex-start !important;
         }
 
         .sim-plan-column {
@@ -157,6 +162,7 @@
             text-align: left;
             margin: 20px 0 2px 0;
             letter-spacing: 0.05em;
+            white-space: nowrap;
         }
 
         .sim-result-price {
