@@ -257,12 +257,14 @@
                   （スペースや記号の前後）で改行されるようにする */
             word-break: keep-all;
             overflow-wrap: break-word;
-            /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
-                  padding-leftで全体を1em右にずらし、1行目だけtext-indentで
-                  元の位置に戻すことで、2行目以降だけがインデントされる */
+            /* 💡 2行目以降を字下げする「ぶら下げインデント」。
+                  padding-leftで全体を右にずらし、1行目だけtext-indentで
+                  元の位置に戻すことで、2行目以降だけがインデントされる。
+                  ※ 1em(1文字分)だと「お支払い割」等が入りきらず3行になって
+                     しまうため、0.7emに抑えて2行に収まるようにしている */
             text-align: left;
-            padding-left: 1.5em;
-            text-indent: -1.5em;
+            padding-left: 0.7em;
+            text-indent: -0.7em;
         }
 
         .sim-placeholder {
@@ -596,12 +598,14 @@
                   （スペースや記号の前後）で改行されるようにする */
             word-break: keep-all;
             overflow-wrap: break-word;
-            /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
-                  padding-leftで全体を1em右にずらし、1行目だけtext-indentで
-                  元の位置に戻すことで、2行目以降だけがインデントされる */
+            /* 💡 2行目以降を字下げする「ぶら下げインデント」。
+                  padding-leftで全体を右にずらし、1行目だけtext-indentで
+                  元の位置に戻すことで、2行目以降だけがインデントされる。
+                  ※ 1em(1文字分)だと「お支払い割」等が入りきらず3行になって
+                     しまうため、0.7emに抑えて2行に収まるようにしている */
             text-align: left;
-            padding-left: 1.5em;
-            text-indent: -1.5em;
+            padding-left: 0.7em;
+            text-indent: -0.7em;
         }
 
         .sim-placeholder {
@@ -1128,7 +1132,11 @@
                             .replace('auスマートバリュー', 'auスマート<wbr>バリュー')
                             .replace('ドコモでんきセット割', 'ドコモ<wbr>でんき<wbr>セット割')
                             .replace('おうち割光セット', 'おうち割光<wbr>セット')
-                            .replace('おうちまたは家族割', 'おうち<wbr>または<wbr>家族割');
+                            .replace('おうちまたは家族割', 'おうち<wbr>または<wbr>家族割')
+                            .replace('みんなドコモ割', 'みんな<wbr>ドコモ割')
+                            .replace('家族割プラス', '家族割<wbr>プラス')
+                            .replace('新みんな家族割', '新みんな<wbr>家族割')
+                            .replace('自宅または家族セット割', '自宅または<wbr>家族<wbr>セット割');
 
                         label.appendChild(checkbox);
                         label.appendChild(textSpan);
