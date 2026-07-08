@@ -1098,7 +1098,11 @@
                         //     <wbr>（改行してよい位置の目印）を入れておく
                         textSpan.innerHTML = disc.name
                             .replace('カードお支払い割', 'カード<wbr>お支払い割')
-                            .replace('PayPayカード割', 'PayPay<wbr>カード<wbr>割');
+                            .replace('PayPayカード割', 'PayPay<wbr>カード<wbr>割')
+                            .replace('auスマートバリュー', 'auスマート<wbr>バリュー')
+                            .replace('ドコモでんきセット割', 'ドコモ<wbr>でんき<wbr>セット割')
+                            .replace('おうち割光セット', 'おうち割<wbr>光セット')
+                            .replace('おうちまたは家族割', 'おうち<wbr>または<wbr>家族割');
 
                         label.appendChild(checkbox);
                         label.appendChild(textSpan);
