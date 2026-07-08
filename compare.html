@@ -39,7 +39,8 @@
         .sim-title {
             text-align: center;
             margin-bottom: 30px;
-            color: #1a1a1a;
+            color: #e6710d;
+            font-weight: bold;
         }
 
         /* 💡 1. プラン選択フォーム（上段）の横並び設定 */
@@ -201,6 +202,12 @@
             color: #495057;
         }
 
+        /* 💡「④ 割引」ラベルも、改行後の2行目を1文字分字下げする */
+        .sim-field label.sim-discount-label {
+            padding-left: 1.5em;
+            text-indent: -1.5em;
+        }
+
         .sim-field select {
             width: 100%;
             padding: 12px;
@@ -249,8 +256,8 @@
             /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
                   padding-leftで全体を1em右にずらし、1行目だけtext-indentで
                   元の位置に戻すことで、2行目以降だけがインデントされる */
-            padding-left: 1em;
-            text-indent: -1em;
+            padding-left: 1.5em;
+            text-indent: -1.5em;
         }
 
         .sim-placeholder {
@@ -403,7 +410,7 @@
                 </div>
 
                 <div class="sim-field">
-                    <label>④ 割引（対象なら<br>選択、複数選択可）</label>
+                    <label class="sim-discount-label">④ 割引（対象なら<br>選択、複数選択可）</label>
                     <div id="sim-left-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -498,7 +505,7 @@
                 </div>
 
                 <div class="sim-field">
-                    <label>④ 割引（対象なら<br>選択、複数選択可）</label>
+                    <label class="sim-discount-label">④ 割引（対象なら<br>選択、複数選択可）</label>
                     <div id="sim-right-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -587,8 +594,8 @@
             /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
                   padding-leftで全体を1em右にずらし、1行目だけtext-indentで
                   元の位置に戻すことで、2行目以降だけがインデントされる */
-            padding-left: 1em;
-            text-indent: -1em;
+            padding-left: 1.5em;
+            text-indent: -1.5em;
         }
 
         .sim-placeholder {
