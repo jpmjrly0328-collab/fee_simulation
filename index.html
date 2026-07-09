@@ -653,27 +653,36 @@
   }
 
   .footer-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #1e293b;
-    cursor: pointer;
-    font-size: 0.75rem;
-    height: 100%;
-  }
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 0.75rem;
+  /* ↓ 効かないので削除してOKです */
+  /* height: 100%; */
+  /* width: auto; */
+  /* object-fit: contain; */
+}
 
-  .footer-tab.active {
-    color: #ffffff !important;
-    /* エラーの濃い赤と合わせて洗練度アップ */
-    font-weight: bold;
-  }
+.footer-tab.active {
+  color: #ffffff !important;
+  font-weight: bold;
+  /* ↓ こちらも不要なので削除 */
+  /* height: 100%; */
+  /* width: auto; */
+  /* object-fit: contain; */
+}
 
-  .tab-icon {
-    font-size: 1.4rem;
-    margin-bottom: 2px;
-  }
+/* 💡 ここを追加！画像と絵文字のサイズを統一します */
+.tab-icon {
+  width: 24px;         /* 絵文字と同じくらいの適切な横幅 */
+  height: 24px;        /* 縦幅も合わせて正方形に */
+  object-fit: contain; /* 縦横比を崩さずに綺麗に収める */
+  margin-bottom: 4px;  /* 下の文字（月額計算）との間に少し隙間を作る */
+}
 
   *,
   *::before,
@@ -1197,7 +1206,7 @@
 
   <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
-      <span class="tab-icon">📱</span>
+      <img src="datalogo.png" class="tab-icon" alt="">
       <span class="tab-label">月額計算</span>
     </div>
 
