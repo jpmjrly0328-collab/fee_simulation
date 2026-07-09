@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ツール置き場</title>
+<title>ツール一覧</title>
 <link rel="stylesheet" href="style.css">
 <style>
     body {
@@ -25,7 +25,7 @@
         border-radius: 12px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         padding: 16px;
-        margin-bottom: 16px;
+        margin-bottom: 128px;
         border: 1px solid var(--border-color);
     }
 
@@ -79,53 +79,62 @@
         background-color: var(--primary-light);
         border-top: 4px solid var(--primary-color);
         box-sizing: border-box;
-        text-align: center;
     }
 
     .price-box .price-label {
-        font-size: 0.9rem;
+        font-size: 1.2rem;
         color: var(--text-sub);
         margin-bottom: 8px;
+        color: #000;
+        font-weight: bold;
+        text-align: left;
     }
 
     .price-box .price-amount {
         font-size: 2.2rem;
         font-weight: 800;
         color: var(--primary-color);
+        text-align: right;
     }
 
     .price-box.h5g-1 {
         background-color: #eef5ff;
         border-top: 4px solid var(--accent-divide);
+        text-align: left;
     }
 
     .price-box.h5g-1 .price-amount {
-        color: var(--accent-divide);
+        color: #e60012;
+        text-align: right;
     }
 
     .price-box.h5g-2 {
         background-color: var(--accent-once-light);
         border-top: 4px solid var(--accent-once);
+        text-align: left;
     }
 
     .price-box.h5g-2 .price-amount {
-        color: var(--accent-once);
+        color: #e60012;
+        text-align: right;
     }
 
     .price-box.h5g-3 {
         background-color: var(--accent-kaedoki-light);
         border-top: 4px solid var(--accent-kaedoki);
+        text-align: left;
     }
 
     .price-box.h5g-3 .price-amount {
-        color: var(--accent-kaedoki);
+        color: #e60012;
+        text-align: right;
     }
 </style>
 </head>
 <body>
 <div class="container">
     <div class="card">
-        <h2>端末月額検索</h2>
+        <h2>smartあんしん補償月額検索</h2>
 
         <div class="section">
             <label for="dv-os">OS</label>
@@ -155,7 +164,7 @@
     </div>
 
     <div class="card">
-        <h2>home 5G 購入方法シミュレーター</h2>
+        <h2>home 5G 月額シミュレーター</h2>
 
         <div class="section">
             <label for="h5g-buy-mode">本体購入方法</label>
