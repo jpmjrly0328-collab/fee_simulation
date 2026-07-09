@@ -1207,6 +1207,11 @@
     <iframe id="page-works" src="./works.html"
       style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
   </div>
+  <div id="page-age-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">年齢別プラン</h1>
+    <iframe id="page-age" src="./age.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
   </div> <!-- 👈 #app-scroll-area を閉じる -->
 
   <footer class="app-footer">
@@ -1223,6 +1228,11 @@
     <div class="footer-tab" onclick="switchTab('search')">
       <img src="searchlogo.png" class="tab-icon" alt="">
       <span class="tab-label">プラン検索</span>
+    </div>
+
+    <div class="footer-tab" onclick="switchTab('age')">
+      <img src="datalogo.png" class="tab-icon" alt="">
+      <span class="tab-label">年齢別プラン</span>
     </div>
 
     <div class="footer-tab" onclick="switchTab('works')">
@@ -2396,9 +2406,11 @@
     const pageCompare = document.getElementById('page-compare');
     const pageSearch = document.getElementById('page-search');
     const pageWorks = document.getElementById('page-works');
+    const pageAge = document.getElementById('page-age');
     const pageCompareWrapper = document.getElementById('page-compare-wrapper');
     const pageSearchWrapper = document.getElementById('page-search-wrapper');
     const pageWorksWrapper = document.getElementById('page-works-wrapper');
+    const pageAgeWrapper = document.getElementById('page-age-wrapper');
 
     // =======================================================================================================================
     // 🛠 iframe自動リサイズ：中身の実際の高さに合わせてiframe自体の高さを伸縮させることで、
@@ -2442,6 +2454,7 @@
     watchIframeResize(pageCompare);
     watchIframeResize(pageSearch);
     watchIframeResize(pageWorks);
+    watchIframeResize(pageAge);
 
     // =======================================================================================================================
     // 💡 以前はiframe内部の変化をMutationObserverで監視して都度リサイズしていたが、
@@ -2456,6 +2469,7 @@
         if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
         if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
         if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
+        if (pageAgeWrapper && pageAgeWrapper.style.display !== 'none') resizeIframeToContent(pageAge);
       }, 500);
     }
     function stopIframeResizePolling() {
@@ -2471,6 +2485,7 @@
       if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
       if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
       if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
+      if (pageAgeWrapper && pageAgeWrapper.style.display !== 'none') resizeIframeToContent(pageAge);
     });
 
     function switchTab(tabName) {
@@ -2479,12 +2494,14 @@
       if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
       if (pageSearchWrapper) pageSearchWrapper.style.display = 'none';
       if (pageWorksWrapper) pageWorksWrapper.style.display = 'none';
+      if (pageAgeWrapper) pageAgeWrapper.style.display = 'none';
 
       // 2. すべてのタブボタンから一旦 active クラスを消す
       if (tabs[0]) tabs[0].classList.remove('active');
       if (tabs[1]) tabs[1].classList.remove('active');
       if (tabs[2]) tabs[2].classList.remove('active');
       if (tabs[3]) tabs[3].classList.remove('active');
+      if (tabs[4]) tabs[4].classList.remove('active');
 
       // 3. クリックされたタブだけを「表示」にする
       if (tabName === 'simulator') {
@@ -2507,8 +2524,15 @@
           requestAnimationFrame(() => resizeIframeToContent(pageSearch));
         }
       }
-      else if (tabName === 'works') {
+      else if (tabName === 'age') {
         if (tabs[3]) tabs[3].classList.add('active');
+        if (pageAgeWrapper) {
+          pageAgeWrapper.style.display = 'block'; // 見出し＋年齢別プラン（iframe）を表示
+          requestAnimationFrame(() => resizeIframeToContent(pageAge));
+        }
+      }
+      else if (tabName === 'works') {
+        if (tabs[4]) tabs[4].classList.add('active');
         if (pageWorksWrapper) {
           pageWorksWrapper.style.display = 'block'; // 見出し＋ツール置き場（iframe）を表示
           requestAnimationFrame(() => resizeIframeToContent(pageWorks));
