@@ -1202,6 +1202,11 @@
     <iframe id="page-search" src="./search.html"
       style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
   </div>
+  <div id="page-works-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">ツール置き場</h1>
+    <iframe id="page-works" src="./works.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
   </div> <!-- 👈 #app-scroll-area を閉じる -->
 
   <footer class="app-footer">
@@ -1218,6 +1223,11 @@
     <div class="footer-tab" onclick="switchTab('search')">
       <img src="searchlogo.png" class="tab-icon" alt="">
       <span class="tab-label">プラン検索</span>
+    </div>
+
+    <div class="footer-tab" onclick="switchTab('works')">
+      <img src="toollogo.png" class="tab-icon" alt="">
+      <span class="tab-label">ツール置き場</span>
     </div>
   </footer>
 
@@ -2385,8 +2395,10 @@
     const pageSimulator = document.getElementById('page-simulator');
     const pageCompare = document.getElementById('page-compare');
     const pageSearch = document.getElementById('page-search');
+    const pageWorks = document.getElementById('page-works');
     const pageCompareWrapper = document.getElementById('page-compare-wrapper');
     const pageSearchWrapper = document.getElementById('page-search-wrapper');
+    const pageWorksWrapper = document.getElementById('page-works-wrapper');
 
     // =======================================================================================================================
     // 🛠 iframe自動リサイズ：中身の実際の高さに合わせてiframe自体の高さを伸縮させることで、
@@ -2429,6 +2441,7 @@
 
     watchIframeResize(pageCompare);
     watchIframeResize(pageSearch);
+    watchIframeResize(pageWorks);
 
     // =======================================================================================================================
     // 💡 以前はiframe内部の変化をMutationObserverで監視して都度リサイズしていたが、
@@ -2442,6 +2455,7 @@
       iframeResizePollTimer = setInterval(() => {
         if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
         if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+        if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
       }, 500);
     }
     function stopIframeResizePolling() {
@@ -2456,6 +2470,7 @@
     window.addEventListener('resize', () => {
       if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
       if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+      if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
     });
 
     function switchTab(tabName) {
@@ -2463,11 +2478,13 @@
       if (pageSimulator) pageSimulator.style.display = 'none';
       if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
       if (pageSearchWrapper) pageSearchWrapper.style.display = 'none';
+      if (pageWorksWrapper) pageWorksWrapper.style.display = 'none';
 
       // 2. すべてのタブボタンから一旦 active クラスを消す
       if (tabs[0]) tabs[0].classList.remove('active');
       if (tabs[1]) tabs[1].classList.remove('active');
       if (tabs[2]) tabs[2].classList.remove('active');
+      if (tabs[3]) tabs[3].classList.remove('active');
 
       // 3. クリックされたタブだけを「表示」にする
       if (tabName === 'simulator') {
@@ -2488,6 +2505,13 @@
         if (pageSearchWrapper) {
           pageSearchWrapper.style.display = 'block'; // 見出し＋プラン検索（iframe）を表示
           requestAnimationFrame(() => resizeIframeToContent(pageSearch));
+        }
+      }
+      else if (tabName === 'works') {
+        if (tabs[3]) tabs[3].classList.add('active');
+        if (pageWorksWrapper) {
+          pageWorksWrapper.style.display = 'block'; // 見出し＋ツール置き場（iframe）を表示
+          requestAnimationFrame(() => resizeIframeToContent(pageWorks));
         }
       }
     }
