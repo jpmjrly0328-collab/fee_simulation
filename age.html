@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>年齢別プラン・キャンペーン</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html,
+    body {
+      overscroll-behavior-y: auto;
+    }
+
+    body {
+      padding: 20px 16px 40px;
+    }
+
+    .birth-select-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .birth-select-row select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    #birth-age-display {
+      display: none;
+      margin-top: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary-color);
+    }
+
+    #age-no-match {
+      display: none;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      padding: 8px 4px;
+    }
+
+    .plan-result-card {
+      border-left-width: 6px;
+      border-left-style: solid;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .plan-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      border: none;
+      background: transparent;
+      margin: 0;
+      padding: 16px;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .plan-card-header:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
+    }
+
+    .plan-card-chevron {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      transition: transform 0.2s ease;
+    }
+
+    .plan-card-header[aria-expanded="true"] .plan-card-chevron {
+      transform: rotate(180deg);
+    }
+
+    .plan-card-body {
+      display: none;
+      padding: 0 16px 16px;
+    }
+
+    .plan-card-total-memo {
+      display: none;
+    }
+
+    .result-card-carrier {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .result-card-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .result-card-age {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: -6px;
+      margin-bottom: 12px;
+    }
+
+    .plan-sub-title {
+      margin: 0 0 10px 0;
+      font-size: 0.95rem;
+      color: #555;
+      font-weight: 700;
+    }
+
+    .no-discount-note {
+      color: #888;
+      font-size: 0.88rem;
+    }
+
+    #age-call-benefit-card .program-notice-box {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    #age-call-benefit-card .program-notice-box:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>生年月日を入力</h2>
+      <div class="birth-select-row">
+        <select id="birth-year" onchange="onBirthChange()"></select>
+        <select id="birth-month" onchange="onBirthChange()"></select>
+        <select id="birth-day" onchange="onBirthChange()"></select>
+      </div>
+      <div id="birth-age-display"></div>
+    </div>
+
+    <div id="age-results-section" style="display:none;">
+      <div class="card">
+        <h2>加入可能プラン一覧</h2>
+        <div id="age-plan-list" class="result-container"></div>
+        <div id="age-no-match">契約可能なプラン・キャンペーンがありません</div>
+      </div>
+
+      <div id="age-call-benefit-card" class="card" style="display:none;">
+        <h2>当てはまる通話特典</h2>
+        <div id="age-call-benefit-list"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>その他キャンペーン</h2>
+      <div class="program-notice-box" style="margin-top:0;">
+        <strong>UQ mobile／コミコミプランバリュー</strong><br>
+        月額￥3,828 − UQコミコミおトク割 ▲￥660 → 合計￥3,168<br>
+        14ヶ月間有効、14ヶ月目以降はau PAY ゴールド支払いで継続可能
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =======================================================================================================================
+    // 📱 年齢別プランデータ（carrierdata.xlsx Sheet5 セクション1「年齢別プラン・キャンペーン」より）
+    // =======================================================================================================================
+    const carrierHue = { docomo: 350, au: 28, UQ: 200, softbank: 46, Rakuten: 265 };
+
+    function buildPlanColor(carrier, planIndex) {
+      const hue = carrierHue[carrier] ?? 0;
+      const lightness = Math.min(70, 38 + planIndex * 9);
+      const bgLightness = Math.max(92, 97 - planIndex * 1.4);
+      return {
+        accent: `hsl(${hue}, 68%, ${lightness}%)`,
+        bg: `hsl(${hue}, 55%, ${bgLightness}%)`,
+        badgeBg: `hsl(${hue}, 60%, 91%)`,
+        badgeText: `hsl(${hue}, 65%, 30%)`,
+        priceText: `hsl(${hue}, 65%, 32%)`,
+      };
+    }
+
+    const agePlans = [
+      {
+        carrier: "docomo", carrierLabel: "ドコモ", plan: "U15はじめてスマホプラン",
+        ageMin: 0, ageMax: 15, ageLabel: "15歳以下",
+        strages: [{ giga: "5GB", price: 1815 }, { giga: "10GB", price: 2695 }],
+        discounts: { family: [], card: [{ tier: 1, value: 187 }], net: null },
+        deadline: "満19歳まで",
+        memo: "最大12ヶ月間dポイント（500/1000）還元、家族間通話無料、みんなドコモ割カウント対象"
+      },
+      {
+        carrier: "docomo", carrierLabel: "ドコモ", plan: "ドコモU22割",
+        ageMin: 0, ageMax: 22, ageLabel: "22歳以下",
+        strages: [{ giga: "~28GB", price: 2970 }, { giga: "28~30GB", price: 2970 }, { giga: "30GB~", price: 7898 }],
+        discounts: { family: [{ tier: 1, value: 550 }, { tier: 2, value: 1210 }], card: [{ tier: 1, value: 220 }, { tier: 2, value: 550 }], net: 1210 },
+        deadline: "7ヶ月間",
+        memo: "7ヶ月以降通常ドコモMAX"
+      },
+      {
+        carrier: "docomo", carrierLabel: "ドコモ", plan: "ドコモU29割",
+        ageMin: 23, ageMax: 29, ageLabel: "23~29歳",
+        strages: [{ giga: "~28GB", price: 2970 }, { giga: "28~30GB", price: 2970 }, { giga: "30GB~", price: 7898 }],
+        discounts: { family: [{ tier: 1, value: 550 }, { tier: 2, value: 1210 }], card: [{ tier: 1, value: 220 }, { tier: 2, value: 550 }], net: 1210 },
+        deadline: "3ヶ月間",
+        memo: "3ヶ月以降通常ドコモMAX"
+      },
+      {
+        carrier: "au", carrierLabel: "au", plan: "U12バリュープラン",
+        ageMin: 5, ageMax: 12, ageLabel: "5~12歳",
+        strages: [{ giga: "無制限", price: 1870 }],
+        discounts: { family: [{ tier: 1, value: 1100 }], card: [{ tier: 1, value: 220 }], net: null },
+        deadline: "無し",
+        memo: "低速"
+      },
+      {
+        carrier: "au", carrierLabel: "au", plan: "U18バリュープラン",
+        ageMin: 5, ageMax: 18, ageLabel: "5~18歳",
+        strages: [{ giga: "~3GB", price: 2398 }, { giga: "3~20GB", price: 4048 }],
+        discounts: { family: [{ tier: 1, value: 220 }, { tier: 2, value: 550 }], card: [{ tier: 1, value: 220 }], net: 550 },
+        deadline: "22歳まで",
+        memo: "23歳以降は一律で~20GB 4,048円"
+      },
+      {
+        carrier: "au", carrierLabel: "au", plan: "シニアバリュープラン",
+        ageMin: 60, ageMax: 999, ageLabel: "60歳以上",
+        strages: [{ giga: "5GB", price: 4048 }],
+        discounts: { family: [], card: [{ tier: 2, value: 220 }], net: 1100 },
+        deadline: "無し",
+        memo: "5分通話無料、カードは銀行でも"
+      },
+      {
+        carrier: "softbank", carrierLabel: "softbank", plan: "スマホデビュープラン",
+        ageMin: 5, ageMax: 18, ageLabel: "5~18歳",
+        strages: [{ giga: "4GB", price: 1078 }, { giga: "20GB", price: 2728 }],
+        discounts: { family: [], card: [], net: null },
+        deadline: "13ヶ月間",
+        memo: "新規のみ、新みんな家族割カウント対象"
+      },
+      {
+        carrier: "Rakuten", carrierLabel: "Rakuten", plan: "最強こども割",
+        ageMin: 0, ageMax: 12, ageLabel: "12歳以下",
+        strages: [{ giga: "~3GB", price: 528 }, { giga: "3~20GB", price: 1958 }, { giga: "20GB~", price: 3058 }],
+        discounts: { family: [], card: [], net: null },
+        deadline: "13歳誕生月まで",
+        memo: ""
+      },
+      {
+        carrier: "Rakuten", carrierLabel: "Rakuten", plan: "最強青春割",
+        ageMin: 13, ageMax: 22, ageLabel: "13~22歳",
+        strages: [{ giga: "~3GB", price: 858 }, { giga: "3~20GB", price: 1958 }, { giga: "20GB~", price: 3058 }],
+        discounts: { family: [], card: [], net: null },
+        deadline: "23歳誕生月の翌月まで",
+        memo: ""
+      },
+      {
+        carrier: "Rakuten", carrierLabel: "Rakuten", plan: "最強シニアプログラム",
+        ageMin: 65, ageMax: 999, ageLabel: "65歳以上",
+        strages: [{ giga: "~3GB", price: 858 }, { giga: "3~20GB", price: 1958 }, { giga: "20GB~", price: 3058 }],
+        discounts: { family: [], card: [], net: null },
+        deadline: "無し",
+        memo: ""
+      }
+    ];
+
+    // 📞 通話特典（セクション2）：年齢一致時に該当プランカード一覧の下へ注記表示
+    const callBenefits = [
+      {
+        carrierLabel: "UQ mobile", plan: "トクトクプランⅡ",
+        ageMin: 60, ageMax: 999,
+        content: "24時間通話放題1,980円が880円に", price: 880, other: ""
+      },
+      {
+        carrierLabel: "softbank", plan: "スマホデビュープラン",
+        ageMin: 60, ageMax: 999,
+        content: "24時間通話放題1,980円が880円に", price: 880, other: "ガラケーからの乗り換えまたは機種変更のみ対象"
+      },
+      {
+        carrierLabel: "Rakuten", plan: "最強プラン",
+        ageMin: 65, ageMax: 999,
+        content: "15分通話無料1,980円が880円ポイント還元で実質月額1,100円", price: 880, other: ""
+      }
+    ];
+
+    function renderPlanCard(p, idx) {
+      const color = buildPlanColor(p.carrier, idx);
+      const strageOptions = p.strages
+        .map((s, i) => `<option value="${i}">${s.giga}　￥${s.price.toLocaleString()}</option>`)
+        .join('');
+
+      let discountHtml = '';
+
+      if (p.discounts.family.length === 2) {
+        discountHtml += `
+          <div class="section">
+            <label for="family-select-${idx}">家族割引:</label>
+            <select id="family-select-${idx}" onchange="updatePlanTotal(${idx})">
+              <option value="">-- 選択しない --</option>
+              <option value="${p.discounts.family[0].value}">①　▲￥${p.discounts.family[0].value.toLocaleString()}</option>
+              <option value="${p.discounts.family[1].value}">②　▲￥${p.discounts.family[1].value.toLocaleString()}</option>
+            </select>
+          </div>`;
+      } else if (p.discounts.family.length === 1) {
+        const t = p.discounts.family[0];
+        discountHtml += `
+          <label class="checkbox-label">
+            <input type="checkbox" id="family-check-${idx}" data-value="${t.value}" onchange="updatePlanTotal(${idx})">
+            家族割引${t.tier === 1 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
+          </label>`;
+      }
+
+      if (p.discounts.card.length === 2) {
+        discountHtml += `
+          <div class="section">
+            <label for="card-select-${idx}">カード割引:</label>
+            <select id="card-select-${idx}" onchange="updatePlanTotal(${idx})">
+              <option value="">-- 選択しない --</option>
+              <option value="${p.discounts.card[0].value}">①　▲￥${p.discounts.card[0].value.toLocaleString()}</option>
+              <option value="${p.discounts.card[1].value}">②　▲￥${p.discounts.card[1].value.toLocaleString()}</option>
+            </select>
+          </div>`;
+      } else if (p.discounts.card.length === 1) {
+        const t = p.discounts.card[0];
+        discountHtml += `
+          <label class="checkbox-label">
+            <input type="checkbox" id="card-check-${idx}" data-value="${t.value}" onchange="updatePlanTotal(${idx})">
+            カード割引${t.tier === 1 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
+          </label>`;
+      }
+
+      if (p.discounts.net !== null) {
+        discountHtml += `
+          <label class="checkbox-label">
+            <input type="checkbox" id="net-check-${idx}" data-value="${p.discounts.net}" onchange="updatePlanTotal(${idx})">
+            ネット割引　▲￥${p.discounts.net.toLocaleString()}
+          </label>`;
+      }
+
+      if (!discountHtml) {
+        discountHtml = `<div class="no-discount-note">対象の割引はありません</div>`;
+      }
+
+      return `
+        <div class="card plan-result-card" style="border-left-color:${color.accent}; background:${color.bg};">
+          <button type="button" class="plan-card-header" aria-expanded="false" aria-controls="plan-card-body-${idx}" onclick="togglePlanCard(${idx})">
+            <span class="result-card-carrier" style="background:${color.badgeBg}; color:${color.badgeText};">${p.carrierLabel}</span>
+            <span class="result-card-name">${p.plan}</span>
+            <span class="plan-card-chevron">▼</span>
+          </button>
+
+          <div class="plan-card-body" id="plan-card-body-${idx}">
+            <div class="result-card-age">対象年齢：${p.ageLabel}</div>
+
+            <div class="sub-container">
+              <h3 class="plan-sub-title">月額</h3>
+              <div class="section">
+                <label for="strage-select-${idx}">容量:</label>
+                <select id="strage-select-${idx}" onchange="updatePlanTotal(${idx})">
+                  <option value="">-- 容量を選択 --</option>
+                  ${strageOptions}
+                </select>
+              </div>
+              <div class="subtotal-wrapper">
+                <div class="subtotal-box bg-plan">月額: <span id="monthly-output-${idx}">￥0</span></div>
+              </div>
+            </div>
+
+            <div class="sub-container">
+              <h3 class="plan-sub-title">割引</h3>
+              <div class="checkbox-group" style="margin-bottom:0;">
+                ${discountHtml}
+              </div>
+              <div class="subtotal-wrapper">
+                <div class="subtotal-box bg-discount">割引合計: <span id="discount-output-${idx}">▲￥0</span></div>
+              </div>
+            </div>
+
+            <div class="plan-card-total-memo" id="plan-total-memo-${idx}">
+              <div class="subtotal-wrapper" style="margin-top:14px;">
+                <div class="subtotal-box" style="background:#fff; border:2px solid ${color.accent}; font-size:1rem;">
+                  合計月額: <span id="total-output-${idx}" style="color:${color.priceText};">￥0</span>
+                </div>
+              </div>
+
+              <div class="program-notice-box">
+                <strong>メモ（備考）</strong><br>
+                割引期限：${p.deadline}${p.memo ? `<br>${p.memo}` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function togglePlanCard(idx) {
+      const header = document.querySelector(`#plan-card-body-${idx}`).previousElementSibling;
+      const body = document.getElementById(`plan-card-body-${idx}`);
+      const isOpen = body.style.display === 'block';
+      body.style.display = isOpen ? 'none' : 'block';
+      header.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    function updatePlanTotal(idx) {
+      const p = agePlans[idx];
+      const strageSelect = document.getElementById(`strage-select-${idx}`);
+      const strageIdx = strageSelect.value;
+      const monthlyPrice = strageIdx !== '' ? p.strages[strageIdx].price : 0;
+
+      let discountTotal = 0;
+      const familySelect = document.getElementById(`family-select-${idx}`);
+      const familyCheck = document.getElementById(`family-check-${idx}`);
+      if (familySelect && familySelect.value) discountTotal += parseInt(familySelect.value, 10);
+      if (familyCheck && familyCheck.checked) discountTotal += parseInt(familyCheck.dataset.value, 10);
+
+      const cardSelect = document.getElementById(`card-select-${idx}`);
+      const cardCheck = document.getElementById(`card-check-${idx}`);
+      if (cardSelect && cardSelect.value) discountTotal += parseInt(cardSelect.value, 10);
+      if (cardCheck && cardCheck.checked) discountTotal += parseInt(cardCheck.dataset.value, 10);
+
+      const netCheck = document.getElementById(`net-check-${idx}`);
+      if (netCheck && netCheck.checked) discountTotal += parseInt(netCheck.dataset.value, 10);
+
+      document.getElementById(`monthly-output-${idx}`).textContent = `￥${monthlyPrice.toLocaleString()}`;
+      document.getElementById(`discount-output-${idx}`).textContent = `▲￥${discountTotal.toLocaleString()}`;
+
+      const total = strageIdx !== '' ? Math.max(0, monthlyPrice - discountTotal) : 0;
+      document.getElementById(`total-output-${idx}`).textContent = `￥${total.toLocaleString()}`;
+
+      document.getElementById(`plan-total-memo-${idx}`).style.display = strageIdx !== '' ? 'block' : 'none';
+    }
+
+    // =======================================================================================================================
+    // 🎂 生年月日プルダウン：年（西暦＋元号）・月・日を選択させ、そこから満年齢を算出する
+    // =======================================================================================================================
+    const eraTable = [
+      { key: 'showa', name: '昭和', start: new Date(1926, 11, 25), end: new Date(1989, 0, 7) },
+      { key: 'heisei', name: '平成', start: new Date(1989, 0, 8), end: new Date(2019, 3, 30) },
+      { key: 'reiwa', name: '令和', start: new Date(2019, 4, 1), end: null },
+    ];
+
+    // 指定した西暦年に重なる元号区間を返す（1989年・2019年のように年の途中で改元する年は2区間になる）
+    function getEraSegmentsForYear(y) {
+      const yearStart = new Date(y, 0, 1);
+      const yearEnd = new Date(y, 11, 31);
+      const segments = [];
+      eraTable.forEach(era => {
+        const segStart = era.start > yearStart ? era.start : yearStart;
+        const effectiveEnd = era.end === null ? yearEnd : (era.end < yearEnd ? era.end : yearEnd);
+        if (segStart <= effectiveEnd) {
+          segments.push({
+            key: era.key,
+            name: era.name,
+            eraYear: y - era.start.getFullYear() + 1,
+            minMonth: segStart.getMonth() + 1,
+            minDay: segStart.getDate(),
+            maxMonth: effectiveEnd.getMonth() + 1,
+            maxDay: effectiveEnd.getDate(),
+          });
+        }
+      });
+      return segments;
+    }
+
+    function populateBirthYearOptions() {
+      const yearSelect = document.getElementById('birth-year');
+      const currentYear = new Date().getFullYear();
+      let options = '<option value="">年</option>';
+      for (let y = currentYear; y >= currentYear - 100; y--) {
+        getEraSegmentsForYear(y).forEach(seg => {
+          const eraLabel = seg.eraYear === 1 ? `${seg.name}元年` : `${seg.name}${seg.eraYear}年`;
+          options += `<option value="${y}-${seg.key}">${y}年（${eraLabel}）</option>`;
+        });
+      }
+      yearSelect.innerHTML = options;
+    }
+
+    function populateBirthMonthOptions() {
+      const yearSelect = document.getElementById('birth-year');
+      const monthSelect = document.getElementById('birth-month');
+      const prevValue = monthSelect.value;
+
+      let minMonth = 1, maxMonth = 12;
+      if (yearSelect.value) {
+        const [yStr, key] = yearSelect.value.split('-');
+        const seg = getEraSegmentsForYear(parseInt(yStr, 10)).find(s => s.key === key);
+        if (seg) { minMonth = seg.minMonth; maxMonth = seg.maxMonth; }
+      }
+
+      let options = '<option value="">月</option>';
+      for (let m = minMonth; m <= maxMonth; m++) {
+        options += `<option value="${m}">${m}月</option>`;
+      }
+      monthSelect.innerHTML = options;
+
+      if (prevValue && parseInt(prevValue, 10) >= minMonth && parseInt(prevValue, 10) <= maxMonth) {
+        monthSelect.value = prevValue;
+      }
+    }
+
+    function populateBirthDayOptions() {
+      const yearSelect = document.getElementById('birth-year');
+      const monthSelect = document.getElementById('birth-month');
+      const daySelect = document.getElementById('birth-day');
+      const prevValue = daySelect.value;
+
+      const month = monthSelect.value ? parseInt(monthSelect.value, 10) : null;
+      let minDay = 1;
+      let maxDay = 31;
+
+      if (yearSelect.value && month) {
+        const [yStr, key] = yearSelect.value.split('-');
+        const y = parseInt(yStr, 10);
+        maxDay = new Date(y, month, 0).getDate();
+        const seg = getEraSegmentsForYear(y).find(s => s.key === key);
+        if (seg) {
+          if (month === seg.minMonth) minDay = Math.max(minDay, seg.minDay);
+          if (month === seg.maxMonth) maxDay = Math.min(maxDay, seg.maxDay);
+        }
+      }
+
+      let options = '<option value="">日</option>';
+      for (let d = minDay; d <= maxDay; d++) {
+        options += `<option value="${d}">${d}日</option>`;
+      }
+      daySelect.innerHTML = options;
+
+      if (prevValue && parseInt(prevValue, 10) >= minDay && parseInt(prevValue, 10) <= maxDay) {
+        daySelect.value = prevValue;
+      }
+    }
+
+    function calcAge(year, month, day) {
+      const today = new Date();
+      const birth = new Date(year, month - 1, day);
+      let age = today.getFullYear() - birth.getFullYear();
+      const hasHadBirthdayThisYear =
+        (today.getMonth() > birth.getMonth()) ||
+        (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+      if (!hasHadBirthdayThisYear) age--;
+      return age;
+    }
+
+    function onBirthChange() {
+      populateBirthMonthOptions();
+      populateBirthDayOptions();
+
+      const yearVal = document.getElementById('birth-year').value;
+      const monthRaw = document.getElementById('birth-month').value;
+      const dayRaw = document.getElementById('birth-day').value;
+      const resultsSection = document.getElementById('age-results-section');
+      const ageDisplay = document.getElementById('birth-age-display');
+      const listEl = document.getElementById('age-plan-list');
+      const noMatchEl = document.getElementById('age-no-match');
+      const callCard = document.getElementById('age-call-benefit-card');
+      const callList = document.getElementById('age-call-benefit-list');
+
+      if (yearVal === '' || monthRaw === '' || dayRaw === '') {
+        resultsSection.style.display = 'none';
+        ageDisplay.style.display = 'none';
+        return;
+      }
+
+      const yearRaw = yearVal.split('-')[0];
+      const age = calcAge(parseInt(yearRaw, 10), parseInt(monthRaw, 10), parseInt(dayRaw, 10));
+      if (isNaN(age) || age < 0) {
+        resultsSection.style.display = 'none';
+        ageDisplay.style.display = 'none';
+        return;
+      }
+
+      ageDisplay.textContent = `満${age}歳`;
+      ageDisplay.style.display = 'block';
+
+      resultsSection.style.display = 'block';
+
+      const matches = agePlans
+        .map((p, idx) => ({ p, idx }))
+        .filter(({ p }) => age >= p.ageMin && age <= p.ageMax);
+
+      if (matches.length === 0) {
+        listEl.innerHTML = '';
+        noMatchEl.style.display = 'block';
+      } else {
+        noMatchEl.style.display = 'none';
+        listEl.innerHTML = matches.map(({ p, idx }) => renderPlanCard(p, idx)).join('');
+        matches.forEach(({ idx }) => updatePlanTotal(idx));
+      }
+
+      const matchedBenefits = callBenefits.filter(b => age >= b.ageMin && age <= b.ageMax);
+      if (matchedBenefits.length > 0) {
+        callCard.style.display = 'block';
+        callList.innerHTML = matchedBenefits.map(b => `
+          <div class="program-notice-box">
+            <strong>${b.carrierLabel}／${b.plan}</strong><br>
+            ${b.content}　→　月額￥${b.price.toLocaleString()}
+            ${b.other ? `<br>${b.other}` : ''}
+          </div>
+        `).join('');
+      } else {
+        callCard.style.display = 'none';
+        callList.innerHTML = '';
+      }
+    }
+
+    populateBirthYearOptions();
+    populateBirthMonthOptions();
+    populateBirthDayOptions();
+
+    // iframeの中から、親画面（ブラウザのタブ）のタイトルを強制的に書き換える
+    if (window.parent !== window) {
+      window.parent.document.title = "年齢別プラン";
+    }
+  </script>
+</body>
+
+</html>
