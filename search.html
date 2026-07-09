@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>プラン検索</title>
+  <title>プランかんたん検索</title>
   <link rel="stylesheet" href="style.css">
   <style>
     html,
@@ -174,6 +174,8 @@
       padding: 2px 10px;
       border-radius: 999px;
       margin-bottom: 6px;
+      background: #fff;
+      border: 1.5px solid;
     }
 
     .result-card-name {
@@ -192,6 +194,7 @@
       margin-top: 8px;
       font-size: 1.3rem;
       font-weight: 800;
+      color: #dc3545;
     }
 
     .result-card-price .unit {
@@ -201,12 +204,23 @@
       margin-left: 2px;
     }
 
+    .result-card-desc {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
     .result-card-memo {
       margin-top: 8px;
       font-size: 0.82rem;
       color: var(--text-sub);
       padding-top: 8px;
       border-top: 1px dashed var(--border-color);
+    }
+
+    .result-header-title {
+      justify-content: flex-start;
     }
 
     .result-empty {
@@ -237,44 +251,44 @@
         <h2>検索方法を選択</h2>
         <label class="checkbox-label mode-toggle">
           <input type="checkbox" id="mode-usage" onchange="onModeToggle('usage')">
-          <span>使用状況から選ぶ</span>
+          <span>使用状況からかんたん検索</span>
         </label>
         <label class="checkbox-label mode-toggle">
           <input type="checkbox" id="mode-advanced" onchange="onModeToggle('advanced')">
-          <span>条件を指定して選ぶ</span>
+          <span>条件を指定して検索</span>
         </label>
       </div>
 
       <fieldset id="fieldset-usage" class="card mode-fieldset" disabled>
-        <legend>使用状況から選ぶ</legend>
+        <legend>かんたん検索</legend>
 
         <div class="usage-option">
           <label class="usage-radio-label">
             <input type="radio" name="usage-preset" value="3" onchange="runUsageSearch('3')">
-            <span class="usage-title">3GB程度</span>
+            <span class="usage-title">あまり使わない</span>
           </label>
-          <p class="usage-desc">例：家にWi-Fiがあり、あまり外でスマホを使わない</p>
+          <p class="usage-desc">LINE・検索がメイン、SNS（写真・画像）を少し見る、家ではWi-Fiを使用等</p>
         </div>
 
         <div class="usage-option">
           <label class="usage-radio-label">
             <input type="radio" name="usage-preset" value="35" onchange="runUsageSearch('35')">
-            <span class="usage-title">35GB程度</span>
+            <span class="usage-title">普段使い</span>
           </label>
-          <p class="usage-desc">例：普段使いでSNSや動画もよく見る</p>
+          <p class="usage-desc">例：動画をよく見る、常に通信を必要とするゲームをする等（目安：1時間の動画 / 1GB）</p>
         </div>
 
         <div class="usage-option">
           <label class="usage-radio-label">
             <input type="radio" name="usage-preset" value="35plus" onchange="runUsageSearch('35plus')">
-            <span class="usage-title">35GB以上（無制限も含む）</span>
+            <span class="usage-title">よく使う</span>
           </label>
-          <p class="usage-desc">例：自宅のネット回線代わりに大量に使う</p>
+          <p class="usage-desc">自宅や出先でWi-Fiがなく、動画やゲームをたくさんする等</p>
         </div>
       </fieldset>
 
       <fieldset id="fieldset-advanced" class="card mode-fieldset" disabled>
-        <legend>条件を指定して選ぶ</legend>
+        <legend>条件を指定して検索</legend>
 
         <div class="adv-field">
           <label>キャリア（複数選択可）</label>
@@ -309,10 +323,10 @@
         <div class="adv-field">
           <label>割引（チェックした条件を全て満たすプランに絞り込み）</label>
           <div class="checkbox-group discount-checkbox-group">
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="family"><span>家族割があるか</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="net"><span>ネット回線の割引があるか</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="card"><span>支払いカードの割引があるか</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="ele"><span>でんきの割引があるか</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="family"><span>家族割がある</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="net"><span>ネットの割引がある</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="card"><span>支払いカードの割引がある</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="ele"><span>でんきの割引がある</span></label>
           </div>
         </div>
 
@@ -323,7 +337,7 @@
     <!-- ===================== 検索結果 ===================== -->
     <section id="result-area">
       <div class="card">
-        <h2>検索結果（<span id="result-count">0</span>件）</h2>
+        <h2 class="result-header-title">検索結果：　<span id="result-count">0</span>件</h2>
         <div class="sort-btn-row">
           <button type="button" class="sort-btn active" data-sort="price-asc" onclick="changeSort('price-asc')">料金の安い順</button>
           <button type="button" class="sort-btn" data-sort="price-desc" onclick="changeSort('price-desc')">料金の高い順</button>
@@ -342,52 +356,71 @@
     const planData = {
       docomo: [
         { name: "ドコモMAX", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "Lemino, dアニメストア, DAZN, NBA・docomoのうちいずれか2つまで見放題（毎月切り替え可能）。<br>使用量に応じて料金が変動。",
           strages: [{ giga: "~1GB", price: 5698 }, { giga: "1~3GB", price: 6798 }, { giga: "3GB~", price: 8004 }] },
         { name: "ポイ活MAX", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "dポイント最大5,000ptで実質値引き。<br>ドコモMAX同様4種類のうち2つの動画配信サイトが見放題。",
           strages: [{ giga: "無制限", price: 11748 }] },
         { name: "ポイ活20", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "dポイント最大2,500ptで実質値引き。ポイ活を始めてみたい人向け。<br>使用量20GBを境に料金が変動。",
           strages: [{ giga: "~20GB", price: 7898 }, { giga: "20GB~", price: 9750 }] },
         { name: "ドコモmini", discounts: { family: false, net: true, card: true, ele: true },
+          desc: "2種類の小容量の定額プラン。<br>キャリアメールは別途契約が必要なことに注意。",
           strages: [{ giga: "4GB", price: 2750 }, { giga: "10GB", price: 3850 }] },
         { name: "ahamo", discounts: { family: false, net: false, card: false, ele: false },
+          desc: "割引無しの高コスパ最強プラン。<br>5分間かけ放題付きかつ+80GBのオプションも選べてあらゆる人が使いやすいプラン。",
           strages: [{ giga: "30GB", price: 2970 }, { giga: "110GB", price: 4950 }] },
       ],
       au: [
         { name: "バリューリンクプラン", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "無制限プランの基本サービスにPontaパスと地震サポートが加わったプラン。<br>使用量に応じて料金が変動。",
           strages: [{ giga: "~1GB", price: 6358 }, { giga: "1GB~", price: 8008 }] },
         { name: "バリューリンク マネ活2", discounts: { family: false, net: true, card: false, ele: false },
+          desc: "auスマートバリュー、au PAYとauじぶん銀行利用で最大￥5,800分の実質値引き。<br>Pontaパスと地震サポートも付帯。",
           strages: [{ giga: "無制限", price: 9328 }] },
         { name: "使い放題MAX+", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "シンプルな無制限プラン。<br>1GBを境に料金が変動。",
           strages: [{ giga: "~1GB", price: 6138 }, { giga: "1GB~", price: 7788 }] },
         { name: "使い放題MAX+ マネ活2", discounts: { family: false, net: true, card: false, ele: false },
+          desc: "使い放題MAX+にマネ活が加わったプラン。<br>auスマートバリュー、au PAYとauじぶん銀行利用で最大￥5,800分の実質値引き。",
           strages: [{ giga: "無制限", price: 9108 }] },
         { name: "スマホミニプラン+", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "最大5GBの小容量プラン。<br>それぞれ1GBと3GBで料金が変動。",
           strages: [{ giga: "~1GB", price: 4928 }, { giga: "1~3GB", price: 6578 }, { giga: "3~5GB", price: 8228 }] },
       ],
       UQ: [
         { name: "コミコミプランバリュー", discounts: { family: false, net: false, card: false, ele: false },
+          desc: "35GBの定額プランで10分かけ放題付き。<br>Pontaパスとau Starlink Directが追加料金無しで利用可能。",
           strages: [{ giga: "35GB", price: 3828 }] },
         { name: "トクトクプラン2", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "5GBを境に料金が変動。<br>金額は異なるが自宅セット割か家族セット割の割引を選択可能で、より広い範囲で割引適用が可能。",
           strages: [{ giga: "~5GB", price: 2948 }, { giga: "5~30GB", price: 4048 }] },
       ],
       softbank: [
         { name: "ペイトク2", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "PayPayカード ゴールド所持でさらにお得。<br>還元率10%に増加で月上限￥4,000相当。",
           strages: [{ giga: "無制限", price: 10538 }] },
         { name: "テイガク無制限", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "シンプルな無制限プラン。",
           strages: [{ giga: "無制限", price: 8008 }] },
         { name: "ミニフィット2", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "2GBを境に月額料金が変動する5GBまでの小容量プラン。<br>新みんな家族割の割引額が小さいので注意。",
           strages: [{ giga: "~2GB", price: 5258 }, { giga: "2~5GB", price: 6358 }] },
       ],
       Ymobile: [
         { name: "シンプル3 S", discounts: { family: true, net: true, card: true, ele: false },
+          desc: "小容量プランで各種割引の重複が可能で、PayPayカードはゴールドならさらに割引。<br>でんきセットは対象外で家族割引は2回線目以降から適用。",
           strages: [{ giga: "5GB", price: 3278 }] },
         { name: "シンプル3 M", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "中容量プランで各種割引の重複が可能で、PayPayカードはゴールドならさらに割引。<br>家族割引は2回線目以降から適用なので注意。",
           strages: [{ giga: "30GB", price: 4378 }] },
         { name: "シンプル3 L", discounts: { family: true, net: true, card: true, ele: true },
+          desc: "10分国内かけ放題がついた中容量プランで各種割引重複可能。<br>家族割引は2回線目以降から適用なので注意。",
           strages: [{ giga: "35GB", price: 5478 }] },
       ],
       Rakuten: [
         { name: "最強プラン", discounts: { family: true, net: false, card: false, ele: false },
+          desc: "1種類のみの分かりやすいプランで、~3GB、~20GB、無制限のいずれでもキャリア間で最安。<br>楽天市場のポイント還元率が+4倍上がる。",
           strages: [{ giga: "~3GB", price: 1078 }, { giga: "3~20GB", price: 2178 }, { giga: "20GB~", price: 3278 }] },
       ],
     };
@@ -397,19 +430,32 @@
     // キャリアごとの基準色相（色相環上の角度）。同キャリア内のプランはこの色相を保ったまま明度を変えて塗り分ける
     const carrierHue = { docomo: 350, au: 28, UQ: 200, softbank: 46, Ymobile: 322, Rakuten: 265 };
 
-    // carrier(色相) × planIndex(明度) の組み合わせでプランごとに一意な配色を作る
-    function buildPlanColor(carrier, planIndex) {
-      const hue = carrierHue[carrier];
-      const lightness = Math.min(70, 38 + planIndex * 9);
-      const bgLightness = Math.max(92, 97 - planIndex * 1.4);
+    function buildPlanColor(carrier) {
       return {
-        accent: `hsl(${hue}, 68%, ${lightness}%)`,
-        bg: `hsl(${hue}, 55%, ${bgLightness}%)`,
-        badgeBg: `hsl(${hue}, 60%, 91%)`,
-        badgeText: `hsl(${hue}, 65%, 30%)`,
-        priceText: `hsl(${hue}, 65%, 32%)`,
+      accent: carrierColor[carrier],
+      bg: carrierBgColor[carrier],
       };
     }
+
+    // キャリアごとの固定カラー（キャリアバッジの枠線・文字色に使用）
+    const carrierColor = {
+      docomo: "#ff0000",   // 赤
+      au: "#f57c00",       // オレンジ
+      UQ: "#7b1fa2",       // 紫
+      softbank: "#9e9e9e", // 薄いグレー
+      Ymobile: "#ff3d3f",  // オレンジ寄りの赤
+      Rakuten: "#ff00a7",  // ピンク
+    };
+    const carrierBgColor = {
+      docomo: "#fff2f1",
+      au: "#fff3e6",
+      UQ: "#f3e8fb",
+      softbank: "#f5f5f5",
+      Ymobile: "#fff6ef",
+      Rakuten: "#ffe9ef",
+    };
+
+    // carrier(色相) × planIndex(明度) の組み合わせでプランごとに一意な配色を作る
 
     const LARGE_GB_SENTINEL = 999999; // 無制限 / open-high側の代表最大値
 
@@ -448,7 +494,9 @@
             entries.push({
               carrier,
               carrierLabel: carrierLabels[carrier],
+              carrierColor: carrierColor[carrier],
               planName: plan.name,
+              desc: plan.desc,
               giga: tier.giga,
               gbMin: range.min,
               gbMax: range.max,
@@ -570,10 +618,11 @@
 
       list.innerHTML = currentResults.map(e => `
         <div class="result-card" style="border-left-color:${e.color.accent}; background:${e.color.bg};">
-          <span class="result-card-carrier" style="background:${e.color.badgeBg}; color:${e.color.badgeText};">${e.carrierLabel}</span>
+          <span class="result-card-carrier" style="border-color:${e.carrierColor}; color:${e.carrierColor};">${e.carrierLabel}</span>
           <div class="result-card-name">${e.planName}</div>
           <div class="result-card-giga">${e.giga}</div>
-          <div class="result-card-price" style="color:${e.color.priceText};">${e.price.toLocaleString()}円<span class="unit">/月</span></div>
+          <div class="result-card-price">￥${e.price.toLocaleString()}<span class="unit">/月</span></div>
+          <div class="result-card-desc">${e.desc}</div>
           <div class="result-card-memo">${e.memo}</div>
         </div>
       `).join('');
