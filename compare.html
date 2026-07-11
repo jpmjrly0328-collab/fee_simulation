@@ -402,9 +402,9 @@
 
                 <div class="sim-field">
                     <label>② 容量</label>
-                    <select id="sim-left-strage" onchange="sim_updateOptionsAndDiscounts('left')" disabled>
-                        <option value="">先にプランを選択してください</option>
-                    </select>
+                    <div id="sim-left-strage-container" class="sim-checkbox-container">
+                        <span class="sim-placeholder">先にプランを選択してください</span>
+                    </div>
                     <div id="sim-left-strage-subtotal" class="sim-item-subtotal"></div>
                 </div>
 
@@ -418,6 +418,10 @@
 
                 <div class="sim-field">
                     <label class="sim-discount-label">④ 割引（対象なら<br>選択、複数選択可）</label>
+                    <label class="sim-checkbox-label sim-discount-toggle-label">
+                        <input type="checkbox" id="sim-left-discount-toggle" onchange="sim_toggleDiscountEnabled('left')" disabled>
+                        <span>割引を適用するか</span>
+                    </label>
                     <div id="sim-left-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -497,9 +501,9 @@
 
                 <div class="sim-field">
                     <label>② 容量</label>
-                    <select id="sim-right-strage" onchange="sim_updateOptionsAndDiscounts('right')" disabled>
-                        <option value="">先にプランを選択してください</option>
-                    </select>
+                    <div id="sim-right-strage-container" class="sim-checkbox-container">
+                        <span class="sim-placeholder">先にプランを選択してください</span>
+                    </div>
                     <div id="sim-right-strage-subtotal" class="sim-item-subtotal"></div>
                 </div>
 
@@ -513,6 +517,10 @@
 
                 <div class="sim-field">
                     <label class="sim-discount-label">④ 割引（対象なら<br>選択、複数選択可）</label>
+                    <label class="sim-checkbox-label sim-discount-toggle-label">
+                        <input type="checkbox" id="sim-right-discount-toggle" onchange="sim_toggleDiscountEnabled('right')" disabled>
+                        <span>割引を適用するか</span>
+                    </label>
                     <div id="sim-right-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -611,6 +619,20 @@
         .sim-placeholder {
             color: #888;
             font-size: 0.9em;
+        }
+
+        /* 💡「割引を適用するか」トグルチェックボックス。有効化するまで各割引項目は選択不可にする */
+        .sim-discount-toggle-label {
+            margin: -4px 0 8px 0;
+            font-weight: bold;
+        }
+
+        .sim-discount-toggle-label input:disabled {
+            cursor: not-allowed;
+        }
+
+        .sim-checkbox-container .sim-checkbox-label input:disabled+span {
+            color: #aaa;
         }
 
         /* 💡 割引チェックボックスの直下に移動してきた連動プルダウン（人数・カード種類等）の見た目 */
@@ -1044,21 +1066,32 @@
         function sim_updateStrages(side) {
             const company = document.getElementById(`sim-${side}-company`).value;
             const planId = document.getElementById(`sim-${side}-plan`).value;
-            const strageSelect = document.getElementById(`sim-${side}-strage`);
+            const strageContainer = document.getElementById(`sim-${side}-strage-container`);
 
             sim_resetSelect(side, ['strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
 
             if (company && planId) {
                 const selectedPlan = simData.plans[company].find(p => p.id === planId);
-                if (selectedPlan && selectedPlan.strages) {
+                if (selectedPlan && selectedPlan.strages && strageContainer) {
+                    strageContainer.innerHTML = '';
                     selectedPlan.strages.forEach(vol => {
-                        const opt = document.createElement("option");
-                        opt.value = vol.price;
-                        opt.textContent = `${vol.giga}`;
-                        opt.dataset.allowDiscount = selectedPlan.allowDiscount;
-                        strageSelect.appendChild(opt);
+                        const label = document.createElement("label");
+                        label.className = "sim-checkbox-label";
+
+                        const radio = document.createElement("input");
+                        radio.type = "radio";
+                        radio.name = `sim-${side}-strage-radio`;
+                        radio.value = vol.price;
+                        radio.dataset.text = vol.giga;
+                        radio.onchange = () => { sim_updateOptionsAndDiscounts(side); };
+
+                        const textSpan = document.createElement("span");
+                        textSpan.textContent = vol.giga;
+
+                        label.appendChild(radio);
+                        label.appendChild(textSpan);
+                        strageContainer.appendChild(label);
                     });
-                    strageSelect.disabled = false;
                 }
             }
             sim_updateComment(side);
@@ -1068,9 +1101,10 @@
         function sim_updateOptionsAndDiscounts(side) {
             const company = document.getElementById(`sim-${side}-company`).value;
             const planId = document.getElementById(`sim-${side}-plan`).value;
-            const strageSelect = document.getElementById(`sim-${side}-strage`);
+            const selectedStrage = document.querySelector(`input[name="sim-${side}-strage-radio"]:checked`);
             const optionSelect = document.getElementById(`sim-${side}-option`);
             const discountContainer = document.getElementById(`sim-${side}-discount-container`);
+            const discountToggle = document.getElementById(`sim-${side}-discount-toggle`);
 
             // 💡 連動プルダウンの枠を、コンテナを空にする前に確保しておく（消えてしまうのを防ぐ）
             const useField = document.getElementById(`sim-${side}-use-field`);
@@ -1082,7 +1116,7 @@
 
             const currentPlan = (simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
 
-            if (company && strageSelect && strageSelect.value) {
+            if (company && selectedStrage) {
                 if (optionSelect) {
                     optionSelect.innerHTML = '<option value="0">なし　¥0</option>';
                     if (simData.options[company]) {
@@ -1101,6 +1135,7 @@
 
             if (currentPlan && currentPlan.allowDiscount === true && discountContainer) {
                 discountContainer.innerHTML = '';
+                if (discountToggle) discountToggle.disabled = false;
 
                 // 💡 先にプルダウン側の初期テキストをリセットしておく（初回クリックの不発を防ぐ）
                 const useSelect = document.getElementById(`sim-${side}-use`);
@@ -1124,6 +1159,8 @@
                         checkbox.type = "checkbox";
                         checkbox.name = `sim-${side}-discount-cb`;
                         checkbox.value = disc.id;
+                        // 💡「割引を適用するか」がONになるまでは各割引項目を選択不可にする
+                        checkbox.disabled = true;
                         checkbox.onchange = () => { sim_handleDiscountChange(side); };
 
                         const textSpan = document.createElement("span");
@@ -1164,8 +1201,23 @@
                         }
                     });
                 }
+            } else if (discountToggle) {
+                discountToggle.disabled = true;
+                discountToggle.checked = false;
             }
             sim_calculateTotal(side);
+        }
+
+        // 💡「割引を適用するか」チェックボックスのON/OFFで、各割引項目の選択可否を切り替える
+        function sim_toggleDiscountEnabled(side) {
+            const toggle = document.getElementById(`sim-${side}-discount-toggle`);
+            const enabled = !!(toggle && toggle.checked);
+            const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]`);
+            checkboxes.forEach(cb => {
+                cb.disabled = !enabled;
+                if (!enabled) cb.checked = false;
+            });
+            sim_handleDiscountChange(side);
         }
 
         function sim_handleDiscountChange(side) {
@@ -1309,7 +1361,6 @@
         function sim_resetSelect(side, targets) {
             const labels = {
                 plan: 'プランを選択してください',
-                strage: '容量を選択してください',
                 option: 'いずれか選択してください', // 💡「容量」から「オプション」に修正
                 use: '利用年数を選択してください',
                 family: '家族割対象人数を選択してください',
@@ -1322,8 +1373,26 @@
             const company = companyEl ? companyEl.value : "";
 
             targets.forEach(target => {
+                if (target === 'strage') {
+                    const container = document.getElementById(`sim-${side}-strage-container`);
+                    if (container) {
+                        const planEl = document.getElementById(`sim-${side}-plan`);
+                        const planSelected = planEl && planEl.value;
+                        container.innerHTML = planSelected
+                            ? '<span class="sim-placeholder">容量を選択してください</span>'
+                            : '<span class="sim-placeholder">先にプランを選択してください</span>';
+                    }
+                    return;
+                }
+
                 if (target === 'discount') {
                     const container = document.getElementById(`sim-${side}-discount-container`);
+                    // 💡「割引を適用するか」トグルも、容量やプランが変わるたびに未チェック・選択不可へ戻す
+                    const toggle = document.getElementById(`sim-${side}-discount-toggle`);
+                    if (toggle) {
+                        toggle.checked = false;
+                        toggle.disabled = true;
+                    }
                     if (container) {
                         // 💡 連動プルダウンの枠がこの中に入ったままだと、innerHTMLのクリアで
                         //     DOMごと消えてしまうため、先に外（親要素）へ退避させておく
@@ -1369,7 +1438,7 @@
             const planId = planEl ? planEl.value : "";
             const currentPlan = (company && simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
 
-            const strageSelect = document.getElementById(`sim-${side}-strage`);
+            const selectedStrage = document.querySelector(`input[name="sim-${side}-strage-radio"]:checked`);
             const optionSelect = document.getElementById(`sim-${side}-option`);
             const useSelect = document.getElementById(`sim-${side}-use`);
             const familySelect = document.getElementById(`sim-${side}-family`);
@@ -1387,9 +1456,9 @@
 
             // 💡 合計金額欄のタイトルを「選択した①携帯会社／②プラン名／③容量」の表記に変更する
             if (titleElement) {
-                if (company && currentPlan && strageSelect && strageSelect.value) {
+                if (company && currentPlan && selectedStrage) {
                     const companyName = companyEl.options[companyEl.selectedIndex].text;
-                    const strageName = strageSelect.options[strageSelect.selectedIndex].text.split('　')[0];
+                    const strageName = selectedStrage.dataset.text.split('　')[0];
                     titleElement.innerHTML =
                         `<span class="sim-title-line sim-title-label-company">①キャリア</span>` +
                         `<span class="sim-title-line sim-title-value">${companyName}</span>` +
@@ -1404,7 +1473,7 @@
             }
 
             // 安全に対象の値を取得（要素が存在しない、または未選択なら 0 ）
-            const basePrice = (strageSelect && strageSelect.value) ? parseInt(strageSelect.value) : 0;
+            const basePrice = (selectedStrage) ? parseInt(selectedStrage.value) : 0;
             const optionPrice = (optionSelect && optionSelect.value) ? parseInt(optionSelect.value) : 0;
 
             let totalDiscountPrice = 0;
@@ -1452,7 +1521,7 @@
                     : "";
             }
             if (strageSubtotal) {
-                strageSubtotal.textContent = (strageSelect && strageSelect.value)
+                strageSubtotal.textContent = (selectedStrage)
                     ? `小計：¥${basePrice.toLocaleString()}`
                     : "";
             }
