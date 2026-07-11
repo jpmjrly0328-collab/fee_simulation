@@ -51,14 +51,6 @@
       padding: 8px 4px;
     }
 
-    .result-card-memo {
-      margin-top: 8px;
-      font-size: 0.82rem;
-      font-weight: 400;
-      color: var(--text-sub);
-      padding-top: 8px;
-      border-top: 1px dashed var(--border-color);
-    }
 
     .plan-result-card {
       border-left-width: 6px;
@@ -125,6 +117,13 @@
       color: #111;
     }
 
+    .result-card-name-age {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-sub);
+      margin-left: 4px;
+    }
+
     .result-card-age {
       font-size: 0.85rem;
       color: var(--text-sub);
@@ -142,6 +141,26 @@
     .no-discount-note {
       color: #888;
       font-size: 0.88rem;
+    }
+
+    .checkbox-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: var(--primary-color);
+    }
+
+    .discount-master-label {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .discount-options .checkbox-label:has(input:disabled) {
+      opacity: 0.5;
+    }
+
+    .discount-options {
+      padding-left: 1em;
     }
 
     #age-call-benefit-card .program-notice-box {
@@ -162,13 +181,34 @@
   <div class="container">
     <h2>年齢特典プラン・キャンペーン検索</h2>
     <div class="card">
-      <h2>生年月日を入力</h2>
-      <div class="birth-select-row">
-        <select id="birth-year" onchange="onBirthChange()"></select>
-        <select id="birth-month" onchange="onBirthChange()"></select>
-        <select id="birth-day" onchange="onBirthChange()"></select>
+      <h2>年齢を入力</h2>
+      <div class="checkbox-group" style="margin-bottom:14px;">
+        <label class="checkbox-label">
+          <input type="radio" name="age-input-mode" value="birth" checked onchange="onAgeInputModeChange()">
+          生年月日で入力
+        </label>
+        <label class="checkbox-label">
+          <input type="radio" name="age-input-mode" value="direct" onchange="onAgeInputModeChange()">
+          年齢を直接入力
+        </label>
       </div>
-      <div id="age-year-oob-message">選択した年では対象となるプラン・キャンペーンがないため、月日は選択できません</div>
+
+      <div id="birth-input-section">
+        <div class="birth-select-row">
+          <select id="birth-year" onchange="onBirthChange()"></select>
+          <select id="birth-month" onchange="onBirthChange()"></select>
+          <select id="birth-day" onchange="onBirthChange()"></select>
+        </div>
+        <div id="age-year-oob-message">選択した年では対象となるプラン・キャンペーンがないため、月日は選択できません</div>
+      </div>
+
+      <div id="direct-age-input-section" style="display:none;">
+        <div class="section" style="margin-bottom:0;">
+          <label for="direct-age-input">年齢:</label>
+          <input type="number" id="direct-age-input" min="0" max="120" placeholder="満年齢を入力" oninput="onDirectAgeChange()">
+        </div>
+      </div>
+
       <div id="birth-age-display"></div>
     </div>
 
@@ -182,19 +222,6 @@
       <div id="age-call-benefit-card" class="card" style="display:none;">
         <h2>当てはまる通話特典</h2>
         <div id="age-call-benefit-list"></div>
-      </div>
-    </div>
-
-    <h2>その他キャンペーン</h2>
-    <div class="card">
-      <div class="program-notice-box" style="margin-top:0;">
-        <strong style="color:#7b1fa2;">UQ mobile</strong><br>
-        <strong style="color:#000; text-decoration:underline;">UQコミコミおトク割</strong><br>
-        コミコミプランバリュー新規加入（※）で月額￥3,828 から <span style="color:#dc3545;">13ヶ月間 ￥660<br>割引（月額￥3,168）</span><br>
-        <div class="result-card-memo">
-          　※機種変更、契約変更、キャンペーン開始前にコミコミプランバリュー契約<br>　　履歴があっても可、1度限り<br>
-          14ヶ月目以降はau PAY ゴールドカード支払いで継続可能（家族カードも<br>対象）
-        </div>
       </div>
     </div>
   </div>
@@ -330,59 +357,67 @@
 
     function renderPlanCard(p, idx) {
       const color = buildPlanColor(p.carrier);
-      const strageOptions = p.strages
-        .map((s, i) => `<option value="${i}">${s.giga}　￥${s.price.toLocaleString()}</option>`)
+      const strageHtml = p.strages
+        .map((s, i) => `
+          <label class="checkbox-label">
+            <input type="radio" name="strage-${idx}" value="${i}" onchange="updatePlanTotal(${idx})">
+            ${s.giga}　￥${s.price.toLocaleString()}
+          </label>`)
         .join('');
 
-      let discountHtml = '';
+      let discountOptionsHtml = '';
 
       if (p.discounts.family.length === 2) {
-        discountHtml += `
-          <div class="section">
-            <label for="family-select-${idx}">家族割引:</label>
-            <select id="family-select-${idx}" onchange="updatePlanTotal(${idx})">
-              <option value="">-- 選択しない --</option>
-              <option value="${p.discounts.family[0].value}">①　▲￥${p.discounts.family[0].value.toLocaleString()}</option>
-              <option value="${p.discounts.family[1].value}">②　▲￥${p.discounts.family[1].value.toLocaleString()}</option>
-            </select>
-          </div>`;
+        discountOptionsHtml += p.discounts.family.map((t, i) => `
+          <label class="checkbox-label">
+            <input type="checkbox" class="discount-cb-${idx} family-tier-${idx}" data-value="${t.value}" disabled
+              onchange="handleTierExclusive(this, 'family-tier-${idx}'); updatePlanTotal(${idx})">
+            家族割引${i === 0 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
+          </label>`).join('');
       } else if (p.discounts.family.length === 1) {
         const t = p.discounts.family[0];
-        discountHtml += `
+        discountOptionsHtml += `
           <label class="checkbox-label">
-            <input type="checkbox" id="family-check-${idx}" data-value="${t.value}" onchange="updatePlanTotal(${idx})">
+            <input type="checkbox" class="discount-cb-${idx}" data-value="${t.value}" disabled onchange="updatePlanTotal(${idx})">
             家族割引${t.tier === 1 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
           </label>`;
       }
 
       if (p.discounts.card.length === 2) {
-        discountHtml += `
-          <div class="section">
-            <label for="card-select-${idx}">カード割引:</label>
-            <select id="card-select-${idx}" onchange="updatePlanTotal(${idx})">
-              <option value="">-- 選択しない --</option>
-              <option value="${p.discounts.card[0].value}">①　▲￥${p.discounts.card[0].value.toLocaleString()}</option>
-              <option value="${p.discounts.card[1].value}">②　▲￥${p.discounts.card[1].value.toLocaleString()}</option>
-            </select>
-          </div>`;
+        discountOptionsHtml += p.discounts.card.map((t, i) => `
+          <label class="checkbox-label">
+            <input type="checkbox" class="discount-cb-${idx} card-tier-${idx}" data-value="${t.value}" disabled
+              onchange="handleTierExclusive(this, 'card-tier-${idx}'); updatePlanTotal(${idx})">
+            カード割引${i === 0 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
+          </label>`).join('');
       } else if (p.discounts.card.length === 1) {
         const t = p.discounts.card[0];
-        discountHtml += `
+        discountOptionsHtml += `
           <label class="checkbox-label">
-            <input type="checkbox" id="card-check-${idx}" data-value="${t.value}" onchange="updatePlanTotal(${idx})">
+            <input type="checkbox" class="discount-cb-${idx}" data-value="${t.value}" disabled onchange="updatePlanTotal(${idx})">
             カード割引${t.tier === 1 ? '①' : '②'}　▲￥${t.value.toLocaleString()}
           </label>`;
       }
 
       if (p.discounts.net !== null) {
-        discountHtml += `
+        discountOptionsHtml += `
           <label class="checkbox-label">
-            <input type="checkbox" id="net-check-${idx}" data-value="${p.discounts.net}" onchange="updatePlanTotal(${idx})">
+            <input type="checkbox" class="discount-cb-${idx}" data-value="${p.discounts.net}" disabled onchange="updatePlanTotal(${idx})">
             ネット割引　▲￥${p.discounts.net.toLocaleString()}
           </label>`;
       }
 
-      if (!discountHtml) {
+      let discountHtml;
+      if (discountOptionsHtml) {
+        discountHtml = `
+          <label class="checkbox-label discount-master-label">
+            <input type="checkbox" id="discount-master-${idx}" onchange="toggleDiscountMaster(${idx})">
+            割引を利用する
+          </label>
+          <div class="checkbox-group discount-options" id="discount-options-${idx}" style="margin-bottom:0;">
+            ${discountOptionsHtml}
+          </div>`;
+      } else {
         discountHtml = `<div class="no-discount-note">対象の割引はありません</div>`;
       }
 
@@ -390,7 +425,7 @@
         <div class="card plan-result-card" style="border-left-color:${color.accent}; background:${color.bg};">
           <button type="button" class="plan-card-header" aria-expanded="false" aria-controls="plan-card-body-${idx}" onclick="togglePlanCard(${idx})">
             <span class="result-card-carrier" style="background:#fff; border:1.5px solid ${color.accent}; color:${color.accent};">${p.carrierLabel}</span>
-            <span class="result-card-name">${p.plan}</span>
+            <span class="result-card-name">${p.plan}<span class="result-card-name-age">（${p.ageLabel}）</span></span>
             <span class="plan-card-chevron">▼</span>
           </button>
 
@@ -399,12 +434,9 @@
 
             <div class="sub-container">
               <h3 class="plan-sub-title">月額</h3>
-              <div class="section">
-                <label for="strage-select-${idx}">容量:</label>
-                <select id="strage-select-${idx}" onchange="updatePlanTotal(${idx})">
-                  <option value="">-- 容量を選択 --</option>
-                  ${strageOptions}
-                </select>
+              <label>容量を選択:</label>
+              <div class="checkbox-group" style="margin-bottom:0;">
+                ${strageHtml}
               </div>
               <div class="subtotal-wrapper">
                 <div class="subtotal-box bg-plan">月額: <span id="monthly-output-${idx}">￥0</span></div>
@@ -413,9 +445,7 @@
 
             <div class="sub-container">
               <h3 class="plan-sub-title">割引</h3>
-              <div class="checkbox-group" style="margin-bottom:0;">
-                ${discountHtml}
-              </div>
+              ${discountHtml}
               <div class="subtotal-wrapper">
                 <div class="subtotal-box bg-discount">割引合計: <span id="discount-output-${idx}">▲￥0</span></div>
               </div>
@@ -446,25 +476,37 @@
       header.setAttribute('aria-expanded', String(!isOpen));
     }
 
+    // 割引の「マスターチェック」がON/OFFされたら、配下の各割引チェックボックスの有効/無効を切り替える
+    function toggleDiscountMaster(idx) {
+      const master = document.getElementById(`discount-master-${idx}`);
+      const container = document.getElementById(`discount-options-${idx}`);
+      if (!container) return;
+      container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.disabled = !master.checked;
+        if (!master.checked) cb.checked = false;
+      });
+      updatePlanTotal(idx);
+    }
+
+    // 同一割引（家族割・カード割）内のティア①②は同時に選べないようにする
+    function handleTierExclusive(checkbox, groupClass) {
+      if (checkbox.checked) {
+        document.querySelectorAll(`.${groupClass}`).forEach(other => {
+          if (other !== checkbox) other.checked = false;
+        });
+      }
+    }
+
     function updatePlanTotal(idx) {
       const p = agePlans[idx];
-      const strageSelect = document.getElementById(`strage-select-${idx}`);
-      const strageIdx = strageSelect.value;
+      const strageChecked = document.querySelector(`input[name="strage-${idx}"]:checked`);
+      const strageIdx = strageChecked ? strageChecked.value : '';
       const monthlyPrice = strageIdx !== '' ? p.strages[strageIdx].price : 0;
 
       let discountTotal = 0;
-      const familySelect = document.getElementById(`family-select-${idx}`);
-      const familyCheck = document.getElementById(`family-check-${idx}`);
-      if (familySelect && familySelect.value) discountTotal += parseInt(familySelect.value, 10);
-      if (familyCheck && familyCheck.checked) discountTotal += parseInt(familyCheck.dataset.value, 10);
-
-      const cardSelect = document.getElementById(`card-select-${idx}`);
-      const cardCheck = document.getElementById(`card-check-${idx}`);
-      if (cardSelect && cardSelect.value) discountTotal += parseInt(cardSelect.value, 10);
-      if (cardCheck && cardCheck.checked) discountTotal += parseInt(cardCheck.dataset.value, 10);
-
-      const netCheck = document.getElementById(`net-check-${idx}`);
-      if (netCheck && netCheck.checked) discountTotal += parseInt(netCheck.dataset.value, 10);
+      document.querySelectorAll(`.discount-cb-${idx}:checked`).forEach(cb => {
+        discountTotal += parseInt(cb.dataset.value, 10);
+      });
 
       document.getElementById(`monthly-output-${idx}`).textContent = `￥${monthlyPrice.toLocaleString()}`;
       document.getElementById(`discount-output-${idx}`).textContent = `▲￥${discountTotal.toLocaleString()}`;
@@ -599,60 +641,23 @@
       return hasAnyPlanMatch(ageIfBirthdayPassed) || hasAnyPlanMatch(ageIfBirthdayPassed - 1);
     }
 
-    function onBirthChange() {
-      populateBirthMonthOptions();
-      populateBirthDayOptions();
+    // 結果表示エリアを隠す（年齢が未確定・不正な場合に呼ぶ）
+    function clearResults() {
+      document.getElementById('age-results-section').style.display = 'none';
+      document.getElementById('birth-age-display').style.display = 'none';
+    }
 
-      const yearVal = document.getElementById('birth-year').value;
-      const monthSelect = document.getElementById('birth-month');
-      const daySelect = document.getElementById('birth-day');
+    // 満年齢が確定した時点で呼ぶ：プラン一覧・通話特典を年齢に応じて描画する
+    function applyAge(age) {
       const resultsSection = document.getElementById('age-results-section');
       const ageDisplay = document.getElementById('birth-age-display');
-      const oobMessage = document.getElementById('age-year-oob-message');
       const listEl = document.getElementById('age-plan-list');
       const noMatchEl = document.getElementById('age-no-match');
       const callCard = document.getElementById('age-call-benefit-card');
       const callList = document.getElementById('age-call-benefit-list');
 
-      if (yearVal === '') {
-        monthSelect.disabled = false;
-        daySelect.disabled = false;
-        oobMessage.style.display = 'none';
-        resultsSection.style.display = 'none';
-        ageDisplay.style.display = 'none';
-        return;
-      }
-
-      const yearRaw = yearVal.split('-')[0];
-
-      if (!isYearEligible(yearRaw)) {
-        monthSelect.value = '';
-        daySelect.value = '';
-        monthSelect.disabled = true;
-        daySelect.disabled = true;
-        oobMessage.style.display = 'block';
-        resultsSection.style.display = 'none';
-        ageDisplay.style.display = 'none';
-        return;
-      }
-
-      monthSelect.disabled = false;
-      daySelect.disabled = false;
-      oobMessage.style.display = 'none';
-
-      const monthRaw = monthSelect.value;
-      const dayRaw = daySelect.value;
-
-      if (monthRaw === '' || dayRaw === '') {
-        resultsSection.style.display = 'none';
-        ageDisplay.style.display = 'none';
-        return;
-      }
-
-      const age = calcAge(parseInt(yearRaw, 10), parseInt(monthRaw, 10), parseInt(dayRaw, 10));
       if (isNaN(age) || age < 0) {
-        resultsSection.style.display = 'none';
-        ageDisplay.style.display = 'none';
+        clearResults();
         return;
       }
 
@@ -688,6 +693,82 @@
         callCard.style.display = 'none';
         callList.innerHTML = '';
       }
+    }
+
+    // 入力方法（生年月日／年齢直接入力）の切り替え
+    function onAgeInputModeChange() {
+      const mode = document.querySelector('input[name="age-input-mode"]:checked').value;
+      const birthSection = document.getElementById('birth-input-section');
+      const directSection = document.getElementById('direct-age-input-section');
+      const oobMessage = document.getElementById('age-year-oob-message');
+
+      if (mode === 'birth') {
+        birthSection.style.display = 'block';
+        directSection.style.display = 'none';
+        document.getElementById('direct-age-input').value = '';
+        onBirthChange();
+      } else {
+        birthSection.style.display = 'none';
+        directSection.style.display = 'block';
+        oobMessage.style.display = 'none';
+        clearResults();
+        document.getElementById('direct-age-input').focus();
+      }
+    }
+
+    // 年齢を直接入力するモード
+    function onDirectAgeChange() {
+      const raw = document.getElementById('direct-age-input').value;
+      if (raw === '') {
+        clearResults();
+        return;
+      }
+      applyAge(parseInt(raw, 10));
+    }
+
+    function onBirthChange() {
+      populateBirthMonthOptions();
+      populateBirthDayOptions();
+
+      const yearVal = document.getElementById('birth-year').value;
+      const monthSelect = document.getElementById('birth-month');
+      const daySelect = document.getElementById('birth-day');
+      const oobMessage = document.getElementById('age-year-oob-message');
+
+      if (yearVal === '') {
+        monthSelect.disabled = false;
+        daySelect.disabled = false;
+        oobMessage.style.display = 'none';
+        clearResults();
+        return;
+      }
+
+      const yearRaw = yearVal.split('-')[0];
+
+      if (!isYearEligible(yearRaw)) {
+        monthSelect.value = '';
+        daySelect.value = '';
+        monthSelect.disabled = true;
+        daySelect.disabled = true;
+        oobMessage.style.display = 'block';
+        clearResults();
+        return;
+      }
+
+      monthSelect.disabled = false;
+      daySelect.disabled = false;
+      oobMessage.style.display = 'none';
+
+      const monthRaw = monthSelect.value;
+      const dayRaw = daySelect.value;
+
+      if (monthRaw === '' || dayRaw === '') {
+        clearResults();
+        return;
+      }
+
+      const age = calcAge(parseInt(yearRaw, 10), parseInt(monthRaw, 10), parseInt(dayRaw, 10));
+      applyAge(age);
     }
 
     populateBirthYearOptions();
