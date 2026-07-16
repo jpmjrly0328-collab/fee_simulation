@@ -18,41 +18,16 @@
     }
 
     /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
-    .app-header-fixed,
     header,
-    header *,
-    .header-content,
-    .header-brand {
+    header * {
       background: transparent !important;
       /* 中の余計な背景をすべて透明化 */
     }
 
     /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
-    .app-header-fixed,
     header {
       background-color: #9e7d7e !important;
       background: #1a4d2f !important;
-    }
-
-    /* 💡 ブランド名（VEIL）のデザイン */
-    .header-brand {
-      display: block !important;
-      font-size: 0.75rem !important;
-      font-weight: 900 !important;
-      letter-spacing: 0.2em !important;
-      color: #94a3b8 !important;
-      /* スタイリッシュなライトグレー */
-      margin-bottom: 2px !important;
-    }
-
-    /* 👑 タイトル文字：インラインと合わせて徹底的にダークネイビー化 */
-    .page-title-navy {
-      color: #1e293b !important;
-      font-size: 1.15rem !important;
-      font-weight: 800 !important;
-      margin: 0 !important;
-      letter-spacing: 0.03em !important;
-      display: inline-block !important;
     }
 
     body {
@@ -646,8 +621,6 @@
     }
 
     h1,
-    .page-title-navy,
-    .main-title,
     header h1 {
       color: #1e293b !important;
     }

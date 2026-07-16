@@ -140,6 +140,19 @@
   color:#f3f3f3;
 }
 
+.campaign-box.cb-ymobile{
+  background:linear-gradient(135deg,#ff3d3f 0%,#ff7043 45%,#d50032 100%);
+  box-shadow:0 10px 25px rgba(255,61,63,.35);
+}
+
+.campaign-price-panel{
+  background:rgba(255,255,255,.88);
+  border-radius:12px;
+  padding:10px 14px;
+  margin:12px 0;
+  color:#4a1010;
+}
+
 @keyframes pulse{
   0%,100%{
     transform:scale(1);
@@ -413,7 +426,7 @@
 
     /* 受付終了プランへのジャンプリンク */
     .jump-link-row{
-    margin:32px 0 64px;
+    margin:32px 0 48px;
     text-align:center;
 }
 
@@ -445,9 +458,7 @@ font-size:1.3rem;
     /* 受付終了プランセクション（検索結果との間を広めに開ける） */
     #closed-plan-section {
       scroll-margin-top: 12px;
-      margin-top: 56px;
-      padding-top: 28px;
-      border-top: 3px dashed var(--border-color);
+      margin-top: 192px;
     }
 
     .closed-plan-intro {
@@ -476,7 +487,7 @@ font-size:1.3rem;
   <div class="container">
     <h1 class="veil-outer-title">プラン検索</h1>
 
-    <h2>開催中のキャンペーン（終了日未定）</h2>
+    <h2 style="margin-top:45px;">開催中のキャンペーン（終了日未定）</h2>
 
 <div class="campaign-box">
 
@@ -497,27 +508,87 @@ font-size:1.3rem;
   </div>
 
   <div class="campaign-price">
-    13ヶ月間 月額 ▲￥660
+    13ヶ月間 月額￥660割引
   </div>
 
+  <div class="campaign-price-panel">
   <div style="font-size:1.1rem;font-weight:bold;">
   月額
   <span>￥3,828</span>
   <span style="color:#ff1744;font-size:1.3rem;font-weight:900;">→</span>
-  <span style="color:#ff1744;font-size:1.6rem;font-weight:900;text-shadow:0 2px 8px rgba(255,23,68,.35);">
+  <span style="color:#ff1744;font-size:1.6rem;font-weight:900;">
     ￥3,168
   </span>
 </div>
+  </div>
 
   <div class="campaign-note">
     ※新規加入対象（条件あり）<br>
-    14ヶ月目以降もau PAY ゴールドカード支払いで継続可能
+    　1回線につき1つまで<br>
+    　プラン変更は1度限り、UQの別プランからの変更も対象、他社からの乗り換えも可能<br>
+    　14ヶ月目以降もau PAY ゴールドカード支払いで継続可能
   </div>
 
 </div>
 
+<div class="campaign-box cb-ymobile">
+
+  <div class="campaign-badge">
+    期間限定キャンペーン
+  </div>
+
+  <div style="font-size:1rem;">
+    Y! mobile
+  </div>
+
+  <div class="campaign-title">
+    超！おトク割
+  </div>
+
+  <div>
+    シンプル3 M / L 新規加入・プラン変更で
+  </div>
+
+  <div class="campaign-price">
+    加入翌月から1年間 月額￥1,100割引
+  </div>
+
+  <div class="campaign-price-panel">
+  <div style="font-size:1.1rem;font-weight:bold;">
+  シンプル3 M　月額
+  <span>￥4,378</span>
+  <span style="color:#d50000;font-size:1.3rem;font-weight:900;">→</span>
+  <span style="color:#d50000;font-size:1.6rem;font-weight:900;">
+    ￥3,278
+  </span>
+</div>
+
+  <div style="font-size:1.1rem;font-weight:bold;margin-top:8px;">
+  シンプル3 L　月額
+  <span>￥5,478</span>
+  <span style="color:#d50000;font-size:1.3rem;font-weight:900;">→</span>
+  <span style="color:#d50000;font-size:1.6rem;font-weight:900;">
+    ￥4,378
+  </span>
+</div>
+  <div style="font-size:.75rem;color:#4a1010;opacity:.75;margin-top:6px;">
+    ※超！おトク割のみ適用時の月額
+  </div>
+  </div>
+
+  <div class="campaign-note">
+    ※PayPayカード ゴールド併用でさらに￥770割引（シンプル3 M：併用時月額￥2,508 / シンプル3 L：併用時月額￥3,608）<br>
+    ※新規加入・プラン変更が対象。同一回線での適用は1回限り<br>
+    ※「家族割引サービス」など他の割引との併用不可（条件重複時は他割引を優先）<br>
+    ※2026年7月17日開始（終了日未定）
+  </div>
+
+</div>
+
+    <h2 style="margin-top:128px;">プランを検索</h2>
+
     <div class="jump-link-row">
-      <a href="#closed-plan-section" onclick="document.getElementById('closed-plan-section').scrollIntoView({behavior:'smooth'}); return false;">📴 受付終了プランを探す ▼</a>
+      <a href="#closed-plan-section" onclick="document.getElementById('closed-plan-section').scrollIntoView({behavior:'smooth'}); return false;">受付終了プランを探す ▼</a>
     </div>
 
     <!-- ===================== 検索 ===================== -->
@@ -569,7 +640,7 @@ font-size:1.3rem;
           </label>
           <p class="usage-desc">10分程度までの通話（LINE等のアプリでの通話を除く）が対象</p>
         </div>
-        <p>目安　1GB ≒ 動画1時間試聴</p>
+        <p>　目安　1GB ≒ 動画1時間試聴</p>
       </fieldset>
 
       <fieldset id="fieldset-advanced" class="card mode-fieldset" disabled>
@@ -597,7 +668,7 @@ font-size:1.3rem;
         </div>
 
         <div class="adv-field">
-          <label>月額（円）</label>
+          <label>月額</label>
           <div class="range-input-row">
             <input type="number" id="adv-price-min" min="0" placeholder="下限">
             <span>〜</span>
@@ -608,10 +679,10 @@ font-size:1.3rem;
         <div class="adv-field">
           <label>割引（チェックした条件を全て満たすプランに絞り込み）</label>
           <div class="checkbox-group discount-checkbox-group">
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="family"><span>家族割がある</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="net"><span>ネットの割引がある</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="card"><span>支払いカードの割引がある</span></label>
-            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="ele"><span>でんきの割引がある</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="family"><span>家族割あり</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="net"><span>ネット割あり</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="card"><span>支払いカード割あり</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="ele"><span>でんき割あり</span></label>
           </div>
         </div>
 
@@ -714,8 +785,12 @@ font-size:1.3rem;
           desc: "2種類の小容量の定額プラン。<br>キャリアメールは別途契約が必要なことに注意。",
           strages: [{ giga: "4GB", price: 2750, type: "A" }, { giga: "10GB", price: 3850, type: "A" }] },
         { name: "ahamo", discounts: { family: [], card: [], net: null, ele: null, long: [] },
-          desc: "割引無しの高コスパ最強プラン。<br>5分間かけ放題付きかつ+80GBのオプションも選べてあらゆる人が使いやすいプラン。",
-          strages: [{ giga: "30GB", price: 2970, type: "B" }, { giga: "110GB", price: 4950, type: "C" }] },
+          strages: [
+            { giga: "30GB", price: 2970, type: "B", memo: "ahamo大盛りで110GBに ￥1,980",
+              desc: "割引無しの高コスパ最強プラン。<br>5分間かけ放題付きであらゆる人が使いやすいプラン。" },
+            { giga: "110GB", price: 4950, type: "C", memo: "ahamo大盛り適用（+80GB ￥1,980）",
+              desc: "30GBプランに「ahamo大盛り」オプション（+80GB ￥1,980）を適用した大容量プラン。<br>5分間かけ放題付きでたくさん使いたい人におすすめ。" },
+          ] },
       ],
       au: [
         { name: "バリューリンクプラン", discounts: { family: [660, 1210], card: [220], net: 1100, ele: null, long: [] },
@@ -738,9 +813,18 @@ font-size:1.3rem;
         { name: "コミコミプランバリュー", discounts: { family: [], card: [], net: null, ele: null, long: [] },
           desc: "35GBの定額プランで10分かけ放題付き。<br>Pontaパスとau Starlink Directが追加料金無しで利用可能。",
           strages: [{ giga: "35GB", price: 3828, type: "B" }] },
+        { name: "コミコミプランバリュー（コミコミおトク割 適用時）", discounts: { family: [], card: [], net: null, ele: null, long: [] },
+          desc: "新規加入から13ヶ月間、月額￥660割引が適用される期間限定キャンペーン価格。<br>14ヶ月目以降はau PAY ゴールドカード支払いで継続、それ以外は通常料金（￥3,828）に戻る。",
+          strages: [{ giga: "35GB", price: 3168, type: "B" }] },
+        { name: "コミコミプランバリュー（増量オプション +5GB 適用）", discounts: { family: [], card: [], net: null, ele: null, long: [] },
+          desc: "増量オプション（+5GB / 月額+￥550）適用後の容量・料金。",
+          strages: [{ giga: "40GB", price: 4378, type: "B" }] },
         { name: "トクトクプラン2", discounts: { family: [550], card: [220], net: 1100, ele: 1100, long: [] },
           desc: "5GBを境に料金が変動。<br>金額は異なるが自宅セット割か家族セット割の割引を選択可能で、より広い範囲で割引適用が可能。",
           strages: [{ giga: "~5GB", price: 2948, type: "A" }, { giga: "5~30GB", price: 4048, type: "B" }] },
+        { name: "トクトクプラン2（増量オプション +5GB 適用）", discounts: { family: [550], card: [220], net: 1100, ele: 1100, long: [] },
+          desc: "増量オプション（+5GB / 月額+￥550）適用後の容量・料金。",
+          strages: [{ giga: "5~35GB", price: 4598, type: "B" }] },
       ],
       softbank: [
         { name: "ペイトク2", discounts: { family: [660, 1210], card: [330, 550], net: 1100, ele: null, long: [] },
@@ -760,9 +844,15 @@ font-size:1.3rem;
         { name: "シンプル3 M", discounts: { family: [1100], card: [330, 550], net: 1650, ele: 1100, long: [] },
           desc: "中容量プランで各種割引の重複が可能で、PayPayカードはゴールドならさらに割引。<br>家族割引は2回線目以降から適用なので注意。",
           strages: [{ giga: "30GB", price: 4378, type: "B" }, { giga: "35GB", price: 4928, type: "B" }] },
+        { name: "シンプル3 M（超！おトク割 適用時）", discounts: { family: [], card: [], net: null, ele: null, long: [] },
+          desc: "加入翌月から1年間、月額割引￥1,100が適用される期間限定キャンペーン価格（通常月額￥4,378→￥3,278）。<br>他の割引との併用不可。2年目以降は通常料金に戻る。",
+          strages: [{ giga: "30GB", price: 3278, type: "B" }] },
         { name: "シンプル3 L", discounts: { family: [1100], card: [330, 550], net: 1650, ele: 1100, long: [] },
           desc: "10分国内かけ放題がついた中容量プランで各種割引重複可能。<br>家族割引は2回線目以降から適用なので注意。",
           strages: [{ giga: "35GB", price: 5478, type: "B" }, { giga: "40GB", price: 6028, type: "B" }] },
+        { name: "シンプル3 L（超！おトク割 適用時）", discounts: { family: [], card: [], net: null, ele: null, long: [] },
+          desc: "加入翌月から1年間、月額￥1,100割引が適用される期間限定キャンペーン価格（通常月額￥5,478→￥4,378）。<br>他の割引との併用不可。2年目以降は通常料金に戻る。",
+          strages: [{ giga: "35GB", price: 4378, type: "B" }] },
       ],
       Rakuten: [
         { name: "最強プラン", discounts: { family: [110], card: [], net: null, ele: null, long: [] },
@@ -773,15 +863,13 @@ font-size:1.3rem;
 
     const carrierLabels = { docomo: "ドコモ", au: "au", UQ: "UQ mobile", softbank: "softbank", Ymobile: "Y! mobile", Rakuten: "Rakuten" };
 
-    // キャリアごとの基準色相（色相環上の角度）。同キャリア内のプランはこの色相を保ったまま明度を変えて塗り分ける
-    const carrierHue = { docomo: 350, au: 28, UQ: 200, softbank: 46, Ymobile: 322, Rakuten: 265 };
-
     function buildPlanColor(carrier) {
       return {
       accent: carrierColor[carrier],
       bg: carrierBgColor[carrier],
       };
     }
+
 
     // キャリアごとの固定カラー（キャリアバッジの枠線・文字色に使用）
     const carrierColor = {
@@ -838,8 +926,9 @@ font-size:1.3rem;
               carrierLabel: carrierLabels[carrier],
               carrierColor: carrierColor[carrier],
               planName: plan.name,
-              desc: plan.desc,
+              desc: tier.desc || plan.desc,
               giga: tier.giga,
+              gigaMemo: tier.memo || null,
               gbMin: range.min,
               gbMax: range.max,
               price: tier.price,
@@ -961,7 +1050,15 @@ font-size:1.3rem;
     }
 
     // ===================== 税込/税抜表示・割引選択UIの共通ヘルパー =====================
-    const DISCOUNT_LABELS = { family: "家族割", card: "カード割", net: "ネット割", ele: "でんき割", long: "長期利用割" };
+    // 割引名は各キャリアの正式名称に合わせる（compare.html／index.htmlの表記に準拠）
+    const DISCOUNT_LABELS = {
+      docomo: { family: "みんなドコモ割", card: "dカードお支払い割", net: "ドコモ光 / home 5G セット割", ele: "ドコモでんきセット割", long: "長期利用割" },
+      au: { family: "家族割プラス", card: "au PAY カードお支払い割", net: "auスマートバリュー", ele: "でんき割", long: "長期利用割" },
+      UQ: { family: "家族セット割", card: "au PAY カードお支払い割", net: "自宅セット割", ele: "でんきセット割", long: "長期利用割" },
+      softbank: { family: "新みんな家族割", card: "PayPayカード割", net: "おうち割光セット", ele: "でんき割", long: "長期利用割" },
+      Ymobile: { family: "家族割引", card: "PayPayカード割", net: "おうち割 光セット(A)", ele: "おうち割 でんきセット(E)", long: "長期利用割" },
+      Rakuten: { family: "最強家族割", card: "カード割", net: "ネット割", ele: "でんき割", long: "長期利用割" },
+    };
 
     // 税込価格から税抜価格（10%として逆算、円未満切り捨て）を求める
     function taxExcl(priceIncl) {
@@ -969,8 +1066,8 @@ font-size:1.3rem;
     }
 
     // 段階制の割引（family/card/long）のラベルを、段階数に応じて組み立てる
-    function buildDiscountTierLabel(key, tierIndex, tierCount) {
-      const base = DISCOUNT_LABELS[key];
+    function buildDiscountTierLabel(carrier, key, tierIndex, tierCount) {
+      const base = DISCOUNT_LABELS[carrier][key];
       if (tierCount <= 1) return base;
       if (key === 'family') return tierIndex === 0 ? `${base}（2回線）` : `${base}（3回線以上）`;
       if (key === 'card') return tierIndex === 0 ? `${base}（通常カード）` : `${base}（ゴールドカード等）`;
@@ -980,23 +1077,27 @@ font-size:1.3rem;
 
     // age.html と同じ「割引を利用する」マスターチェック＋個別割引（複数段階は排他選択）の表示方式
     // 該当する割引が一つも無ければ「対象の割引なし」の静的表示にする
-    // Y!mobileのみ、家族割・ネット割・でんき割は同時に選べない（重複不可）扱いにする
-    function buildDiscountChecklistHtml(carrier, discounts, showTaxExcl) {
+    // Y!mobile、およびUQ「トクトクプラン2」系は、家族割・ネット割・でんき割は同時に選べない（重複不可）扱いにする
+    const FAMILY_NET_ELE_EXCLUSIVE_PLAN_PREFIXES = ['トクトクプラン2'];
+
+    function buildDiscountChecklistHtml(carrier, discounts, showTaxExcl, planName) {
       const rows = [];
-      const YMOBILE_EXCLUSIVE_GROUP = 'ymobile-family-net-ele';
-      const isYmobileExclusive = carrier === 'Ymobile';
+      const EXCLUSIVE_GROUP = 'family-net-ele-exclusive';
+      const isExclusive = carrier === 'Ymobile' ||
+        FAMILY_NET_ELE_EXCLUSIVE_PLAN_PREFIXES.some(prefix => (planName || '').startsWith(prefix));
 
       ['family', 'card', 'long'].forEach(key => {
         const tiers = discounts[key] || [];
         tiers.forEach((value, i) => {
-          const label = buildDiscountTierLabel(key, i, tiers.length);
+          const label = buildDiscountTierLabel(carrier, key, i, tiers.length);
           const exclHtml = showTaxExcl ? `<span class="tax-excl-inline">（税抜▲￥${taxExcl(value).toLocaleString()}）</span>` : '';
-          const tierGroup = (key === 'family' && isYmobileExclusive) ? YMOBILE_EXCLUSIVE_GROUP : (tiers.length > 1 ? key : null);
+          const tierGroup = (key === 'family' && isExclusive) ? EXCLUSIVE_GROUP : (tiers.length > 1 ? key : null);
           const tierGroupAttr = tierGroup ? ` data-tier-group="${tierGroup}"` : '';
           rows.push(`
             <label class="checkbox-label">
               <input type="checkbox" class="card-discount-cb" data-amount="${value}"${tierGroupAttr} disabled>
               <span>${label} <span class="discount-amount">▲￥${value.toLocaleString()}</span>${exclHtml}</span>
+
             </label>`);
         });
       });
@@ -1005,12 +1106,12 @@ font-size:1.3rem;
         const value = discounts[key];
         if (value === null || value === undefined) return;
         const exclHtml = showTaxExcl ? `<span class="tax-excl-inline">（税抜▲￥${taxExcl(value).toLocaleString()}）</span>` : '';
-        const tierGroup = isYmobileExclusive ? YMOBILE_EXCLUSIVE_GROUP : null;
+        const tierGroup = isExclusive ? EXCLUSIVE_GROUP : null;
         const tierGroupAttr = tierGroup ? ` data-tier-group="${tierGroup}"` : '';
         rows.push(`
           <label class="checkbox-label">
             <input type="checkbox" class="card-discount-cb" data-amount="${value}"${tierGroupAttr} disabled>
-            <span>${DISCOUNT_LABELS[key]} <span class="discount-amount">▲￥${value.toLocaleString()}</span>${exclHtml}</span>
+            <span>${DISCOUNT_LABELS[carrier][key]} <span class="discount-amount">▲￥${value.toLocaleString()}</span>${exclHtml}</span>
           </label>`);
       });
 
@@ -1038,8 +1139,8 @@ font-size:1.3rem;
       return `
         <div class="discount-total-row">割引合計：<span class="discount-total-amount">▲￥0</span>${discountTaxExclHtml}</div>
         <div class="final-total-row">
-          <span class="final-before-wrap">月額目安（割引前）：<span class="final-before-incl">￥${price.toLocaleString()}</span>${beforeTaxExclHtml}</span>
-          <span class="final-after-wrap">月額目安（割引後）：<span class="final-after-incl">￥${price.toLocaleString()}</span>${afterTaxExclHtml}</span>
+          <span class="final-before-wrap">月額：<span class="final-before-incl">￥${price.toLocaleString()}</span>${beforeTaxExclHtml}</span>
+          <span class="final-after-wrap">月額：<span class="final-after-incl">￥${price.toLocaleString()}</span>${afterTaxExclHtml}</span>
         </div>`;
     }
 
@@ -1052,11 +1153,11 @@ font-size:1.3rem;
         <div class="result-card" data-price="${e.price}" style="border-left-color:${e.color.accent}; background:${e.color.bg};">
           <span class="result-card-carrier" style="border-color:${e.carrierColor}; color:${e.carrierColor};">${e.carrierLabel}</span>
           <div class="result-card-name">${nameHtml}</div>
-          <div class="result-card-giga">${e.giga}</div>
+          <div class="result-card-giga">${e.giga}${e.gigaMemo ? `（${e.gigaMemo}）` : ''}</div>
           <div class="result-card-price">￥${e.price.toLocaleString()}<span class="unit">/月（税込）</span></div>
           ${taxExclLineHtml}
           <div class="result-card-desc">${e.desc}</div>
-          ${buildDiscountChecklistHtml(e.carrier, e.discounts, showTaxExcl)}
+          ${buildDiscountChecklistHtml(e.carrier, e.discounts, showTaxExcl, e.planName)}
           ${buildFinalTotalHtml(e.price, showTaxExcl)}
         </div>
       `;

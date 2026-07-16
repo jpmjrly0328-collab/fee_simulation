@@ -38,41 +38,16 @@
   }
 
   /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
-  .app-header-fixed,
   header,
-  header *,
-  .header-content,
-  .header-brand {
+  header * {
     background: transparent !important;
     /* 中の余計な背景をすべて透明化 */
   }
 
   /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
-  .app-header-fixed,
   header {
     background-color: #9e7d7e !important;
     background: #1a4d2f !important;
-  }
-
-  /* 💡 ブランド名（VEIL）のデザイン */
-  .header-brand {
-    display: block !important;
-    font-size: 0.75rem !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.2em !important;
-    color: #94a3b8 !important;
-    /* スタイリッシュなライトグレー */
-    margin-bottom: 2px !important;
-  }
-
-  /* 👑 タイトル文字：インラインと合わせて徹底的にダークネイビー化 */
-  .page-title-navy {
-    color: #1e293b !important;
-    font-size: 1.15rem !important;
-    font-weight: 800 !important;
-    margin: 0 !important;
-    letter-spacing: 0.03em !important;
-    display: inline-block !important;
   }
 
   html,
@@ -668,19 +643,11 @@
   color: #1e293b;
   cursor: pointer;
   font-size: 0.75rem;
-  /* ↓ 効かないので削除してOKです */
-  /* height: 100%; */
-  /* width: auto; */
-  /* object-fit: contain; */
 }
 
 .footer-tab.active {
   color: #ffffff !important;
   font-weight: bold;
-  /* ↓ こちらも不要なので削除 */
-  /* height: 100%; */
-  /* width: auto; */
-  /* object-fit: contain; */
 }
 
 /* 💡 ここを追加！画像と絵文字のサイズを統一します */
@@ -699,8 +666,6 @@
   }
 
   h1,
-  .page-title-navy,
-  .main-title,
   header h1 {
     color: #1e293b !important;
   }
@@ -946,10 +911,16 @@
             <div class="subtotal-box bg-plan">プラン月額: <span id="subtotal-plan">￥0</span></div>
             <div class="day-subtotal-box">プラン月額（日割り）: <span id="day-subtotal-plan">￥0</span></div>
           </div>
+          <div style="text-align: right; margin-top: 10px;">
+            <button type="button" class="btn-reset" onclick="resetPlanInputs()">
+              <span class="btn-reset-icon">🔄</span> リセット
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="card">
-          <h2>
+      <div class="card">
+        <h2>
             <span>オプション</span>
             <label class="clear-all-label"><input type="checkbox" id="clear-options"
                 onchange="clearAllGroup('options')">すべての選択を解除</label>
@@ -1005,6 +976,8 @@
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活オプション　￥2,200</label>
+            <div>　　</div>
+            <label class="checkbox-label">　　 AppleCare+（※iPhoneのみ、オプションの計算に含めない）<br>　　 ￥980<br>　　 または2年間で￥19,800</label>
           </div>
 
           <div class="subtotal-wrapper">
@@ -1188,7 +1161,6 @@
           </div>
         </div>
 
-      </div>
       <button type="button" class="btn-reset" onclick="resetAllInputs()">
         <span class="btn-reset-icon">🔄</span> 全てをリセット
       </button>
@@ -1901,7 +1873,7 @@
     // ★【修正箇所】金額計算メインロジック。未入力項目があっても途中で処理を殺さず最後まで計算して合計を反映
     function updatePriceOptions() {
       // 1. 要素の取得と基本チェック
-      const isValid = typeof validateInputs === 'function' ? validateInputs() : true;
+      if (typeof validateInputs === 'function') validateInputs();
       const strageSelect = document.getElementById('strage-select');
       const selectedStrage = strageSelect ? strageSelect.value : '';
 
@@ -2092,8 +2064,6 @@
 
       if (continueFeeBox2) continueFeeBox2.classList.add('disabled-box');
       if (continueFeeBox3) continueFeeBox3.classList.add('disabled-box');
-      // if(bkContinue2) bkContinue2.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
-      // if(bkContinue3) bkContinue3.innerHTML = '<span class="breakdown-line">分割払いが選択されていません</span>';
 
       if (kaedokiMonth2Box) kaedokiMonth2Box.classList.add('disabled-box');
       if (kaedokiMonth323Box) kaedokiMonth323Box.classList.add('disabled-box');
@@ -2546,6 +2516,19 @@
           requestAnimationFrame(() => resizeIframeToContent(pageWorks));
         }
       }
+    }
+    function resetPlanInputs() {
+      // プラン・容量・日付入力だけをリセットする（オプションや割引の選択はそのまま）
+      const planSelect = document.getElementById('plan-select');
+      const today = document.getElementById('today');
+
+      if (planSelect) planSelect.value = "";
+      if (today) today.value = "";
+
+      updateStrageSelect();
+      optionRules();
+      offOptions();
+      updatePriceOptions();
     }
     function resetAllInputs() {
       // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す

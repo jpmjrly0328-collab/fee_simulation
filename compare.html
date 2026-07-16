@@ -151,6 +151,18 @@
             margin-bottom: 4px;
         }
 
+        /* 💡「40GB（増量オプションⅡ　￥550 追加後）」等、長い容量名が
+              省略(…)されて途中で切れてしまわないよう、③容量の値だけは
+              1行固定をやめて折り返しを許可し、必ず全文が見えるようにする */
+        .sim-title-value-strage {
+            font-size: 7px;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
         .sim-title-label-company {
             color: #007bff;
         }
@@ -383,7 +395,7 @@
                     <label>① 携帯会社</label>
                     <select id="sim-left-company" onchange="sim_updatePlans('left')">
                         <option value="">選択してください</option>
-                        <option value="docomo">ドコモ</option>
+                        <option value="docomo">docomo</option>
                         <option value="au">au</option>
                         <option value="UQ">UQ mobile</option>
                         <option value="softbank">softbank</option>
@@ -482,7 +494,7 @@
                     <label>① 携帯会社</label>
                     <select id="sim-right-company" onchange="sim_updatePlans('right')">
                         <option value="">選択してください</option>
-                        <option value="docomo">ドコモ</option>
+                        <option value="docomo">docomo</option>
                         <option value="au">au</option>
                         <option value="UQ">UQ mobile</option>
                         <option value="softbank">softbank</option>
@@ -717,7 +729,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
-                        denyDiscounts: ["d_disc_old", "d_opt_5mAh", "d_opt_fullAh"],
+                        denyDiscounts: ["d_disc_old"],
                         comment: "dポイント最大2,500ptで実質値引き。ポイ活を始めてみたい人<br>向け。<br>使用量20GBを境に料金が変動。",
                         strages: [
                             { giga: "~20GB", price: 7898 },
@@ -730,7 +742,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
-                        denyDiscounts: ["d_disc_family", "d_disc_old", "d_opt_5mAh", "d_opt_fullAh"],
+                        denyDiscounts: ["d_disc_family", "d_disc_old"],
                         comment: "2種類の小容量の定額プラン。<br>キャリアメールは別途契約が必要なことに注意。",
                         strages: [
                             { giga: "4GB", price: 2750 },
@@ -796,8 +808,9 @@
                         id: "u_komi", name: "コミコミプランバリュー",
                         allowOption: true,
                         denyOptions: ["u_opt_10mToku", "u_opt_fullToku", "u_opt_60mToku"],
-                        allowDiscount: false,
-                        comment: "35GBの定額プランで10分かけ放題付き。<br>Pontaパスとau Starlink Directが追加料金無しで利用可能。<br>データの繰り越しも可能。",
+                        allowDiscount: true,
+                        denyDiscounts: ["u_disc_family", "u_disc_select"],
+                        comment: "35GBの定額プランで10分かけ放題付き。<br>Pontaパスとau Starlink Directが追加料金無しで利用可能。<br>データの繰り越しも可能。<br>新規加入なら「コミコミおトク割」で13ヶ月間月額￥660割引（14ヶ月目以降はau PAY ゴールドカード支払いで継続）。",
                         strages: [
                             { giga: "35GB", price: 3828 },
                             { giga: "40GB（増量オプションⅡ　￥550 追加後）", price: 4378 }
@@ -808,6 +821,7 @@
                         allowOption: true,
                         denyOptions: ["u_opt_10mKomi", "u_opt_fullKomi"],
                         allowDiscount: true,
+                        denyDiscounts: ["u_disc_komi_toku"],
                         comment: "5GBを境に料金が変動。<br>金額は異なるが自宅セット割か家族セット割の割引を選択可能で、より広い範囲で割引適用が可能。",
                         strages: [
                             { giga: "~5GB", price: 4048 },
@@ -856,7 +870,7 @@
                         allowOption: true,
                         denyOptions: ["y_opt_10m3l", "y_opt_full3l"],
                         allowDiscount: true,
-                        denyDiscounts: ["y_disc_ele"],
+                        denyDiscounts: ["y_disc_ele", "y_disc_toku"],
                         comment: "小容量プランで各種割引の重複が可能で、PayPayカードは<br>ゴールドならさらに割引。<br>ただし、でんきセット(E)は対象外で家族割引は2回線目以降から<br>適用。",
                         strages: [
                             { giga: "5GB", price: 3278 },
@@ -868,7 +882,7 @@
                         allowOption: true,
                         denyOptions: ["y_opt_10m3l", "y_opt_full3l"],
                         allowDiscount: true,
-                        comment: "中容量プランで各種割引の重複が可能で、PayPayカードは<br>ゴールドならさらに割引。<br>家族割引は2回線目以降から適用なので注意。",
+                        comment: "中容量プランで各種割引の重複が可能で、PayPayカードは<br>ゴールドならさらに割引。<br>家族割引は2回線目以降から適用なので注意。<br>新規加入・プラン変更なら「超！おトク割」で加入翌月から1年間月額￥1,100割引（他の割引との併用不可）。",
                         strages: [
                             { giga: "30GB", price: 4378 },
                             { giga: "35GB（￥550 追加後）", price: 4928 }
@@ -879,7 +893,7 @@
                         allowOption: true,
                         denyOptions: ["y_opt_10m", "y_opt_full"],
                         allowDiscount: true,
-                        comment: "10分国内かけ放題がついた中容量プランで各種割引重複可能。<br>PayPayカードはゴールドでさらにお得で、家族割引は2回線目以降から適用なので注意。",
+                        comment: "10分国内かけ放題がついた中容量プランで各種割引重複可能。<br>PayPayカードはゴールドでさらにお得で、家族割引は2回線目以降から適用なので注意。<br>新規加入・プラン変更なら「超！おトク割」で加入翌月から1年間月額￥1,100割引（他の割引との併用不可）。",
                         strages: [
                             { giga: "35GB", price: 5478 },
                             { giga: "40GB（￥550 追加後）", price: 6028 }
@@ -988,7 +1002,8 @@
                             { id: "u_select_home", name: "自宅セット割", value: 1100 },
                             { id: "u_select_family", name: "家族セット割", value: 550 }
                         ]
-                    }
+                    },
+                    { id: "u_disc_komi_toku", name: "コミコミおトク割（新規13ヶ月間）", value: 660, exclusive: true }
                 ],
                 softbank: [
                     {
@@ -1032,7 +1047,8 @@
                             { id: "y_disc_family", name: "家族割引", value: 1100 },
                             { id: "y_disc_ele", name: "おうち割 でんきセット(E)", value: 1100 },
                         ]
-                    }
+                    },
+                    { id: "y_disc_toku", name: "超！おトク割（加入翌月から1年間）", value: 1100, exclusive: true }
                 ],
                 Rakuten: [
                     { id: "r_disc_family", name: "最強家族割", value: 110 }
@@ -1161,7 +1177,7 @@
                         checkbox.value = disc.id;
                         // 💡「割引を適用するか」がONになるまでは各割引項目を選択不可にする
                         checkbox.disabled = true;
-                        checkbox.onchange = () => { sim_handleDiscountChange(side); };
+                        checkbox.onchange = () => { sim_onDiscountCheckboxChange(side, checkbox); };
 
                         const textSpan = document.createElement("span");
                         // 💡 スペースの無い長い項目名は、任意の位置で自然に改行できるよう
@@ -1176,7 +1192,9 @@
                             .replace('みんなドコモ割', 'みんな<wbr>ドコモ割')
                             .replace('家族割プラス', '家族割<wbr>プラス')
                             .replace('新みんな家族割', '新みんな<wbr>家族割')
-                            .replace('自宅または家族セット割', '自宅または<wbr>家族<wbr>セット割');
+                            .replace('自宅または家族セット割', '自宅または<wbr>家族<wbr>セット割')
+                            .replace('コミコミおトク割（新規13ヶ月間）', 'コミコミ<wbr>おトク割<wbr>（新規13ヶ月間）')
+                            .replace('超！おトク割（加入翌月から1年間）', '超！おトク割<wbr>（加入翌月から<wbr>1年間）');
 
                         label.appendChild(checkbox);
                         label.appendChild(textSpan);
@@ -1217,6 +1235,31 @@
                 cb.disabled = !enabled;
                 if (!enabled) cb.checked = false;
             });
+            sim_handleDiscountChange(side);
+        }
+
+        // 💡「コミコミおトク割」「超！おトク割」など、他の割引と併用不可（exclusive）な割引の
+        //     チェックON/OFFに応じて、同時に選べないチェックボックスを自動で解除する
+        function sim_onDiscountCheckboxChange(side, changedCheckbox) {
+            const company = document.getElementById(`sim-${side}-company`).value;
+            const allDiscounts = simData.discounts[company] || [];
+            const changedDisc = allDiscounts.find(d => d.id === changedCheckbox.value);
+            const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]`);
+
+            if (changedCheckbox.checked) {
+                if (changedDisc && changedDisc.exclusive) {
+                    checkboxes.forEach(cb => {
+                        if (cb !== changedCheckbox) cb.checked = false;
+                    });
+                } else {
+                    checkboxes.forEach(cb => {
+                        if (cb === changedCheckbox) return;
+                        const d = allDiscounts.find(x => x.id === cb.value);
+                        if (d && d.exclusive) cb.checked = false;
+                    });
+                }
+            }
+
             sim_handleDiscountChange(side);
         }
 
@@ -1458,14 +1501,14 @@
             if (titleElement) {
                 if (company && currentPlan && selectedStrage) {
                     const companyName = companyEl.options[companyEl.selectedIndex].text;
-                    const strageName = selectedStrage.dataset.text.split('　')[0];
+                    const strageName = selectedStrage.dataset.text;
                     titleElement.innerHTML =
                         `<span class="sim-title-line sim-title-label-company">①キャリア</span>` +
                         `<span class="sim-title-line sim-title-value">${companyName}</span>` +
                         `<span class="sim-title-line sim-title-label-plan">②プラン名</span>` +
                         `<span class="sim-title-line sim-title-value">${currentPlan.name}</span>` +
                         `<span class="sim-title-line sim-title-label-strage">③容量</span>` +
-                        `<span class="sim-title-line sim-title-value">${strageName}</span>`;
+                        `<span class="sim-title-line sim-title-value sim-title-value-strage">${strageName}</span>`;
                 } else {
                     // 💡 未選択時のデフォルトメッセージは表示しない
                     titleElement.textContent = "";
