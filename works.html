@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ツール一覧</title>
+<link rel="stylesheet" href="style.css">
+<style>
+    body {
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        line-height: 1.6;
+        margin: 0;
+        padding: 16px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: var(--bg-card);
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        padding: 16px;
+        margin-bottom: 128px;
+        border: 1px solid var(--border-color);
+    }
+
+    h2 {
+        font-size: 1.15rem;
+        color: #111;
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .section {
+        margin-bottom: 14px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        font-size: 0.95rem;
+        background-color: #fff;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    select:focus {
+        border-color: var(--primary-color);
+    }
+
+    select:disabled {
+        background-color: #e9ecef;
+        color: #adb5bd;
+    }
+
+    .price-box {
+        width: 100%;
+        border-radius: 10px;
+        padding: 18px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--border-color);
+        background-color: var(--primary-light);
+        border-top: 4px solid var(--primary-color);
+        box-sizing: border-box;
+    }
+
+    .price-box .price-label {
+        font-size: 1.2rem;
+        color: var(--text-sub);
+        margin-bottom: 8px;
+        color: #000;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .price-box .price-amount {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        text-align: right;
+    }
+
+    .price-box.h5g-1 {
+        background-color: #eef5ff;
+        border-top: 4px solid var(--accent-divide);
+        text-align: left;
+    }
+
+    .price-box.h5g-1 .price-amount {
+        color: #e60012;
+        text-align: right;
+    }
+
+    .price-box.h5g-2 {
+        background-color: var(--accent-once-light);
+        border-top: 4px solid var(--accent-once);
+        text-align: left;
+    }
+
+    .price-box.h5g-2 .price-amount {
+        color: #e60012;
+        text-align: right;
+    }
+
+    .price-box.h5g-3 {
+        background-color: var(--accent-kaedoki-light);
+        border-top: 4px solid var(--accent-kaedoki);
+        text-align: left;
+    }
+
+    .price-box.h5g-3 .price-amount {
+        color: #e60012;
+        text-align: right;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2>smartあんしん補償月額検索</h2>
+
+        <div class="section">
+            <label for="dv-os">OS</label>
+            <select id="dv-os" onchange="dv_updateSeries()">
+                <option value="">選択してください</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label for="dv-series">シリーズ</label>
+            <select id="dv-series" onchange="dv_updateModel()" disabled>
+                <option value="">選択してください</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label for="dv-model">機種名</label>
+            <select id="dv-model" onchange="dv_updatePrice()" disabled>
+                <option value="">選択してください</option>
+            </select>
+        </div>
+
+        <div class="price-box">
+            <div class="price-label">月額</div>
+            <div class="price-amount" id="dv-price">-</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>home 5G 月額シミュレーター</h2>
+
+        <div class="section">
+            <label for="h5g-buy-mode">本体購入方法</label>
+            <select id="h5g-buy-mode" onchange="h5g_update()">
+                <option value="">選択してください</option>
+                <option value="一括">一括</option>
+                <option value="分割">分割</option>
+                <option value="一括（キャンペーン）">一括（キャンペーン）</option>
+            </select>
+        </div>
+
+        <div class="result-container">
+            <div class="price-box h5g-1">
+                <strong>1ヶ月目</strong>
+                <div class="price-breakdown">
+                    <span class="breakdown-line" id="h5g-m1-device">本体代：-</span>
+                    <span class="breakdown-line" id="h5g-m1-fee">月額料金：-</span>
+                    <span class="breakdown-line" id="h5g-m1-discount">割引：-</span>
+                </div>
+                <div class="price-amount" id="h5g-m1-total">-</div>
+            </div>
+
+            <div class="price-box h5g-2">
+                <strong>2〜48ヶ月目</strong>
+                <div class="price-breakdown">
+                    <span class="breakdown-line" id="h5g-m2-device">本体代：-</span>
+                    <span class="breakdown-line" id="h5g-m2-fee">月額料金：-</span>
+                    <span class="breakdown-line" id="h5g-m2-discount">割引：-</span>
+                </div>
+                <div class="price-amount" id="h5g-m2-total">-</div>
+            </div>
+
+            <div class="price-box h5g-3">
+                <strong>49ヶ月目以降</strong>
+                <div class="price-breakdown">
+                    <span class="breakdown-line" id="h5g-m3-fee">月額料金：-</span>
+                </div>
+                <div class="price-amount" id="h5g-m3-total">-</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 📱 端末データ（carrierdata.xlsx Sheet3 より確定値をハードコード）
+    const deviceData = {
+        "iOS": {
+            "iPhone": { "17 Pro MAX": 1720, "17 Pro": 1460, "17 Air": 1460, "17": 1100, "17e": 1100, "16e": 880 }
+        },
+        "Android": {
+            "Galaxy": { "S26 Ultra": 1460, "S26": 1100, "S25": 880, "Z Flip7": 1100, "Z Fold7": 1720, "A57": 990, "A36": 330, "A25": 330 },
+            "Pixel": { "10 Pro": 1100, "10": 1100, "10a": 990, "9a": 880 },
+            "Xperia": { "10 Ⅶ": 990, "1 Ⅶ": 1100 },
+            "AQUOS": { "R11": 1100, "R10": 880, "sense10": 860, "R9 pro": 880, "sense9": 605, "wish5": 330 },
+            "FCNT": { "arrows Alpha": 990, "arrows We2": 330, "arrows We3": 490, "らくスマ": 605, "らくホン": 490 },
+            "motorola": { "razr 60d": 990 },
+            "京セラ": { "DIGNO": 330, "キッズケータイ": 330 }
+        }
+    };
+
+    function dv_resetSelect(id) {
+        const select = document.getElementById(id);
+        select.innerHTML = '<option value="">選択してください</option>';
+        select.disabled = true;
+    }
+
+    function dv_init() {
+        const osSelect = document.getElementById("dv-os");
+        Object.keys(deviceData).forEach(os => {
+            const opt = document.createElement("option");
+            opt.value = os;
+            opt.textContent = os;
+            osSelect.appendChild(opt);
+        });
+    }
+
+    function dv_updateSeries() {
+        const os = document.getElementById("dv-os").value;
+        const seriesSelect = document.getElementById("dv-series");
+
+        dv_resetSelect("dv-series");
+        dv_resetSelect("dv-model");
+        dv_updatePrice();
+
+        if (os && deviceData[os]) {
+            Object.keys(deviceData[os]).forEach(series => {
+                const opt = document.createElement("option");
+                opt.value = series;
+                opt.textContent = series;
+                seriesSelect.appendChild(opt);
+            });
+            seriesSelect.disabled = false;
+        }
+    }
+
+    function dv_updateModel() {
+        const os = document.getElementById("dv-os").value;
+        const series = document.getElementById("dv-series").value;
+        const modelSelect = document.getElementById("dv-model");
+
+        dv_resetSelect("dv-model");
+        dv_updatePrice();
+
+        if (os && series && deviceData[os][series]) {
+            Object.keys(deviceData[os][series]).forEach(model => {
+                const opt = document.createElement("option");
+                opt.value = model;
+                opt.textContent = model;
+                modelSelect.appendChild(opt);
+            });
+            modelSelect.disabled = false;
+        }
+    }
+
+    function dv_updatePrice() {
+        const os = document.getElementById("dv-os").value;
+        const series = document.getElementById("dv-series").value;
+        const model = document.getElementById("dv-model").value;
+        const priceEl = document.getElementById("dv-price");
+
+        if (os && series && model && deviceData[os][series][model] !== undefined) {
+            priceEl.textContent = `¥${deviceData[os][series][model].toLocaleString()}`;
+        } else {
+            priceEl.textContent = "-";
+        }
+    }
+
+    dv_init();
+
+    // 🏠 home 5G データ（carrierdata.xlsx Sheet2 より確定値をハードコード）
+    const h5gData = {
+        monthlyFee: 5280,
+        discount: { month1: 1585, month2to48: 1525 },
+        device: {
+            "一括": { month1: 73260, month2to48: 0 },
+            "分割": { month1: 1538, month2to48: 1526 },
+            "一括（キャンペーン）": { month1: 1, month2to48: 0 }
+        }
+    };
+
+    function h5g_update() {
+        const mode = document.getElementById("h5g-buy-mode").value;
+        const plan = h5gData.device[mode];
+
+        if (!plan) {
+            ["m1-device", "m1-fee", "m1-discount", "m2-device", "m2-fee", "m2-discount", "m3-fee"].forEach(key => {
+                document.getElementById(`h5g-${key}`).textContent = key.endsWith("fee") ? "月額料金：-" : key.includes("discount") ? "割引：-" : "本体代：-";
+            });
+            document.getElementById("h5g-m1-total").textContent = "-";
+            document.getElementById("h5g-m2-total").textContent = "-";
+            document.getElementById("h5g-m3-total").textContent = "-";
+            return;
+        }
+
+        const fee = h5gData.monthlyFee;
+        const disc1 = h5gData.discount.month1;
+        const disc2 = h5gData.discount.month2to48;
+
+        document.getElementById("h5g-m1-device").textContent = `本体代：¥${plan.month1.toLocaleString()}`;
+        document.getElementById("h5g-m1-fee").textContent = `月額料金：¥${fee.toLocaleString()}`;
+        document.getElementById("h5g-m1-discount").textContent = `割引：▲¥${disc1.toLocaleString()}`;
+        document.getElementById("h5g-m1-total").textContent = `¥${(plan.month1 + fee - disc1).toLocaleString()}`;
+
+        document.getElementById("h5g-m2-device").textContent = `本体代：¥${plan.month2to48.toLocaleString()}`;
+        document.getElementById("h5g-m2-fee").textContent = `月額料金：¥${fee.toLocaleString()}`;
+        document.getElementById("h5g-m2-discount").textContent = `割引：▲¥${disc2.toLocaleString()}`;
+        document.getElementById("h5g-m2-total").textContent = `¥${(plan.month2to48 + fee - disc2).toLocaleString()}`;
+
+        document.getElementById("h5g-m3-fee").textContent = `月額料金：¥${fee.toLocaleString()}`;
+        document.getElementById("h5g-m3-total").textContent = `¥${fee.toLocaleString()}`;
+    }
+</script>
+</body>
+</html>

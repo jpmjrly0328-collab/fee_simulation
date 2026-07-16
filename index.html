@@ -8,7 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
-</head>
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#7d99cf">
 <title>料金シミュレーション</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
@@ -633,6 +638,8 @@
         #app-scroll-area 導入により不要になったため削除） */
   .app-page {
     box-sizing: border-box;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   /* 📱 スマホ風の固定フッター（重複を整理した綺麗な一本化版） */
@@ -653,27 +660,36 @@
   }
 
   .footer-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #1e293b;
-    cursor: pointer;
-    font-size: 0.75rem;
-    height: 100%;
-  }
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 0.75rem;
+  /* ↓ 効かないので削除してOKです */
+  /* height: 100%; */
+  /* width: auto; */
+  /* object-fit: contain; */
+}
 
-  .footer-tab.active {
-    color: #ffffff !important;
-    /* エラーの濃い赤と合わせて洗練度アップ */
-    font-weight: bold;
-  }
+.footer-tab.active {
+  color: #ffffff !important;
+  font-weight: bold;
+  /* ↓ こちらも不要なので削除 */
+  /* height: 100%; */
+  /* width: auto; */
+  /* object-fit: contain; */
+}
 
-  .tab-icon {
-    font-size: 1.4rem;
-    margin-bottom: 2px;
-  }
+/* 💡 ここを追加！画像と絵文字のサイズを統一します */
+.tab-icon {
+  width: 42px;         /* 絵文字と同じくらいの適切な横幅 */
+  height: 42px;        /* 縦幅も合わせて正方形に */
+  object-fit: contain; /* 縦横比を崩さずに綺麗に収める */
+  margin-bottom: 4px;  /* 下の文字（月額計算）との間に少し隙間を作る */
+}
 
   *,
   *::before,
@@ -1193,22 +1209,42 @@
     <iframe id="page-search" src="./search.html"
       style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
   </div>
+  <div id="page-works-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">ツール一覧</h1>
+    <iframe id="page-works" src="./works.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
+  <div id="page-age-wrapper" style="display: none;">
+    <h1 class="veil-outer-title">年齢別プラン・キャンペーン</h1>
+    <iframe id="page-age" src="./age.html"
+      style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
+  </div>
   </div> <!-- 👈 #app-scroll-area を閉じる -->
 
   <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
-      <span class="tab-icon">📱</span>
+      <img src="calclogo.png" class="tab-icon" alt="">
       <span class="tab-label">月額計算</span>
     </div>
 
     <div class="footer-tab" onclick="switchTab('prices')">
-      <span class="tab-icon">📋</span>
-      <span class="tab-label">キャリア料金比較</span>
+      <img src="binderlogo.png" class="tab-icon" alt="">
+      <span class="tab-label">料金比較</span>
     </div>
 
     <div class="footer-tab" onclick="switchTab('search')">
-      <span class="tab-icon">🔎</span>
+      <img src="searchlogo.png" class="tab-icon" alt="">
       <span class="tab-label">プラン検索</span>
+    </div>
+
+    <div class="footer-tab" onclick="switchTab('age')">
+      <img src="datalogo.png" class="tab-icon" alt="">
+      <span class="tab-label">年齢別プラン</span>
+    </div>
+
+    <div class="footer-tab" onclick="switchTab('works')">
+      <img src="toollogo.png" class="tab-icon" alt="">
+      <span class="tab-label">ツール置き場</span>
     </div>
   </footer>
 
@@ -1220,6 +1256,7 @@
     // フッターの下に隙間ができてしまうことがある。
     // window.visualViewport を使って、本当に見えている下端の位置に合わせてフッターを再配置し、
     // そのズレ分も #app-scroll-area の下端オフセットに反映する。
+
     function syncFooterToVisualViewport() {
       const vv = window.visualViewport;
       const footer = document.querySelector('.app-footer');
@@ -2376,8 +2413,12 @@
     const pageSimulator = document.getElementById('page-simulator');
     const pageCompare = document.getElementById('page-compare');
     const pageSearch = document.getElementById('page-search');
+    const pageWorks = document.getElementById('page-works');
+    const pageAge = document.getElementById('page-age');
     const pageCompareWrapper = document.getElementById('page-compare-wrapper');
     const pageSearchWrapper = document.getElementById('page-search-wrapper');
+    const pageWorksWrapper = document.getElementById('page-works-wrapper');
+    const pageAgeWrapper = document.getElementById('page-age-wrapper');
 
     // =======================================================================================================================
     // 🛠 iframe自動リサイズ：中身の実際の高さに合わせてiframe自体の高さを伸縮させることで、
@@ -2420,6 +2461,8 @@
 
     watchIframeResize(pageCompare);
     watchIframeResize(pageSearch);
+    watchIframeResize(pageWorks);
+    watchIframeResize(pageAge);
 
     // =======================================================================================================================
     // 💡 以前はiframe内部の変化をMutationObserverで監視して都度リサイズしていたが、
@@ -2433,6 +2476,8 @@
       iframeResizePollTimer = setInterval(() => {
         if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
         if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+        if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
+        if (pageAgeWrapper && pageAgeWrapper.style.display !== 'none') resizeIframeToContent(pageAge);
       }, 500);
     }
     function stopIframeResizePolling() {
@@ -2447,6 +2492,8 @@
     window.addEventListener('resize', () => {
       if (pageCompareWrapper && pageCompareWrapper.style.display !== 'none') resizeIframeToContent(pageCompare);
       if (pageSearchWrapper && pageSearchWrapper.style.display !== 'none') resizeIframeToContent(pageSearch);
+      if (pageWorksWrapper && pageWorksWrapper.style.display !== 'none') resizeIframeToContent(pageWorks);
+      if (pageAgeWrapper && pageAgeWrapper.style.display !== 'none') resizeIframeToContent(pageAge);
     });
 
     function switchTab(tabName) {
@@ -2454,11 +2501,15 @@
       if (pageSimulator) pageSimulator.style.display = 'none';
       if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
       if (pageSearchWrapper) pageSearchWrapper.style.display = 'none';
+      if (pageWorksWrapper) pageWorksWrapper.style.display = 'none';
+      if (pageAgeWrapper) pageAgeWrapper.style.display = 'none';
 
       // 2. すべてのタブボタンから一旦 active クラスを消す
       if (tabs[0]) tabs[0].classList.remove('active');
       if (tabs[1]) tabs[1].classList.remove('active');
       if (tabs[2]) tabs[2].classList.remove('active');
+      if (tabs[3]) tabs[3].classList.remove('active');
+      if (tabs[4]) tabs[4].classList.remove('active');
 
       // 3. クリックされたタブだけを「表示」にする
       if (tabName === 'simulator') {
@@ -2479,6 +2530,20 @@
         if (pageSearchWrapper) {
           pageSearchWrapper.style.display = 'block'; // 見出し＋プラン検索（iframe）を表示
           requestAnimationFrame(() => resizeIframeToContent(pageSearch));
+        }
+      }
+      else if (tabName === 'age') {
+        if (tabs[3]) tabs[3].classList.add('active');
+        if (pageAgeWrapper) {
+          pageAgeWrapper.style.display = 'block'; // 見出し＋年齢別プラン（iframe）を表示
+          requestAnimationFrame(() => resizeIframeToContent(pageAge));
+        }
+      }
+      else if (tabName === 'works') {
+        if (tabs[4]) tabs[4].classList.add('active');
+        if (pageWorksWrapper) {
+          pageWorksWrapper.style.display = 'block'; // 見出し＋ツール置き場（iframe）を表示
+          requestAnimationFrame(() => resizeIframeToContent(pageWorks));
         }
       }
     }
