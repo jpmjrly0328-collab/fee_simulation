@@ -129,11 +129,391 @@
         color: #e60012;
         text-align: right;
     }
+
+    .toc {
+        background: var(--bg-card);
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        padding: 16px;
+        margin-bottom: 128px;
+        border: 1px solid var(--border-color);
+    }
+
+    .toc h2 {
+        font-size: 1.05rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .toc ol {
+        margin: 0;
+        padding-left: 1.2em;
+    }
+
+    .toc li {
+        margin-bottom: 6px;
+    }
+
+    .toc a {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .toc a:hover {
+        text-decoration: underline;
+    }
+
+    .dpoint-subhead {
+        font-size: 1rem;
+        font-weight: bold;
+        margin: 0 0 10px 0;
+        color: var(--text-main);
+    }
+
+    .dpoint-note {
+        font-size: 0.85rem;
+        color: var(--text-sub);
+        margin: -4px 0 10px 0;
+        padding-left: 1em;
+        text-indent: -1em;
+    }
+
+    .dpoint-note-paren {
+        padding-left: 2em;
+        text-indent: -2em;
+    }
+
+    .dpoint-note-total + .dpoint-note-total {
+        margin-top: 6px;
+        text-indent: 0;
+    }
+
+    table.dpoint-table.dpoint-table-mobile th:first-child,
+    table.dpoint-table.dpoint-table-mobile td:first-child {
+        width: 14.5em;
+    }
+
+    .dpoint-table-wrap {
+        overflow-x: auto;
+        margin-bottom: 8px;
+        transition: filter 0.15s ease, opacity 0.15s ease;
+    }
+
+    table.dpoint-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        min-width: 480px;
+    }
+
+    table.dpoint-table th,
+    table.dpoint-table td {
+        border: 1px solid var(--border-color);
+        padding: 8px 6px;
+        text-align: center;
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    table.dpoint-table thead th {
+        background-color: var(--primary-light);
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    table.dpoint-table tbody th {
+        background-color: #fafafa;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    table.dpoint-table td.rate-cell {
+        font-weight: bold;
+    }
+
+    table.dpoint-table td.cell-disabled {
+        background-color: #e9ecef !important;
+        color: #adb5bd !important;
+        font-weight: normal;
+    }
+
+    .dpoint-table-title {
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin: 14px 0 6px 0;
+        color: var(--text-sub);
+    }
+
+    .dpoint-table-title-plan {
+        margin: 24px 0 12px 0;
+    }
+
+    .dpoint-table-title-plan .dpoint-section-toggle {
+        font-size: 0.9rem;
+        color: var(--text-sub);
+    }
+
+    .dpoint-table-wrap.dpoint-plan-inactive {
+        filter: grayscale(1);
+        opacity: 0.55;
+    }
+
+    .dpoint-section-toggle:has(input:disabled) {
+        opacity: 0.75;
+    }
+
+    .dpoint-frame {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        background-color: var(--bg-body);
+    }
+
+    .dpoint-frame-title {
+        font-size: 0.95rem;
+        font-weight: bold;
+        margin: 0 0 8px 0;
+        color: var(--text-main);
+    }
+
+    table.dpoint-table.dpoint-table-mobile {
+        font-size: 0.68rem;
+        min-width: 0;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    table.dpoint-table.dpoint-table-mobile th,
+    table.dpoint-table.dpoint-table-mobile td {
+        padding: 5px 3px;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .checkbox-label:has(input:disabled) {
+        opacity: 0.75;
+    }
+
+    .dpoint-section-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .dpoint-section-toggle input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .dpoint-section-body {
+        transition: opacity 0.15s ease;
+    }
+
+    .dpoint-section-body.dpoint-section-disabled {
+        opacity: 0.75;
+        pointer-events: none;
+    }
+
+    .dpoint-fee-input {
+        margin-top: 12px;
+        margin-bottom: 0;
+    }
+
+    .dpoint-item-result {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--border-color);
+    }
+
+    .dpoint-item-result-box {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 8px 10px;
+        text-align: center;
+    }
+
+    .dpoint-item-result-label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--text-sub);
+        margin-bottom: 4px;
+    }
+
+    .dpoint-item-result-value {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .dpoint-frame-card {
+        border-color: var(--primary-color);
+        background-color: #fffbfc;
+    }
+
+    .dpoint-frame-plan {
+        border-color: #00897b;
+        background-color: #f0f9f8;
+    }
+
+    .sub-container.dpoint-mobile {
+        border-left-color: #1e88e5;
+        background-color: #f1f8fe;
+    }
+
+    .sub-container.dpoint-hikari {
+        border-left-color: #8e24aa;
+        background-color: #f9f2fa;
+    }
+
+    .sub-container.dpoint-denki {
+        border-left-color: var(--accent-kaedoki);
+        background-color: #f4faf4;
+    }
+
+    .sub-container.dpoint-gas {
+        border-left-color: var(--accent-once);
+        background-color: #fffce6;
+    }
+
+    .sub-container.dpoint-total {
+        border-left-color: #ad1457;
+        background-color: #fdf1f5;
+        padding-top: 76px;
+        padding-bottom: 76px;
+    }
+
+    .dpoint-total-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .dpoint-total-item {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .dpoint-total-label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-sub);
+        margin-bottom: 6px;
+    }
+
+    .dpoint-total-value {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ad1457;
+    }
+    .link-list{
+    list-style:none;
+    margin:0;
+    padding-left:0;
+}
+
+.link-list > li{
+    margin-bottom:16px;
+}
+
+.link-list-item-spaced{
+    margin-top:32px;
+}
+
+.link-list-title{
+    display:block;
+    font-weight:700;
+    font-size:1rem;
+    margin-bottom:8px;
+    color:var(--text-main);
+}
+
+.link-list-title-mobile{
+    color:#8e24aa;
+}
+
+.link-list-title-hikari{
+    color:#f9a825;
+}
+
+.link-list-title-home5g{
+    color:#e91e63;
+}
+
+.link-list-title-denki{
+    color:#2e7d32;
+}
+
+.link-list-title-gas{
+    color:#1565c0;
+}
+
+.link-list-sub{
+    list-style:none;
+    margin:0;
+    padding-left:1.2em;
+}
+
+.link-list-sub > li{
+    margin-bottom:30px;
+}
+
+.link-list-subtitle{
+    display:block;
+    font-weight:600;
+    font-size:0.92rem;
+    margin-bottom:6px;
+    color:var(--text-sub);
+}
+
+.link-list-items{
+    list-style:disc;
+    margin:0;
+    padding-left:2.2em;
+}
+
+.link-list-items li{
+    margin-bottom:8px;
+}
+
+.link-list a{
+    color:var(--primary-color);
+    font-weight:600;
+    text-decoration:none;
+}
+
+.link-list a:hover{
+    text-decoration:underline;
+}
 </style>
 </head>
 <body>
 <div class="container">
-    <div class="card">
+    <nav class="toc">
+        <h2>目次</h2>
+        <ol>
+            <li><a href="#dv-checker">smartあんしん補償月額検索</a></li>
+            <li><a href="#link-list">リンク集</a></li>
+            <li><a href="#h5g-simulator">home 5G 月額シミュレーター</a></li>
+            <li><a href="#dpoint-search">dポイント還元検索</a></li>
+        </ol>
+    </nav>
+
+    <div class="card" id="dv-checker">
         <h2>smartあんしん補償月額検索</h2>
 
         <div class="section">
@@ -163,7 +543,120 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="link-list">
+       <h2>リンク集</h2>
+
+    <ul class="link-list">
+        <li>
+            <span class="link-list-title link-list-title-mobile">携帯</span>
+            <ul class="link-list-sub">
+                <li>
+                    <span class="link-list-subtitle">補償・オプション</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/service/smart_anshin_hoshou/" target="_blank" rel="noopener">smartあんしん補償</a></li>
+                        <li><a href="https://virusbuster.jp/store/sb/?AAID=ad_mem_GGL_sb_nb_aw_88_241226_G1&gad_source=1&gad_campaignid=22067696134&gbraid=0AAAAACevllidiyiQdFng7ByXdaUu5p6vj&gclid=Cj0KCQjw39zSBhDhARIsANammDtx5BB3m55JHx2l52cjlWJTjiM0YQQlC4QyWxylqtAWuELCr6pK9GYaArmwEALw_wcB" target="_blank" rel="noopener">詐欺バスター　概要</a></li>
+                        <li><a href="https://www.trendmicro.com/ja_jp/forHome/products/sb/feature.html?_gl=1*sq5b4h*_ga*OTk4MDYwMDg0LjE3ODQxNDU1MDY.*_ga_H44V87G8F6*czE3ODQxNDU1MDYkbzEkZzAkdDE3ODQxNDU1MDYkajYwJGwwJGgw*_ga_2SM2K3CQQG*czE3ODQxNDU1MDckbzEkZzAkdDE3ODQxNDU1MDckajYwJGwwJGgw*_ga_WN7RPBD7MK*czE3ODQxNDU1MDckbzEkZzAkdDE3ODQxNDU1MDckajYwJGwwJGgw*_gcl_au*MjAxMDg2NzM1OS4xNzg0MTQ1NTA4" target="_blank" rel="noopener">詐欺バスター　機能一覧</a></li>
+                        <li><a href="https://www.sakura-ssi.co.jp/anshin-mobile/" target="_blank" rel="noopener">あんしんモバイル保険</a></li>
+                        <li><a href="https://www.docomo.ne.jp/service/dvaluepass/?icid=CRP_SER_to_CRP_SER_dvaluepass" target="_blank" rel="noopener">dバリューパス</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">実務関連</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://ahamo.com/support/supported-phones/" target="_blank" rel="noopener">ahamo対応端末</a></li>
+                        <li><a href="https://www.docomo.ne.jp/area/?icid=CRP_TOP_bnr01_to_CRP_AREA" target="_blank" rel="noopener">通信関連</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_5g/hr02/" target="_blank" rel="noopener">home 5G</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/hp01/" target="_blank" rel="noopener">homeでんわ</a></li>
+                        <li><a href="https://www.docomo.ne.jp/charge/?icid=CRP_TOP_bnr01_to_CRP_CHA" target="_blank" rel="noopener">料金・オプション</a></li>
+                        <li><a href="https://ahamo.com/" target="_blank" rel="noopener">ahamo ホーム</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">サービス系</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/kaedoki_program/" target="_blank" rel="noopener">いつでもカエドキプログラム</a></li>
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/shitadori/" target="_blank" rel="noopener">下取りプログラム</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="link-list-item-spaced">
+            <span class="link-list-title link-list-title-hikari">光（NTT西日本エリア）</span>
+            <ul class="link-list-sub">
+                <li>
+                    <span class="link-list-subtitle">設置前確認事項</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/" target="_blank" rel="noopener">ドコモ光　ホーム</a></li>
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/provider_list/" target="_blank" rel="noopener">プロバイダ</a></li>
+                        <li><a href="https://docomohikari-koujiryo.ac.at.nttdocomo.co.jp/index.php/site/index/" target="_blank" rel="noopener">工事料金シミュレーション</a></li>
+                        <li><a href="https://www.docomo.ne.jp/binary/pdf/internet/hikari/subscribe/construction.pdf" target="_blank" rel="noopener">工事前案内</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">電話オプション</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/tell_service/initial_cost/?icid=CRP_INT_hikari_tell_service_to_CRP_INT_hikari_tell_service_initial_cost" target="_blank" rel="noopener">光電話工事概要①</a></li>
+                        <li><a href="https://www.docomo.ne.jp/binary/pdf/internet/hikari/tell_service/initial_cost/construction_charge_01.pdf?ver=1706749234" target="_blank" rel="noopener">光電話工事概要②</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">テレビオプション</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/eizo_service/tv_option/?icid=CRP_INT_hikari_eizo_service_to_CRP_INT_hikari_eizo_service_tv_option" target="_blank" rel="noopener">テレビオプション</a></li>
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/eizo_service/skyperfectv/?icid=CRP_INT_hikari_eizo_service_to_CRP_INT_hikari_eizo_service_skyperfectv" target="_blank" rel="noopener">スカパー！</a></li>
+                        <li><a href="https://www.docomo.ne.jp/internet/hikari/eizo_service/hikaritv/?icid=CRP_INT_hikari_eizo_service_to_CRP_INT_hikari_eizo_service_hikaritv" target="_blank" rel="noopener">ひかりTV</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">特典</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/hikari_10g_plan_change_kojiryo/index.html" target="_blank" rel="noopener">ドコモ光 1G → 10G 特典</a></li>
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/hikari_norikae/" target="_blank" rel="noopener">ドコモ光 特典</a></li>
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/hikari_norikae/" target="_blank" rel="noopener">新規工事料実質無料 特典</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="link-list-item-spaced">
+            <span class="link-list-title link-list-title-home5g">home 5G</span>
+            <ul class="link-list-sub">
+                <li>
+                    <span class="link-list-subtitle">特典</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/campaign_event/home5g_norikae/" target="_blank" rel="noopener">home 5G 特典</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">homeでんわ</span>
+                    <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/flow/" target="_blank" rel="noopener">homeでんわ　利用までの流れ</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/usage/" target="_blank" rel="noopener">homeでんわ　利用方法</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/notice/" target="_blank" rel="noopener">homeでんわ　利用時注意事項</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/prior_confirmation/" target="_blank" rel="noopener">homeでんわ　購入・申し込み前確認事項</a></li>
+                        <li><a href="https://www.docomo.ne.jp/home_denwa/area/" target="_blank" rel="noopener">homeでんわ　対象エリア</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="link-list-item-spaced">
+            <span class="link-list-title link-list-title-denki">でんき（関西電力エリア）</span>
+            <ul class="link-list-items">
+                <li><a href="https://denki.docomo.ne.jp/" target="_blank" rel="noopener">ドコモでんき　ホーム</a></li>
+                <li><a href="https://denki.docomo.ne.jp/" target="_blank" rel="noopener">利用開始までの流れ</a></li>
+                <li><a href="https://denki.docomo.ne.jp/plan/green_kansai/" target="_blank" rel="noopener">ドコモでんき Green</a></li>
+                <li><a href="https://denki.docomo.ne.jp/plan/basic_kansai/" target="_blank" rel="noopener">ドコモでんき Basic</a></li>
+            </ul>
+        </li>
+        <li class="link-list-item-spaced">
+            <span class="link-list-title link-list-title-gas">ガス</span>
+            <ul class="link-list-items">
+                <li><a href="https://denki.docomo.ne.jp/gas/" target="_blank" rel="noopener">ドコモガス　ホーム</a></li>
+            </ul>
+        </li>
+    </ul>
+    </div>
+
+    <div class="card" id="h5g-simulator">
         <h2>home 5G 月額シミュレーター</h2>
 
         <div class="section">
@@ -206,6 +699,298 @@
             </div>
         </div>
     </div>
+
+    <div class="card" id="dpoint-search">
+        <h2>dポイント還元検索</h2>
+        <p class="dpoint-note" style="margin-top: -10px; margin-bottom: 15px;">※以降dカードを所持しているものとして計算する</p>
+
+        <div class="dpoint-frame dpoint-frame-card">
+            <p class="dpoint-frame-title">dカード券種</p>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" data-group="dcard-type" value="dcard" onchange="dpointOnCardChange(this);">dカード</label>
+                <label class="checkbox-label"><input type="checkbox" data-group="dcard-type" value="goldu" onchange="dpointOnCardChange(this);">dカード GOLD U</label>
+                <label class="checkbox-label"><input type="checkbox" data-group="dcard-type" value="gold" onchange="dpointOnCardChange(this);">dカード GOLD</label>
+                <label class="checkbox-label"><input type="checkbox" data-group="dcard-type" value="platinum" onchange="dpointOnCardChange(this);">dカード PLATINUM</label>
+            </div>
+        </div>
+
+        <div class="dpoint-frame dpoint-frame-plan">
+            <p class="dpoint-frame-title">携帯プラン選択</p>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" data-group="mobile-year" value="y1" onchange="dpointOnMobilePlanChange(this);">入会初年度（dカード PLATINUMのみ選択）</label>
+                <label class="checkbox-label"><input type="checkbox" data-group="mobile-year" value="y2" onchange="dpointOnMobilePlanChange(this);">2年目以降（dカード PLATINUMのみ選択）</label>
+            </div>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" data-group="mobile-plan" value="target" onchange="dpointOnMobilePlanChange(this);">対象プラン（ドコモMAX, ドコモポイ活MAX, ドコモポイ活20）</label>
+                <label class="checkbox-label"><input type="checkbox" data-group="mobile-plan" value="nontarget" onchange="dpointOnMobilePlanChange(this);">非対象プラン（ドコモmini, ahamo）</label>
+            </div>
+        </div>
+
+        <div class="sub-container dpoint-mobile">
+            <p class="dpoint-subhead">携帯</p>
+            <div class="dpoint-section-body" id="dpoint-mobile-body">
+            <div class="section dpoint-fee-input">
+                <label for="dpoint-mobile-fee">月額（おおよそ・税込）￥</label>
+                <input type="number" id="dpoint-mobile-fee" min="0" step="100" placeholder="例：8000" oninput="dpointUpdateTotal()">
+            </div>
+
+            <div class="dpoint-table-wrap">
+                <table class="dpoint-table dpoint-table-mobile" id="dpoint-mobile-table">
+                    <thead>
+                        <tr>
+                            <th>条件</th>
+                            <th>REGULAR</th>
+                            <th>GOLD U</th>
+                            <th>GOLD</th>
+                            <th>PLATINUM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-plan="target">
+                            <th>対象プラン・<br>入会初年度</th>
+                            <td class="rate-cell" data-card="dcard" rowspan="4">1%</td>
+                            <td class="rate-cell" data-card="goldu" rowspan="4">5%</td>
+                            <td class="rate-cell" data-card="gold" rowspan="4">10%</td>
+                            <td class="rate-cell" data-card="platinum" data-year="y1">20%</td>
+                        </tr>
+                        <tr data-plan="target">
+                            <th>対象プラン・2年目以降<br>（所定月のショッピング利用<br>：10万円未満）</th>
+                            <td class="rate-cell" data-card="platinum" data-year="y2">10%</td>
+                        </tr>
+                        <tr data-plan="target">
+                            <th>対象プラン・2年目以降<br>（所定月のショッピング利用<br>：10〜20万円未満）</th>
+                            <td class="rate-cell" data-card="platinum" data-year="y2">15%</td>
+                        </tr>
+                        <tr data-plan="target">
+                            <th>対象プラン・2年目以降<br>（所定月のショッピング利用<br>：20万円以上）</th>
+                            <td class="rate-cell" data-card="platinum" data-year="y2">20%</td>
+                        </tr>
+                        <tr data-plan="nontarget">
+                            <th>非対象プラン・<br>入会初年度</th>
+                            <td class="rate-cell" data-card="dcard" rowspan="2">1%</td>
+                            <td class="rate-cell" data-card="goldu" rowspan="2">1%</td>
+                            <td class="rate-cell" data-card="gold" rowspan="2">1%</td>
+                            <td class="rate-cell" data-card="platinum" data-year="y1">1%</td>
+                        </tr>
+                        <tr data-plan="nontarget">
+                            <th>非対象プラン・<br>2年目以降</th>
+                            <td class="rate-cell" data-card="platinum" data-year="y2">1%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dpoint-item-result">
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元率</span>
+                    <span class="dpoint-item-result-value" id="dpoint-mobile-rate">-</span>
+                </div>
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元ポイント / 月</span>
+                    <span class="dpoint-item-result-value" id="dpoint-mobile-points">-</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="sub-container dpoint-hikari" style="margin-top:20px;">
+            <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-hikari-enabled" onchange="dpointToggleSection('hikari')">ドコモ光</label></p>
+            <div class="dpoint-section-body" id="dpoint-hikari-body">
+            <div class="section dpoint-fee-input">
+                <label for="dpoint-hikari-fee">月額（おおよそ・税込）￥</label>
+                <input type="number" id="dpoint-hikari-fee" min="0" step="100" placeholder="例：5500" oninput="dpointUpdateTotal()">
+            </div>
+
+            <div class="dpoint-table-wrap">
+                <table class="dpoint-table dpoint-table-mobile" id="dpoint-hikari-table">
+                    <thead>
+                        <tr>
+                            <th>条件</th>
+                            <th>REGULAR</th>
+                            <th>GOLD U</th>
+                            <th>GOLD</th>
+                            <th>PLATINUM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-year="y1">
+                            <th>入会初年度</th>
+                            <td class="rate-cell" data-card="dcard" rowspan="4">1%</td>
+                            <td class="rate-cell" data-card="goldu" rowspan="4">5%</td>
+                            <td class="rate-cell" data-card="gold" rowspan="4">10%</td>
+                            <td class="rate-cell" data-card="platinum">20%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：10万円未満）</th>
+                            <td class="rate-cell" data-card="platinum">10%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：10〜20万円未満）</th>
+                            <td class="rate-cell" data-card="platinum">15%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：20万円以上）</th>
+                            <td class="rate-cell" data-card="platinum">20%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dpoint-item-result">
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元率</span>
+                    <span class="dpoint-item-result-value" id="dpoint-hikari-rate">-</span>
+                </div>
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元ポイント / 月</span>
+                    <span class="dpoint-item-result-value" id="dpoint-hikari-points">-</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="sub-container dpoint-denki" style="margin-top:20px;">
+            <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-denki-enabled" onchange="dpointToggleSection('denki')">ドコモでんき</label></p>
+            <div class="dpoint-section-body" id="dpoint-denki-body">
+            <p class="dpoint-note dpoint-note-paren">（※ドコモの回線契約をしているものとし、関西電力エリアの場合を表示。<br>Green / Basicで還元率が異なります。）</p>
+            <div class="section dpoint-fee-input">
+                <label for="dpoint-denki-fee">月額（おおよそ・税込）￥</label>
+                <input type="number" id="dpoint-denki-fee" min="0" step="100" placeholder="例：8000" oninput="dpointUpdateTotal()">
+            </div>
+            <label class="checkbox-label"><input type="checkbox" id="dpoint-gas-bundle" onchange="dpointUpdateTotal()">ドコモガスも同時契約している（電気の還元率+2%）</label>
+
+            <p class="dpoint-table-title dpoint-table-title-plan"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-denki-green-enabled" data-group="denki-plan" onchange="dpointOnDenkiPlanChange(this);">Greenプラン</label></p>
+            <div class="dpoint-table-wrap dpoint-plan-inactive" id="dpoint-denki-green-wrap">
+                <table class="dpoint-table dpoint-table-mobile" id="dpoint-denki-green-table">
+                    <thead>
+                        <tr>
+                            <th>条件</th>
+                            <th>REGULAR</th>
+                            <th>GOLD U</th>
+                            <th>GOLD</th>
+                            <th>PLATINUM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-year="y1">
+                            <th>初年度</th>
+                            <td class="rate-cell" data-card="dcard" rowspan="4">5%</td>
+                            <td class="rate-cell" data-card="goldu,gold" colspan="2" rowspan="4">10%</td>
+                            <td class="rate-cell" data-card="platinum">20%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：10万円未満）</th>
+                            <td class="rate-cell" data-card="platinum">10%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：10〜20万円未満）</th>
+                            <td class="rate-cell" data-card="platinum">15%</td>
+                        </tr>
+                        <tr data-year="y2">
+                            <th>2年目以降<br>（所定月のショッピング利用<br>：20万円以上）</th>
+                            <td class="rate-cell" data-card="platinum">20%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="dpoint-note">※PLATINUM会員でも回線番号の登録条件を満たさない場合は5%になります。<br>
+                ドコモガスを同時契約している場合、電気代の還元率がさらに+2%されます。</p>
+
+            <p class="dpoint-table-title dpoint-table-title-plan"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-denki-basic-enabled" data-group="denki-plan" onchange="dpointOnDenkiPlanChange(this);">Basicプラン</label></p>
+            <div class="dpoint-table-wrap dpoint-plan-inactive" id="dpoint-denki-basic-wrap">
+                <table class="dpoint-table dpoint-table-mobile" id="dpoint-denki-basic-table">
+                    <thead>
+                        <tr>
+                            <th>条件</th>
+                            <th>REGULAR</th>
+                            <th>GOLD U</th>
+                            <th>GOLD</th>
+                            <th>PLATINUM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>対象プラン契約中</th>
+                            <td class="rate-cell" data-card="dcard,goldu,gold,platinum" colspan="4">2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="dpoint-item-result">
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元率</span>
+                    <span class="dpoint-item-result-value" id="dpoint-denki-rate">-</span>
+                </div>
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元ポイント／月</span>
+                    <span class="dpoint-item-result-value" id="dpoint-denki-points">-</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="sub-container dpoint-gas" style="margin-top:20px;">
+            <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-gas-enabled" onchange="dpointToggleSection('gas')">ドコモガス</label></p>
+            <div class="dpoint-section-body" id="dpoint-gas-body">
+            <p class="dpoint-note">（※ドコモでんきに契約済みとし、大阪ガスの還元率を表示。）</p>
+            <div class="section dpoint-fee-input">
+                <label for="dpoint-gas-fee">月額（おおよそ・税込）</label>
+                <input type="number" id="dpoint-gas-fee" min="0" step="100" placeholder="例：4000" oninput="dpointUpdateTotal()">
+            </div>
+
+            <div class="dpoint-table-wrap">
+                <table class="dpoint-table" id="dpoint-gas-table">
+                    <thead>
+                        <tr>
+                            <th>条件</th>
+                            <th>REGULAR</th>
+                            <th>GOLD U</th>
+                            <th>GOLD</th>
+                            <th>PLATINUM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>ドコモでんき同時契約あり</th>
+                            <td class="rate-cell" data-card="dcard">1%</td>
+                            <td class="rate-cell" data-card="goldu">1%</td>
+                            <td class="rate-cell" data-card="gold">1%</td>
+                            <td class="rate-cell" data-card="platinum">1%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="dpoint-note">※でんき同時契約時は電気代側の還元率になります。</p>
+            <div class="dpoint-item-result">
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元率</span>
+                    <span class="dpoint-item-result-value" id="dpoint-gas-rate">-</span>
+                </div>
+                <div class="dpoint-item-result-box">
+                    <span class="dpoint-item-result-label">還元ポイント / 月</span>
+                    <span class="dpoint-item-result-value" id="dpoint-gas-points">-</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="sub-container dpoint-total" id="dpoint-total-box" style="margin-top:20px;">
+            <p class="dpoint-subhead">合計還元率・還元ポイント（目安）</p>
+            <div class="dpoint-total-grid">
+                <div class="dpoint-total-item">
+                    <span class="dpoint-total-label">合計還元率</span>
+                    <span class="dpoint-total-value" id="dpoint-total-rate">-</span>
+                </div>
+                <div class="dpoint-total-item">
+                    <span class="dpoint-total-label">還元ポイント / 月</span>
+                    <span class="dpoint-total-value" id="dpoint-total-points">-</span>
+                </div>
+            </div>
+            <p class="dpoint-note dpoint-note-total">※チェックを入れた項目のみ計算対象です。</p>
+            <p class="dpoint-note dpoint-note-total">各項目で条件が一意に絞り込まれた還元率（ドコモでんきはGreen/Basicプランのうちチェックした方を使用、ガス同時契約チェック時は+2%）をもとに、入力した「月額（税込）」を税抜換算のうえ、携帯・ドコモ光は税抜1,000円ごと（1,000円未満切り捨て）、ドコモでんき・ドコモガスは税抜100円ごと（100円未満切り捨て）で<br>ポイントを算出し合算した概算値です。</p>
+            <p class="dpoint-note dpoint-note-total">条件が絞り込めない項目やチェックが外れている項目は0として扱われます。</p>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -336,6 +1121,182 @@
         document.getElementById("h5g-m3-fee").textContent = `月額料金：¥${fee.toLocaleString()}`;
         document.getElementById("h5g-m3-total").textContent = `¥${fee.toLocaleString()}`;
     }
+
+    // 🎁 dポイント還元検索：チェックボックス排他選択＆表グレーアウト
+    function dpointExclusive(checkbox) {
+        const group = checkbox.dataset.group;
+        document.querySelectorAll(`input[type="checkbox"][data-group="${group}"]`).forEach(cb => {
+            if (cb !== checkbox) cb.checked = false;
+        });
+    }
+
+    function dpointGetChecked(groupName) {
+        if (!groupName) return null;
+        const el = document.querySelector(`input[type="checkbox"][data-group="${groupName}"]:checked`);
+        return el ? el.value : null;
+    }
+
+    function dpointRecalc(cardGroup, yearGroup, planGroup, tableIds) {
+        const selectedCard = dpointGetChecked(cardGroup);
+        const selectedYear = dpointGetChecked(yearGroup);
+        const selectedPlan = dpointGetChecked(planGroup);
+        const anyFilterActive = !!(selectedCard || selectedYear || selectedPlan);
+
+        tableIds.forEach(tableId => {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            table.querySelectorAll("tbody tr").forEach(tr => {
+                const rowPlan = tr.dataset.plan;
+
+                tr.querySelectorAll("td[data-card]").forEach(td => {
+                    const rowYear = td.dataset.year;
+                    const rowMatches =
+                        (!selectedPlan || !rowPlan || rowPlan === selectedPlan) &&
+                        (!selectedYear || !rowYear || rowYear === selectedYear);
+                    const cardMatches = !selectedCard || td.dataset.card.split(",").includes(selectedCard);
+                    const isMatch = rowMatches && cardMatches;
+                    td.classList.toggle("cell-disabled", anyFilterActive && !isMatch);
+                });
+            });
+        });
+    }
+
+    function dpointUpdateYearAvailability() {
+        const selectedCard = dpointGetChecked("dcard-type");
+        const enable = selectedCard === "platinum";
+        document.querySelectorAll('input[type="checkbox"][data-group="mobile-year"]').forEach(cb => {
+            cb.disabled = !enable;
+            if (!enable) cb.checked = false;
+        });
+    }
+
+    function dpointOnCardChange(checkbox) {
+        dpointExclusive(checkbox);
+        dpointUpdateYearAvailability();
+        dpointRecalc("dcard-type", "mobile-year", "mobile-plan", ["dpoint-mobile-table"]);
+        dpointRecalc("dcard-type", null, null, ["dpoint-hikari-table"]);
+        dpointRecalc("dcard-type", null, null, ["dpoint-denki-green-table"]);
+        dpointRecalc("dcard-type", null, null, ["dpoint-denki-basic-table"]);
+        dpointRecalc("dcard-type", null, null, ["dpoint-gas-table"]);
+        dpointUpdateTotal();
+    }
+
+    function dpointOnMobilePlanChange(checkbox) {
+        dpointExclusive(checkbox);
+        dpointRecalc("dcard-type", "mobile-year", "mobile-plan", ["dpoint-mobile-table"]);
+        dpointUpdateTotal();
+    }
+
+    function dpointOnDenkiPlanChange(checkbox) {
+        dpointExclusive(checkbox);
+        ["green", "basic"].forEach(plan => {
+            const enabled = document.getElementById(`dpoint-denki-${plan}-enabled`).checked;
+            document.getElementById(`dpoint-denki-${plan}-wrap`).classList.toggle("dpoint-plan-inactive", !enabled);
+        });
+        dpointUpdateTotal();
+    }
+
+    function dpointGetSingleRate(tableId) {
+        const table = document.getElementById(tableId);
+        if (!table) return null;
+
+        const matched = [...table.querySelectorAll("td.rate-cell")].filter(td => !td.classList.contains("cell-disabled"));
+        if (matched.length === 0) return null;
+
+        const values = matched.map(td => parseFloat(td.textContent));
+        if (values.some(v => isNaN(v))) return null;
+
+        return values.every(v => v === values[0]) ? values[0] : null;
+    }
+
+    const DPOINT_TAX_RATE = 0.1;
+
+    function dpointGetFee(inputId) {
+        const fee = parseFloat(document.getElementById(inputId).value);
+        return (!isNaN(fee) && fee > 0) ? fee : null;
+    }
+
+    // 還元率・還元ポイントを項目末尾の表示欄に反映し、算出したポイント数を返す（合計計算用）
+    // fee は税込入力値。税抜換算のうえ unit 円未満を切り捨ててから還元率を乗じる
+    function dpointRenderItemResult(rateElId, pointsElId, rate, fee, unit) {
+        const rateEl = document.getElementById(rateElId);
+        const pointsEl = document.getElementById(pointsElId);
+        if (!rateEl || !pointsEl) return 0;
+
+        if (rate === null) {
+            rateEl.textContent = "-";
+            pointsEl.textContent = "-";
+            return 0;
+        }
+        rateEl.textContent = `${rate.toFixed(1).replace(/\.0$/, "")}%`;
+
+        if (fee === null) {
+            pointsEl.textContent = "-";
+            return 0;
+        }
+        const feeExcludingTax = fee / (1 + DPOINT_TAX_RATE);
+        const roundedBase = Math.floor(feeExcludingTax / unit) * unit;
+        const points = Math.floor(roundedBase * rate / 100);
+        pointsEl.textContent = `${points.toLocaleString()}pt`;
+        return points;
+    }
+
+    function dpointIsSectionEnabled(section) {
+        const checkbox = document.getElementById(`dpoint-${section}-enabled`);
+        return !!(checkbox && checkbox.checked);
+    }
+
+    function dpointToggleSection(section) {
+        const body = document.getElementById(`dpoint-${section}-body`);
+        const enabled = dpointIsSectionEnabled(section);
+        body.classList.toggle("dpoint-section-disabled", !enabled);
+        body.querySelectorAll("input, select").forEach(el => { el.disabled = !enabled; });
+        dpointUpdateTotal();
+    }
+
+    function dpointUpdateTotal() {
+        const selectedCard = dpointGetChecked("dcard-type");
+        const gasBundle = document.getElementById("dpoint-gas-bundle").checked;
+
+        let mobileRate = (selectedCard && dpointIsSectionEnabled("mobile")) ? dpointGetSingleRate("dpoint-mobile-table") : null;
+        let hikariRate = (selectedCard && dpointIsSectionEnabled("hikari")) ? dpointGetSingleRate("dpoint-hikari-table") : null;
+        let denkiRate = null;
+        if (selectedCard && dpointIsSectionEnabled("denki")) {
+            if (document.getElementById("dpoint-denki-green-enabled").checked) {
+                denkiRate = dpointGetSingleRate("dpoint-denki-green-table");
+            } else if (document.getElementById("dpoint-denki-basic-enabled").checked) {
+                denkiRate = dpointGetSingleRate("dpoint-denki-basic-table");
+            }
+        }
+        if (denkiRate !== null && gasBundle) denkiRate += 2;
+        let gasRate = (selectedCard && dpointIsSectionEnabled("gas")) ? dpointGetSingleRate("dpoint-gas-table") : null;
+
+        const mobilePoints = dpointRenderItemResult("dpoint-mobile-rate", "dpoint-mobile-points", mobileRate, dpointGetFee("dpoint-mobile-fee"), 1000);
+        const hikariPoints = dpointRenderItemResult("dpoint-hikari-rate", "dpoint-hikari-points", hikariRate, dpointGetFee("dpoint-hikari-fee"), 1000);
+        const denkiPoints = dpointRenderItemResult("dpoint-denki-rate", "dpoint-denki-points", denkiRate, dpointGetFee("dpoint-denki-fee"), 100);
+        const gasPoints = dpointRenderItemResult("dpoint-gas-rate", "dpoint-gas-points", gasRate, dpointGetFee("dpoint-gas-fee"), 100);
+
+        const rateEl = document.getElementById("dpoint-total-rate");
+        const pointsEl = document.getElementById("dpoint-total-points");
+        if (!rateEl || !pointsEl) return;
+
+        const rates = [mobileRate, hikariRate, denkiRate, gasRate].filter(r => r !== null);
+        if (rates.length === 0) {
+            rateEl.textContent = "-";
+            pointsEl.textContent = "-";
+            return;
+        }
+
+        const totalRate = rates.reduce((sum, r) => sum + r, 0);
+        rateEl.textContent = `${totalRate.toFixed(1).replace(/\.0$/, "")}%`;
+
+        const totalPoints = mobilePoints + hikariPoints + denkiPoints + gasPoints;
+        pointsEl.textContent = totalPoints > 0 ? `${totalPoints.toLocaleString()}pt` : "-";
+    }
+
+    dpointUpdateYearAvailability();
+    ["mobile", "hikari", "denki", "gas"].forEach(dpointToggleSection);
 </script>
 </body>
 </html>
