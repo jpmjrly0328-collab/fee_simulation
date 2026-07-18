@@ -2571,8 +2571,11 @@
         updatePriceOptions();
       }
 
-      // 6. ページ最上部までスクロールして戻す
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // 6. ページ最上部まで一瞬でジャンプして戻す
+      // 💡 body自体はoverflow:hiddenで固定されており、実際にスクロールしているのは
+      //    #app-scroll-area なので、window.scrollTo ではなくこちらを直接動かす
+      const appScrollArea = document.getElementById('app-scroll-area');
+      if (appScrollArea) appScrollArea.scrollTo({ top: 0, behavior: 'auto' });
     }
     window.addEventListener('DOMContentLoaded', updatePriceOptions);
     // 1. ページが開いた瞬間、即座にスクロールを禁止
