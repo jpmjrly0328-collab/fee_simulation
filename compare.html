@@ -1640,8 +1640,15 @@
             sim_updateComment(side);
             sim_calculateTotal(side);
 
-            // ページ最上部までスクロールして戻す（iframeで埋め込まれている場合は親ページ側をスクロール）
-            window.parent.scrollTo({ top: 0, behavior: 'smooth' });
+            // ページ最上部まで一瞬でジャンプして戻す（iframeで埋め込まれている場合は親ページ側をジャンプ）
+            // 💡 親ページ(index.html)はbody自体がoverflow:hiddenで固定されており、
+            //    実際にスクロールしているのは #app-scroll-area なので、そちらを直接動かす
+            const parentScrollArea = window.parent.document.getElementById('app-scroll-area');
+            if (parentScrollArea) {
+                parentScrollArea.scrollTo({ top: 0, behavior: 'auto' });
+            } else {
+                window.parent.scrollTo({ top: 0, behavior: 'auto' });
+            }
         }
         // iframeの中から、親画面（ブラウザのタブ）のタイトルを強制的に書き換える
         window.parent.document.title = "料金比較";
