@@ -976,8 +976,8 @@
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活オプション　￥2,200</label>
-            <div>　　</div>
-            <label class="checkbox-label">　　 AppleCare+（※iPhoneのみ、オプションの計算に含めない）<br>　　 ￥980<br>　　 または2年間で￥19,800</label>
+            <hr style="width:100%; border:none; border-top:1px solid var(--border-color); margin:0;">
+            <label class="checkbox-label">　　 AppleCare+（※iPhoneのみ、オプション<br>　　 の計算に含めない）　￥980<br>　<br>　　 または2年間で￥19,800</label>
           </div>
 
           <div class="subtotal-wrapper">
@@ -2405,8 +2405,13 @@
           //     body.scrollHeight はこの制約を受けないため、縮む方向にも正しく追従する。
           let newHeight = doc.body ? doc.body.scrollHeight : doc.documentElement.scrollHeight;
 
-          // 💡 想定外の理由で高さが際限なく大きくなってしまうのを防ぐための安全上限
-          const SAFE_MAX_HEIGHT = 8000;
+          // 💡 想定外の理由で高さが際限なく大きくなってしまうのを防ぐための安全上限。
+          //     検索結果のように条件次第で表示件数が大きく増えるページでも中身が
+          //     切り詰められてしまわないよう、通常のページ長より十分大きい値にしてある
+          //     （小さすぎると、iframeの高さが実際のコンテンツより低く抑えられてしまい、
+          //     iframe自体は overflow:hidden で内部スクロールできないため、
+          //     はみ出した分に一切スクロールで到達できなくなってしまう）
+          const SAFE_MAX_HEIGHT = 50000;
           if (newHeight > SAFE_MAX_HEIGHT) newHeight = SAFE_MAX_HEIGHT;
 
           const currentHeight = parseInt(iframe.style.height, 10) || 0;
@@ -2419,6 +2424,22 @@
       } catch (e) {
         // 読み込みタイミングやクロスオリジン等で取得できない場合は何もしない
       }
+    }
+
+    // 🛠 iframe内の要素を、実際のスクロールコンテナである#app-scroll-areaの中で
+    // 目的の位置まで直接スクロールさせる。
+    // 💡 iframe内から element.scrollIntoView() を呼ぶと、クロスフレームでの位置合わせが
+    //    ブラウザ任せになり、「一番上に揃える」ところまでは保証されず途中で止まってしまう
+    //    ことがある。そのため、iframe側で計算した「iframe内での要素の位置」を受け取り、
+    //    ここで#app-scroll-areaの絶対スクロール位置に変換して直接動かすことで、
+    //    常に狙った位置ぴったりへスクロールできるようにする。
+    function scrollAppAreaToIframeTarget(iframe, offsetInIframe) {
+      const appScrollArea = document.getElementById('app-scroll-area');
+      if (!appScrollArea || !iframe) return;
+      const areaRect = appScrollArea.getBoundingClientRect();
+      const iframeRect = iframe.getBoundingClientRect();
+      const targetTop = appScrollArea.scrollTop + (iframeRect.top - areaRect.top) + offsetInIframe;
+      appScrollArea.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
     }
 
     // iframeが読み込まれた直後に一度だけ高さを合わせておく
@@ -2467,6 +2488,12 @@
     });
 
     function switchTab(tabName) {
+      // 0. タブを切り替えるたびに、スクロール位置を維持せずページ最上部へ戻す
+      //    （body自体はoverflow:hiddenで固定されており、実際にスクロールしているのは
+      //    #app-scroll-area なので、window.scrollTo ではなくこちらを直接動かす）
+      const appScrollArea = document.getElementById('app-scroll-area');
+      if (appScrollArea) appScrollArea.scrollTo({ top: 0, behavior: 'auto' });
+
       // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
       if (pageSimulator) pageSimulator.style.display = 'none';
       if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
@@ -2570,6 +2597,12 @@
       if (typeof updatePriceOptions === 'function') {
         updatePriceOptions();
       }
+
+      // 6. ページ最上部まで一瞬でジャンプして戻す
+      // 💡 body自体はoverflow:hiddenで固定されており、実際にスクロールしているのは
+      //    #app-scroll-area なので、window.scrollTo ではなくこちらを直接動かす
+      const appScrollArea = document.getElementById('app-scroll-area');
+      if (appScrollArea) appScrollArea.scrollTo({ top: 0, behavior: 'auto' });
     }
     window.addEventListener('DOMContentLoaded', updatePriceOptions);
     // 1. ページが開いた瞬間、即座にスクロールを禁止
