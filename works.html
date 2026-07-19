@@ -1245,7 +1245,7 @@
 
     function dpointIsSectionEnabled(section) {
         const checkbox = document.getElementById(`dpoint-${section}-enabled`);
-        return !!(checkbox && checkbox.checked);
+        return checkbox ? checkbox.checked : true;
     }
 
     function dpointToggleSection(section) {
