@@ -988,16 +988,39 @@ font-size:1.3rem;
       }
     }
 
+    // 指定した要素の上端が「検索結果」の一番上にぴったり来るようスクロールする
+    // 💡 このiframe内から el.scrollIntoView() を呼ぶと、実際のスクロールコンテナである
+    //    親ページの#app-scroll-area（position:fixedな要素）へクロスフレームで
+    //    スクロールが伝播はするものの、「要素の上端をきっちり揃える」ところまでは
+    //    保証されず、目的の見出しより下（結果カードの途中）で止まってしまうことがある。
+    //    そのため、iframe内での要素の位置を自分で計算し、親ページ側に渡して
+    //    #app-scroll-areaのスクロール位置を直接指定する（親にアクセスできない場合のみ
+    //    scrollIntoViewにフォールバックする）。
+    function scrollAreaToElement(el, marginTop) {
+      if (!el) return;
+      try {
+        if (window.parent && window.parent !== window &&
+            typeof window.parent.scrollAppAreaToIframeTarget === 'function' && window.frameElement) {
+          const offsetInIframe = el.getBoundingClientRect().top;
+          window.parent.scrollAppAreaToIframeTarget(window.frameElement, offsetInIframe - (marginTop || 0));
+          return;
+        }
+      } catch (e) {
+        // 別オリジン埋め込み等で親にアクセスできない場合は下のフォールバックへ
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     // 検索結果カードへスムーズにスクロールする
     // 💡 直前のrenderResults()によるDOM書き換え（結果件数の増減で高さが変わる）が
-    //    レイアウトに反映される前にscrollIntoViewを呼ぶと、スクロール先が古い高さを
+    //    レイアウトに反映される前にスクロールすると、スクロール先が古い高さを
     //    基準に計算され「一番上まで行って戻る」ような不安定な挙動になることがあるため、
     //    レイアウト確定後（次の描画フレーム）まで1フレーム待ち、親ページの高さ同期も
     //    済ませてから実行する
     function scrollToResults() {
       requestAnimationFrame(() => {
         syncIframeHeight();
-        document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollAreaToElement(document.getElementById('result-area'), 20);
       });
     }
 
@@ -1526,7 +1549,7 @@ font-size:1.3rem;
     function scrollToClosedResults() {
       requestAnimationFrame(() => {
         syncIframeHeight();
-        document.getElementById('closed-result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollAreaToElement(document.getElementById('closed-result-area'), 20);
       });
     }
 
