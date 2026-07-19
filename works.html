@@ -451,7 +451,7 @@
 }
 
 .link-list-title-home5g{
-    color:#e91e63;
+    color:#46c0f8;
 }
 
 .link-list-title-denki{
@@ -563,6 +563,7 @@
                 <li>
                     <span class="link-list-subtitle">実務関連</span>
                     <ul class="link-list-items">
+                        <li><a href="https://www.docomo.ne.jp/support/for_simfree/apn.html" target="_blank" rel="noopener">APN設定</a></li>
                         <li><a href="https://ahamo.com/support/supported-phones/" target="_blank" rel="noopener">ahamo対応端末</a></li>
                         <li><a href="https://www.docomo.ne.jp/area/?icid=CRP_TOP_bnr01_to_CRP_AREA" target="_blank" rel="noopener">通信関連</a></li>
                         <li><a href="https://www.docomo.ne.jp/home_5g/hr02/" target="_blank" rel="noopener">home 5G</a></li>
@@ -1244,7 +1245,7 @@
 
     function dpointIsSectionEnabled(section) {
         const checkbox = document.getElementById(`dpoint-${section}-enabled`);
-        return !!(checkbox && checkbox.checked);
+        return checkbox ? checkbox.checked : true;
     }
 
     function dpointToggleSection(section) {
