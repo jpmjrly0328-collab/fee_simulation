@@ -115,7 +115,6 @@
   border-radius:999px;
   font-size:.8rem;
   margin-bottom:12px;
-  animation:pulse 2s infinite;
 }
 
 .campaign-title{
@@ -153,14 +152,6 @@
   color:#4a1010;
 }
 
-@keyframes pulse{
-  0%,100%{
-    transform:scale(1);
-  }
-  50%{
-    transform:scale(1.08);
-  }
-}
     .usage-title {
       font-weight: 700;
       font-size: 1rem;
@@ -1036,6 +1027,18 @@ font-size:1.3rem;
       }
       document.getElementById('fieldset-usage').disabled = !usageCb.checked;
       document.getElementById('fieldset-advanced').disabled = !advCb.checked;
+
+      if (which === 'usage' && usageCb.checked) {
+        requestAnimationFrame(() => {
+          syncIframeHeight();
+          scrollAreaToElement(document.getElementById('fieldset-usage'), 20);
+        });
+      } else if (which === 'advanced' && advCb.checked) {
+        requestAnimationFrame(() => {
+          syncIframeHeight();
+          scrollAreaToElement(document.getElementById('fieldset-advanced'), 20);
+        });
+      }
     }
 
     // 使用状況からの簡易検索
