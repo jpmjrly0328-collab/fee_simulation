@@ -977,7 +977,7 @@
             <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamoポイ活オプション　￥2,200</label>
             <hr style="width:100%; border:none; border-top:1px solid var(--border-color); margin:0;">
-            <label class="checkbox-label">　　 AppleCare+（※iPhoneのみ、オプション<br>　　 の計算に含めない）<br>　　　 ￥980<br>　　 または2年間で￥19,800</label>
+            <label class="checkbox-label">　　 AppleCare+（※iPhoneのみ、オプション<br>　　 の計算に含めない）<br>　　　 ￥980 または2年間で￥19,800</label>
           </div>
 
           <div class="subtotal-wrapper">
@@ -2467,6 +2467,12 @@
     });
 
     function switchTab(tabName) {
+      // 0. タブを切り替えるたびに、スクロール位置を維持せずページ最上部へ戻す
+      //    （body自体はoverflow:hiddenで固定されており、実際にスクロールしているのは
+      //    #app-scroll-area なので、window.scrollTo ではなくこちらを直接動かす）
+      const appScrollArea = document.getElementById('app-scroll-area');
+      if (appScrollArea) appScrollArea.scrollTo({ top: 0, behavior: 'auto' });
+
       // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
       if (pageSimulator) pageSimulator.style.display = 'none';
       if (pageCompareWrapper) pageCompareWrapper.style.display = 'none';
