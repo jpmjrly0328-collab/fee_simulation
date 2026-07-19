@@ -1582,6 +1582,13 @@
             // 2. チェックボックスがON、かつプルダウンが未選択（空）のものを探す
             let errors = [];
 
+            // 💡「割引を適用するか」がONなのに、各割引のチェックボックスが1つも有効(チェック)でない場合は
+            //     合計金額を表示しない
+            const discountToggle = document.getElementById(`sim-${side}-discount-toggle`);
+            if (discountToggle && discountToggle.checked && checkboxes.length === 0) {
+                errors.push("「割引の種類」<br>を選択してください。");
+            }
+
             // 利用年数のチェック
             if (useSelect && useSelect.disabled === false && useSelect.value === "") {
                 errors.push("「利用年数」<br>を選択してください。");
