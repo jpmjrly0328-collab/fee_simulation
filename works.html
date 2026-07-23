@@ -70,6 +70,11 @@
         color: #adb5bd;
     }
 
+    input[type="number"]:disabled {
+        background-color: #e9ecef;
+        color: #adb5bd;
+    }
+
     .price-box {
         width: 100%;
         border-radius: 10px;
@@ -731,8 +736,8 @@
             <p class="dpoint-subhead">携帯</p>
             <div class="dpoint-section-body" id="dpoint-mobile-body">
             <div class="section dpoint-fee-input">
-                <label for="dpoint-mobile-fee">月額（おおよそ・税込）￥</label>
-                <input type="number" id="dpoint-mobile-fee" min="0" step="100" placeholder="例：8000" oninput="dpointUpdateTotal()">
+                <label for="dpoint-mobile-fee">月額（おおよそ・税込）¥</label>
+                <input type="number" id="dpoint-mobile-fee" min="0" step="100" placeholder="dカードと携帯プランを先に検索してください" oninput="dpointUpdateTotal()" disabled>
             </div>
 
             <div class="dpoint-table-wrap">
@@ -797,7 +802,7 @@
             <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-hikari-enabled" onchange="dpointToggleSection('hikari')">ドコモ光</label></p>
             <div class="dpoint-section-body" id="dpoint-hikari-body">
             <div class="section dpoint-fee-input">
-                <label for="dpoint-hikari-fee">月額（おおよそ・税込）￥</label>
+                <label for="dpoint-hikari-fee">月額（おおよそ・税込）¥</label>
                 <input type="number" id="dpoint-hikari-fee" min="0" step="100" placeholder="例：5500" oninput="dpointUpdateTotal()">
             </div>
 
@@ -853,7 +858,7 @@
             <div class="dpoint-section-body" id="dpoint-denki-body">
             <p class="dpoint-note dpoint-note-paren">（※ドコモの回線契約をしているものとし、関西電力エリアの場合を表示。<br>Green / Basicで還元率が異なります。）</p>
             <div class="section dpoint-fee-input">
-                <label for="dpoint-denki-fee">月額（おおよそ・税込）￥</label>
+                <label for="dpoint-denki-fee">月額（おおよそ・税込）¥</label>
                 <input type="number" id="dpoint-denki-fee" min="0" step="100" placeholder="例：8000" oninput="dpointUpdateTotal()">
             </div>
             <label class="checkbox-label"><input type="checkbox" id="dpoint-gas-bundle" onchange="dpointUpdateTotal()">ドコモガスも同時契約している（電気の還元率+2%）</label>
@@ -930,7 +935,7 @@
         </div>
 
         <div class="sub-container dpoint-gas" style="margin-top:20px;">
-            <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-gas-enabled" onchange="dpointToggleSection('gas')">ドコモガス</label></p>
+            <p class="dpoint-subhead"><label class="dpoint-section-toggle"><input type="checkbox" id="dpoint-gas-enabled" onchange="dpointToggleSection('gas')">ドコモガス<span style="color: red; font-weight: bold;">（※大阪ガス提供エリアかどうか確認）</span></label></p>
             <div class="dpoint-section-body" id="dpoint-gas-body">
             <p class="dpoint-note">（※ドコモでんきに契約済みとし、大阪ガスの還元率を表示。）</p>
             <div class="section dpoint-fee-input">
@@ -1172,9 +1177,20 @@
         });
     }
 
+    function dpointUpdateMobileFeeAvailability() {
+        const cardSelected = dpointGetChecked("dcard-type");
+        const planSelected = dpointGetChecked("mobile-plan");
+        const enable = !!(cardSelected && planSelected);
+        const feeInput = document.getElementById("dpoint-mobile-fee");
+        feeInput.disabled = !enable;
+        feeInput.placeholder = enable ? "例：8000" : "dカードと携帯プランを先に検索してください";
+        if (!enable) feeInput.value = "";
+    }
+
     function dpointOnCardChange(checkbox) {
         dpointExclusive(checkbox);
         dpointUpdateYearAvailability();
+        dpointUpdateMobileFeeAvailability();
         dpointRecalc("dcard-type", "mobile-year", "mobile-plan", ["dpoint-mobile-table"]);
         dpointRecalc("dcard-type", null, null, ["dpoint-hikari-table"]);
         dpointRecalc("dcard-type", null, null, ["dpoint-denki-green-table"]);
@@ -1185,6 +1201,7 @@
 
     function dpointOnMobilePlanChange(checkbox) {
         dpointExclusive(checkbox);
+        dpointUpdateMobileFeeAvailability();
         dpointRecalc("dcard-type", "mobile-year", "mobile-plan", ["dpoint-mobile-table"]);
         dpointUpdateTotal();
     }
@@ -1297,6 +1314,7 @@
     }
 
     dpointUpdateYearAvailability();
+    dpointUpdateMobileFeeAvailability();
     ["mobile", "hikari", "denki", "gas"].forEach(dpointToggleSection);
 </script>
 </body>
