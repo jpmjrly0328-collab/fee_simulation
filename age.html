@@ -251,7 +251,7 @@
       </div>
 
       <div id="age-call-benefit-card" class="card" style="display:none;">
-        <h2>当てはまる通話特典</h2>
+        <h2>対象の通話特典</h2>
         <div id="age-call-benefit-list"></div>
       </div>
     </div>
@@ -291,7 +291,7 @@
         strages: [{ giga: "5GB", price: 1815 }, { giga: "10GB", price: 2695 }],
         discounts: { family: [], card: [{ tier: 1, value: 187 }], net: null },
         deadline: "満19歳まで",
-        memo: "最大12ヶ月間dポイント（500/1000）還元<br>家族間通話無料<br>みんなドコモ割カウント対象"
+        memo: "最大12ヶ月間dポイント（500 / 1000）還元<br>家族間通話無料<br>みんなドコモ割カウント対象"
       },
       {
         carrier: "docomo", carrierLabel: "docomo", plan: "ドコモU22割",
@@ -838,7 +838,7 @@
         callCard.style.display = 'block';
         callList.innerHTML = matchedBenefits.map(b => `
           <div class="program-notice-box">
-            <strong>${b.carrierLabel}／${b.plan}</strong><br>
+            <strong>${b.carrierLabel} / ${b.plan}</strong><br>
             ${b.content}　→　月額￥${b.price.toLocaleString()}
             ${b.other ? `<br>${b.other}` : ''}
           </div>
@@ -849,7 +849,7 @@
       }
     }
 
-    // 生年月日／年齢入力後にEnterキーが押されたら「加入可能プラン一覧」の先頭へジャンプする
+    // 生年月日/年齢入力後にEnterキーが押されたら「加入可能プラン一覧」の先頭へジャンプする
     function jumpToPlanResults(e) {
       if (e.key !== 'Enter') return;
       const resultsSection = document.getElementById('age-results-section');
@@ -858,7 +858,7 @@
       resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // 入力方法（生年月日／年齢直接入力）の切り替え
+    // 入力方法（生年月日/年齢直接入力）の切り替え
     function onAgeInputModeChange() {
       const mode = document.querySelector('input[name="age-input-mode"]:checked').value;
       const birthSection = document.getElementById('birth-input-section');
