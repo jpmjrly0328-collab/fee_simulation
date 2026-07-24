@@ -744,7 +744,6 @@
         <ol>
             <li><a href="#dv-checker">smartあんしん補償月額検索</a></li>
             <li><a href="#link-list">リンク集</a></li>
-            <li><a href="#carrier-search">対応キャリア検索</a></li>
             <li><a href="#h5g-simulator">home 5G 月額シミュレーター</a></li>
             <li><a href="#dpoint-search">dポイント還元検索</a></li>
         </ol>
@@ -814,6 +813,49 @@
                     <ul class="link-list-items">
                         <li><a href="https://www.docomo.ne.jp/campaign_event/kaedoki_program/" target="_blank" rel="noopener">いつでもカエドキプログラム</a></li>
                         <li><a href="https://www.docomo.ne.jp/campaign_event/shitadori/" target="_blank" rel="noopener">下取りプログラム</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="link-list-subtitle">利用可能端末</span>
+                    <ul class="link-list-sub">
+                        <li>
+                            <span class="link-list-subtitle" style="color:#ff0000;">docomo</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://www.docomo.ne.jp/service/spmode/compatible_model/" target="_blank" rel="noopener">docomo対応端末</a></li>
+                                <li><a href="https://ahamo.com/support/supported-phones/index.html" target="_blank" rel="noopener">ahamo対応端末</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="link-list-subtitle" style="color:#f57c00;">au</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://www.au.com/mobile/product/sim/devices/" target="_blank" rel="noopener">au対応端末</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="link-list-subtitle" style="color:#7b1fa2;">UQ mobile</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://www.uqwimax.jp/mobile/products/sim/devices/" target="_blank" rel="noopener">UQ mobile対応端末</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="link-list-subtitle" style="color:#9e9e9e;">softbank</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://www.softbank.jp/mobile/products/sim/usim-card-device/" target="_blank" rel="noopener">softbank対応端末（USIMカード）</a></li>
+                                <li><a href="https://www.softbank.jp/mobile/products/sim/esim-device/" target="_blank" rel="noopener">softbank対応端末（eSIM）</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="link-list-subtitle" style="color:#ff3d3f;">Y! mobile</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://www.ymobile.jp/store/lineup/sim_devices/" target="_blank" rel="noopener">Y! mobile対応端末</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="link-list-subtitle" style="color:#ff00a7;">Rakuten</span>
+                            <ul class="link-list-items">
+                                <li><a href="https://network.mobile.rakuten.co.jp/product/certified-products/" target="_blank" rel="noopener">Rakuten対応端末</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -893,91 +935,6 @@
         </li>
     </ul>
     </div>
-  <div class="card" id="carrier-search">
-    <div class="cu-header-row">
-      <h2>対応キャリア検索</h2>
-      <button type="button" class="btn-reset" onclick="cu_reset()"><span class="btn-reset-icon">🔄</span> リセット</button>
-    </div>
-    <p class="cu-note">
-      機種とキャリア、どちらを起点にも検索できます。<br>
-      対象キャリア：docomo / au / UQ mobile / softbank / Y!mobile / Rakuten（ahamo対応端末ページの情報をもとに作成）
-    </p>
-    <p class="cu-caution">※ 記載のない端末については、各メーカーのホームページをご覧ください。</p>
-
-    <div class="card cu-mode-select">
-      <label class="checkbox-label cu-mode-toggle">
-        <input type="checkbox" id="cu-mode-device" checked onchange="cu_onModeToggle('device')">
-        <span>機種からキャリアを探す</span>
-      </label>
-      <label class="checkbox-label cu-mode-toggle">
-        <input type="checkbox" id="cu-mode-carrier" onchange="cu_onModeToggle('carrier')">
-        <span>キャリアから機種を探す</span>
-      </label>
-    </div>
-
-    <!-- ===== モード1：機種からキャリアを探す ===== -->
-    <fieldset id="cu-fieldset-device" class="cu-mode-fieldset">
-
-      <div class="section">
-        <label for="cu-os">OS</label>
-        <select id="cu-os" onchange="cu_updateMaker()">
-          <option value="">選択してください</option>
-        </select>
-      </div>
-
-      <div class="section">
-        <label for="cu-maker">メーカー</label>
-        <select id="cu-maker" onchange="cu_updateSeries()" disabled>
-          <option value="">選択してください</option>
-        </select>
-      </div>
-
-      <div class="section">
-        <label for="cu-series">シリーズ</label>
-        <select id="cu-series" onchange="cu_updateModel()" disabled>
-          <option value="">選択してください</option>
-        </select>
-      </div>
-
-      <div class="section">
-        <label for="cu-keyword">機種名・メーカーで絞り込み</label>
-        <input type="text" id="cu-keyword" class="cu-keyword-input" placeholder="例：Galaxy、AQUOS など" oninput="cu_filterModel()" disabled>
-      </div>
-
-      <div class="section">
-        <label for="cu-model">機種名</label>
-        <select id="cu-model" onchange="cu_showResult()" disabled>
-          <option value="">選択してください</option>
-        </select>
-      </div>
-
-      <div id="cu-result"></div>
-    </fieldset>
-
-    <!-- ===== モード2：キャリアから機種を探す ===== -->
-    <fieldset id="cu-fieldset-carrier" class="cu-mode-fieldset" disabled>
-
-      <div class="section">
-        <label for="cu2-carrier">キャリア</label>
-        <select id="cu2-carrier" onchange="cu2_updateResult()">
-          <option value="">選択してください</option>
-        </select>
-      </div>
-
-      <div class="section">
-        <label for="cu2-os">OS</label>
-        <select id="cu2-os" onchange="cu2_updateResult()">
-          <option value="">すべて</option>
-          <option value="iOS">iOS</option>
-          <option value="Android">Android</option>
-        </select>
-      </div>
-
-      <div id="cu2-result"></div>
-    </fieldset>
-
-  </div>
-
     <div class="card" id="h5g-simulator">
         <h2>home 5G 月額シミュレーター</h2>
 
